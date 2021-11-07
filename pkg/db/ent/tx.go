@@ -12,8 +12,20 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// Empty is the client for interacting with the Empty builders.
-	Empty *EmptyClient
+	// Application is the client for interacting with the Application builders.
+	Application *ApplicationClient
+	// ApplicationGroup is the client for interacting with the ApplicationGroup builders.
+	ApplicationGroup *ApplicationGroupClient
+	// ApplicationGroupUser is the client for interacting with the ApplicationGroupUser builders.
+	ApplicationGroupUser *ApplicationGroupUserClient
+	// ApplicationResource is the client for interacting with the ApplicationResource builders.
+	ApplicationResource *ApplicationResourceClient
+	// ApplicationRole is the client for interacting with the ApplicationRole builders.
+	ApplicationRole *ApplicationRoleClient
+	// ApplicationRoleUser is the client for interacting with the ApplicationRoleUser builders.
+	ApplicationRoleUser *ApplicationRoleUserClient
+	// ApplicationUser is the client for interacting with the ApplicationUser builders.
+	ApplicationUser *ApplicationUserClient
 
 	// lazily loaded.
 	client     *Client
@@ -149,7 +161,13 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.Empty = NewEmptyClient(tx.config)
+	tx.Application = NewApplicationClient(tx.config)
+	tx.ApplicationGroup = NewApplicationGroupClient(tx.config)
+	tx.ApplicationGroupUser = NewApplicationGroupUserClient(tx.config)
+	tx.ApplicationResource = NewApplicationResourceClient(tx.config)
+	tx.ApplicationRole = NewApplicationRoleClient(tx.config)
+	tx.ApplicationRoleUser = NewApplicationRoleUserClient(tx.config)
+	tx.ApplicationUser = NewApplicationUserClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
@@ -159,7 +177,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: Empty.QueryXXX(), the query will be executed
+// applies a query, for example: Application.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

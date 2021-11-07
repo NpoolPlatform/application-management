@@ -8,7 +8,13 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/NpoolPlatform/application-management/pkg/db/ent/empty"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/application"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroup"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroupuser"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationresource"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationrole"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationroleuser"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationuser"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -29,7 +35,13 @@ type OrderFunc func(*sql.Selector)
 // columnChecker returns a function indicates if the column exists in the given column.
 func columnChecker(table string) func(string) error {
 	checks := map[string]func(string) bool{
-		empty.Table: empty.ValidColumn,
+		application.Table:          application.ValidColumn,
+		applicationgroup.Table:     applicationgroup.ValidColumn,
+		applicationgroupuser.Table: applicationgroupuser.ValidColumn,
+		applicationresource.Table:  applicationresource.ValidColumn,
+		applicationrole.Table:      applicationrole.ValidColumn,
+		applicationroleuser.Table:  applicationroleuser.ValidColumn,
+		applicationuser.Table:      applicationuser.ValidColumn,
 	}
 	check, ok := checks[table]
 	if !ok {

@@ -9,15 +9,93 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 )
 
-// The EmptyFunc type is an adapter to allow the use of ordinary
-// function as Empty mutator.
-type EmptyFunc func(context.Context, *ent.EmptyMutation) (ent.Value, error)
+// The ApplicationFunc type is an adapter to allow the use of ordinary
+// function as Application mutator.
+type ApplicationFunc func(context.Context, *ent.ApplicationMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f EmptyFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	mv, ok := m.(*ent.EmptyMutation)
+func (f ApplicationFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ApplicationMutation)
 	if !ok {
-		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.EmptyMutation", m)
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ApplicationGroupFunc type is an adapter to allow the use of ordinary
+// function as ApplicationGroup mutator.
+type ApplicationGroupFunc func(context.Context, *ent.ApplicationGroupMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ApplicationGroupFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ApplicationGroupMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationGroupMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ApplicationGroupUserFunc type is an adapter to allow the use of ordinary
+// function as ApplicationGroupUser mutator.
+type ApplicationGroupUserFunc func(context.Context, *ent.ApplicationGroupUserMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ApplicationGroupUserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ApplicationGroupUserMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationGroupUserMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ApplicationResourceFunc type is an adapter to allow the use of ordinary
+// function as ApplicationResource mutator.
+type ApplicationResourceFunc func(context.Context, *ent.ApplicationResourceMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ApplicationResourceFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ApplicationResourceMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationResourceMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ApplicationRoleFunc type is an adapter to allow the use of ordinary
+// function as ApplicationRole mutator.
+type ApplicationRoleFunc func(context.Context, *ent.ApplicationRoleMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ApplicationRoleFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ApplicationRoleMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationRoleMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ApplicationRoleUserFunc type is an adapter to allow the use of ordinary
+// function as ApplicationRoleUser mutator.
+type ApplicationRoleUserFunc func(context.Context, *ent.ApplicationRoleUserMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ApplicationRoleUserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ApplicationRoleUserMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationRoleUserMutation", m)
+	}
+	return f(ctx, mv)
+}
+
+// The ApplicationUserFunc type is an adapter to allow the use of ordinary
+// function as ApplicationUser mutator.
+type ApplicationUserFunc func(context.Context, *ent.ApplicationUserMutation) (ent.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f ApplicationUserFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	mv, ok := m.(*ent.ApplicationUserMutation)
+	if !ok {
+		return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.ApplicationUserMutation", m)
 	}
 	return f(ctx, mv)
 }

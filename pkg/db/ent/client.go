@@ -8,8 +8,15 @@ import (
 	"log"
 
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/migrate"
+	"github.com/google/uuid"
 
-	"github.com/NpoolPlatform/application-management/pkg/db/ent/empty"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/application"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroup"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroupuser"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationresource"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationrole"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationroleuser"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationuser"
 
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
@@ -20,8 +27,20 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// Empty is the client for interacting with the Empty builders.
-	Empty *EmptyClient
+	// Application is the client for interacting with the Application builders.
+	Application *ApplicationClient
+	// ApplicationGroup is the client for interacting with the ApplicationGroup builders.
+	ApplicationGroup *ApplicationGroupClient
+	// ApplicationGroupUser is the client for interacting with the ApplicationGroupUser builders.
+	ApplicationGroupUser *ApplicationGroupUserClient
+	// ApplicationResource is the client for interacting with the ApplicationResource builders.
+	ApplicationResource *ApplicationResourceClient
+	// ApplicationRole is the client for interacting with the ApplicationRole builders.
+	ApplicationRole *ApplicationRoleClient
+	// ApplicationRoleUser is the client for interacting with the ApplicationRoleUser builders.
+	ApplicationRoleUser *ApplicationRoleUserClient
+	// ApplicationUser is the client for interacting with the ApplicationUser builders.
+	ApplicationUser *ApplicationUserClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -35,7 +54,13 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.Empty = NewEmptyClient(c.config)
+	c.Application = NewApplicationClient(c.config)
+	c.ApplicationGroup = NewApplicationGroupClient(c.config)
+	c.ApplicationGroupUser = NewApplicationGroupUserClient(c.config)
+	c.ApplicationResource = NewApplicationResourceClient(c.config)
+	c.ApplicationRole = NewApplicationRoleClient(c.config)
+	c.ApplicationRoleUser = NewApplicationRoleUserClient(c.config)
+	c.ApplicationUser = NewApplicationUserClient(c.config)
 }
 
 // Open opens a database/sql.DB specified by the driver name and
@@ -67,9 +92,15 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Empty:  NewEmptyClient(cfg),
+		ctx:                  ctx,
+		config:               cfg,
+		Application:          NewApplicationClient(cfg),
+		ApplicationGroup:     NewApplicationGroupClient(cfg),
+		ApplicationGroupUser: NewApplicationGroupUserClient(cfg),
+		ApplicationResource:  NewApplicationResourceClient(cfg),
+		ApplicationRole:      NewApplicationRoleClient(cfg),
+		ApplicationRoleUser:  NewApplicationRoleUserClient(cfg),
+		ApplicationUser:      NewApplicationUserClient(cfg),
 	}, nil
 }
 
@@ -87,15 +118,21 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		config: cfg,
-		Empty:  NewEmptyClient(cfg),
+		config:               cfg,
+		Application:          NewApplicationClient(cfg),
+		ApplicationGroup:     NewApplicationGroupClient(cfg),
+		ApplicationGroupUser: NewApplicationGroupUserClient(cfg),
+		ApplicationResource:  NewApplicationResourceClient(cfg),
+		ApplicationRole:      NewApplicationRoleClient(cfg),
+		ApplicationRoleUser:  NewApplicationRoleUserClient(cfg),
+		ApplicationUser:      NewApplicationUserClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Empty.
+//		Application.
 //		Query().
 //		Count(ctx)
 //
@@ -118,87 +155,93 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
-	c.Empty.Use(hooks...)
+	c.Application.Use(hooks...)
+	c.ApplicationGroup.Use(hooks...)
+	c.ApplicationGroupUser.Use(hooks...)
+	c.ApplicationResource.Use(hooks...)
+	c.ApplicationRole.Use(hooks...)
+	c.ApplicationRoleUser.Use(hooks...)
+	c.ApplicationUser.Use(hooks...)
 }
 
-// EmptyClient is a client for the Empty schema.
-type EmptyClient struct {
+// ApplicationClient is a client for the Application schema.
+type ApplicationClient struct {
 	config
 }
 
-// NewEmptyClient returns a client for the Empty from the given config.
-func NewEmptyClient(c config) *EmptyClient {
-	return &EmptyClient{config: c}
+// NewApplicationClient returns a client for the Application from the given config.
+func NewApplicationClient(c config) *ApplicationClient {
+	return &ApplicationClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `empty.Hooks(f(g(h())))`.
-func (c *EmptyClient) Use(hooks ...Hook) {
-	c.hooks.Empty = append(c.hooks.Empty, hooks...)
+// A call to `Use(f, g, h)` equals to `application.Hooks(f(g(h())))`.
+func (c *ApplicationClient) Use(hooks ...Hook) {
+	c.hooks.Application = append(c.hooks.Application, hooks...)
 }
 
-// Create returns a create builder for Empty.
-func (c *EmptyClient) Create() *EmptyCreate {
-	mutation := newEmptyMutation(c.config, OpCreate)
-	return &EmptyCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a create builder for Application.
+func (c *ApplicationClient) Create() *ApplicationCreate {
+	mutation := newApplicationMutation(c.config, OpCreate)
+	return &ApplicationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of Empty entities.
-func (c *EmptyClient) CreateBulk(builders ...*EmptyCreate) *EmptyCreateBulk {
-	return &EmptyCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of Application entities.
+func (c *ApplicationClient) CreateBulk(builders ...*ApplicationCreate) *ApplicationCreateBulk {
+	return &ApplicationCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for Empty.
-func (c *EmptyClient) Update() *EmptyUpdate {
-	mutation := newEmptyMutation(c.config, OpUpdate)
-	return &EmptyUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for Application.
+func (c *ApplicationClient) Update() *ApplicationUpdate {
+	mutation := newApplicationMutation(c.config, OpUpdate)
+	return &ApplicationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *EmptyClient) UpdateOne(e *Empty) *EmptyUpdateOne {
-	mutation := newEmptyMutation(c.config, OpUpdateOne, withEmpty(e))
-	return &EmptyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ApplicationClient) UpdateOne(a *Application) *ApplicationUpdateOne {
+	mutation := newApplicationMutation(c.config, OpUpdateOne, withApplication(a))
+	return &ApplicationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *EmptyClient) UpdateOneID(id int) *EmptyUpdateOne {
-	mutation := newEmptyMutation(c.config, OpUpdateOne, withEmptyID(id))
-	return &EmptyUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *ApplicationClient) UpdateOneID(id string) *ApplicationUpdateOne {
+	mutation := newApplicationMutation(c.config, OpUpdateOne, withApplicationID(id))
+	return &ApplicationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for Empty.
-func (c *EmptyClient) Delete() *EmptyDelete {
-	mutation := newEmptyMutation(c.config, OpDelete)
-	return &EmptyDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for Application.
+func (c *ApplicationClient) Delete() *ApplicationDelete {
+	mutation := newApplicationMutation(c.config, OpDelete)
+	return &ApplicationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a delete builder for the given entity.
-func (c *EmptyClient) DeleteOne(e *Empty) *EmptyDeleteOne {
-	return c.DeleteOneID(e.ID)
+func (c *ApplicationClient) DeleteOne(a *Application) *ApplicationDeleteOne {
+	return c.DeleteOneID(a.ID)
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *EmptyClient) DeleteOneID(id int) *EmptyDeleteOne {
-	builder := c.Delete().Where(empty.ID(id))
+func (c *ApplicationClient) DeleteOneID(id string) *ApplicationDeleteOne {
+	builder := c.Delete().Where(application.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &EmptyDeleteOne{builder}
+	return &ApplicationDeleteOne{builder}
 }
 
-// Query returns a query builder for Empty.
-func (c *EmptyClient) Query() *EmptyQuery {
-	return &EmptyQuery{
+// Query returns a query builder for Application.
+func (c *ApplicationClient) Query() *ApplicationQuery {
+	return &ApplicationQuery{
 		config: c.config,
 	}
 }
 
-// Get returns a Empty entity by its id.
-func (c *EmptyClient) Get(ctx context.Context, id int) (*Empty, error) {
-	return c.Query().Where(empty.ID(id)).Only(ctx)
+// Get returns a Application entity by its id.
+func (c *ApplicationClient) Get(ctx context.Context, id string) (*Application, error) {
+	return c.Query().Where(application.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *EmptyClient) GetX(ctx context.Context, id int) *Empty {
+func (c *ApplicationClient) GetX(ctx context.Context, id string) *Application {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -207,6 +250,546 @@ func (c *EmptyClient) GetX(ctx context.Context, id int) *Empty {
 }
 
 // Hooks returns the client hooks.
-func (c *EmptyClient) Hooks() []Hook {
-	return c.hooks.Empty
+func (c *ApplicationClient) Hooks() []Hook {
+	return c.hooks.Application
+}
+
+// ApplicationGroupClient is a client for the ApplicationGroup schema.
+type ApplicationGroupClient struct {
+	config
+}
+
+// NewApplicationGroupClient returns a client for the ApplicationGroup from the given config.
+func NewApplicationGroupClient(c config) *ApplicationGroupClient {
+	return &ApplicationGroupClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `applicationgroup.Hooks(f(g(h())))`.
+func (c *ApplicationGroupClient) Use(hooks ...Hook) {
+	c.hooks.ApplicationGroup = append(c.hooks.ApplicationGroup, hooks...)
+}
+
+// Create returns a create builder for ApplicationGroup.
+func (c *ApplicationGroupClient) Create() *ApplicationGroupCreate {
+	mutation := newApplicationGroupMutation(c.config, OpCreate)
+	return &ApplicationGroupCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ApplicationGroup entities.
+func (c *ApplicationGroupClient) CreateBulk(builders ...*ApplicationGroupCreate) *ApplicationGroupCreateBulk {
+	return &ApplicationGroupCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ApplicationGroup.
+func (c *ApplicationGroupClient) Update() *ApplicationGroupUpdate {
+	mutation := newApplicationGroupMutation(c.config, OpUpdate)
+	return &ApplicationGroupUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApplicationGroupClient) UpdateOne(ag *ApplicationGroup) *ApplicationGroupUpdateOne {
+	mutation := newApplicationGroupMutation(c.config, OpUpdateOne, withApplicationGroup(ag))
+	return &ApplicationGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApplicationGroupClient) UpdateOneID(id uuid.UUID) *ApplicationGroupUpdateOne {
+	mutation := newApplicationGroupMutation(c.config, OpUpdateOne, withApplicationGroupID(id))
+	return &ApplicationGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ApplicationGroup.
+func (c *ApplicationGroupClient) Delete() *ApplicationGroupDelete {
+	mutation := newApplicationGroupMutation(c.config, OpDelete)
+	return &ApplicationGroupDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ApplicationGroupClient) DeleteOne(ag *ApplicationGroup) *ApplicationGroupDeleteOne {
+	return c.DeleteOneID(ag.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ApplicationGroupClient) DeleteOneID(id uuid.UUID) *ApplicationGroupDeleteOne {
+	builder := c.Delete().Where(applicationgroup.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApplicationGroupDeleteOne{builder}
+}
+
+// Query returns a query builder for ApplicationGroup.
+func (c *ApplicationGroupClient) Query() *ApplicationGroupQuery {
+	return &ApplicationGroupQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ApplicationGroup entity by its id.
+func (c *ApplicationGroupClient) Get(ctx context.Context, id uuid.UUID) (*ApplicationGroup, error) {
+	return c.Query().Where(applicationgroup.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApplicationGroupClient) GetX(ctx context.Context, id uuid.UUID) *ApplicationGroup {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApplicationGroupClient) Hooks() []Hook {
+	return c.hooks.ApplicationGroup
+}
+
+// ApplicationGroupUserClient is a client for the ApplicationGroupUser schema.
+type ApplicationGroupUserClient struct {
+	config
+}
+
+// NewApplicationGroupUserClient returns a client for the ApplicationGroupUser from the given config.
+func NewApplicationGroupUserClient(c config) *ApplicationGroupUserClient {
+	return &ApplicationGroupUserClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `applicationgroupuser.Hooks(f(g(h())))`.
+func (c *ApplicationGroupUserClient) Use(hooks ...Hook) {
+	c.hooks.ApplicationGroupUser = append(c.hooks.ApplicationGroupUser, hooks...)
+}
+
+// Create returns a create builder for ApplicationGroupUser.
+func (c *ApplicationGroupUserClient) Create() *ApplicationGroupUserCreate {
+	mutation := newApplicationGroupUserMutation(c.config, OpCreate)
+	return &ApplicationGroupUserCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ApplicationGroupUser entities.
+func (c *ApplicationGroupUserClient) CreateBulk(builders ...*ApplicationGroupUserCreate) *ApplicationGroupUserCreateBulk {
+	return &ApplicationGroupUserCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ApplicationGroupUser.
+func (c *ApplicationGroupUserClient) Update() *ApplicationGroupUserUpdate {
+	mutation := newApplicationGroupUserMutation(c.config, OpUpdate)
+	return &ApplicationGroupUserUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApplicationGroupUserClient) UpdateOne(agu *ApplicationGroupUser) *ApplicationGroupUserUpdateOne {
+	mutation := newApplicationGroupUserMutation(c.config, OpUpdateOne, withApplicationGroupUser(agu))
+	return &ApplicationGroupUserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApplicationGroupUserClient) UpdateOneID(id uuid.UUID) *ApplicationGroupUserUpdateOne {
+	mutation := newApplicationGroupUserMutation(c.config, OpUpdateOne, withApplicationGroupUserID(id))
+	return &ApplicationGroupUserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ApplicationGroupUser.
+func (c *ApplicationGroupUserClient) Delete() *ApplicationGroupUserDelete {
+	mutation := newApplicationGroupUserMutation(c.config, OpDelete)
+	return &ApplicationGroupUserDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ApplicationGroupUserClient) DeleteOne(agu *ApplicationGroupUser) *ApplicationGroupUserDeleteOne {
+	return c.DeleteOneID(agu.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ApplicationGroupUserClient) DeleteOneID(id uuid.UUID) *ApplicationGroupUserDeleteOne {
+	builder := c.Delete().Where(applicationgroupuser.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApplicationGroupUserDeleteOne{builder}
+}
+
+// Query returns a query builder for ApplicationGroupUser.
+func (c *ApplicationGroupUserClient) Query() *ApplicationGroupUserQuery {
+	return &ApplicationGroupUserQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ApplicationGroupUser entity by its id.
+func (c *ApplicationGroupUserClient) Get(ctx context.Context, id uuid.UUID) (*ApplicationGroupUser, error) {
+	return c.Query().Where(applicationgroupuser.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApplicationGroupUserClient) GetX(ctx context.Context, id uuid.UUID) *ApplicationGroupUser {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApplicationGroupUserClient) Hooks() []Hook {
+	return c.hooks.ApplicationGroupUser
+}
+
+// ApplicationResourceClient is a client for the ApplicationResource schema.
+type ApplicationResourceClient struct {
+	config
+}
+
+// NewApplicationResourceClient returns a client for the ApplicationResource from the given config.
+func NewApplicationResourceClient(c config) *ApplicationResourceClient {
+	return &ApplicationResourceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `applicationresource.Hooks(f(g(h())))`.
+func (c *ApplicationResourceClient) Use(hooks ...Hook) {
+	c.hooks.ApplicationResource = append(c.hooks.ApplicationResource, hooks...)
+}
+
+// Create returns a create builder for ApplicationResource.
+func (c *ApplicationResourceClient) Create() *ApplicationResourceCreate {
+	mutation := newApplicationResourceMutation(c.config, OpCreate)
+	return &ApplicationResourceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ApplicationResource entities.
+func (c *ApplicationResourceClient) CreateBulk(builders ...*ApplicationResourceCreate) *ApplicationResourceCreateBulk {
+	return &ApplicationResourceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ApplicationResource.
+func (c *ApplicationResourceClient) Update() *ApplicationResourceUpdate {
+	mutation := newApplicationResourceMutation(c.config, OpUpdate)
+	return &ApplicationResourceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApplicationResourceClient) UpdateOne(ar *ApplicationResource) *ApplicationResourceUpdateOne {
+	mutation := newApplicationResourceMutation(c.config, OpUpdateOne, withApplicationResource(ar))
+	return &ApplicationResourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApplicationResourceClient) UpdateOneID(id uuid.UUID) *ApplicationResourceUpdateOne {
+	mutation := newApplicationResourceMutation(c.config, OpUpdateOne, withApplicationResourceID(id))
+	return &ApplicationResourceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ApplicationResource.
+func (c *ApplicationResourceClient) Delete() *ApplicationResourceDelete {
+	mutation := newApplicationResourceMutation(c.config, OpDelete)
+	return &ApplicationResourceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ApplicationResourceClient) DeleteOne(ar *ApplicationResource) *ApplicationResourceDeleteOne {
+	return c.DeleteOneID(ar.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ApplicationResourceClient) DeleteOneID(id uuid.UUID) *ApplicationResourceDeleteOne {
+	builder := c.Delete().Where(applicationresource.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApplicationResourceDeleteOne{builder}
+}
+
+// Query returns a query builder for ApplicationResource.
+func (c *ApplicationResourceClient) Query() *ApplicationResourceQuery {
+	return &ApplicationResourceQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ApplicationResource entity by its id.
+func (c *ApplicationResourceClient) Get(ctx context.Context, id uuid.UUID) (*ApplicationResource, error) {
+	return c.Query().Where(applicationresource.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApplicationResourceClient) GetX(ctx context.Context, id uuid.UUID) *ApplicationResource {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApplicationResourceClient) Hooks() []Hook {
+	return c.hooks.ApplicationResource
+}
+
+// ApplicationRoleClient is a client for the ApplicationRole schema.
+type ApplicationRoleClient struct {
+	config
+}
+
+// NewApplicationRoleClient returns a client for the ApplicationRole from the given config.
+func NewApplicationRoleClient(c config) *ApplicationRoleClient {
+	return &ApplicationRoleClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `applicationrole.Hooks(f(g(h())))`.
+func (c *ApplicationRoleClient) Use(hooks ...Hook) {
+	c.hooks.ApplicationRole = append(c.hooks.ApplicationRole, hooks...)
+}
+
+// Create returns a create builder for ApplicationRole.
+func (c *ApplicationRoleClient) Create() *ApplicationRoleCreate {
+	mutation := newApplicationRoleMutation(c.config, OpCreate)
+	return &ApplicationRoleCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ApplicationRole entities.
+func (c *ApplicationRoleClient) CreateBulk(builders ...*ApplicationRoleCreate) *ApplicationRoleCreateBulk {
+	return &ApplicationRoleCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ApplicationRole.
+func (c *ApplicationRoleClient) Update() *ApplicationRoleUpdate {
+	mutation := newApplicationRoleMutation(c.config, OpUpdate)
+	return &ApplicationRoleUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApplicationRoleClient) UpdateOne(ar *ApplicationRole) *ApplicationRoleUpdateOne {
+	mutation := newApplicationRoleMutation(c.config, OpUpdateOne, withApplicationRole(ar))
+	return &ApplicationRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApplicationRoleClient) UpdateOneID(id uuid.UUID) *ApplicationRoleUpdateOne {
+	mutation := newApplicationRoleMutation(c.config, OpUpdateOne, withApplicationRoleID(id))
+	return &ApplicationRoleUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ApplicationRole.
+func (c *ApplicationRoleClient) Delete() *ApplicationRoleDelete {
+	mutation := newApplicationRoleMutation(c.config, OpDelete)
+	return &ApplicationRoleDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ApplicationRoleClient) DeleteOne(ar *ApplicationRole) *ApplicationRoleDeleteOne {
+	return c.DeleteOneID(ar.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ApplicationRoleClient) DeleteOneID(id uuid.UUID) *ApplicationRoleDeleteOne {
+	builder := c.Delete().Where(applicationrole.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApplicationRoleDeleteOne{builder}
+}
+
+// Query returns a query builder for ApplicationRole.
+func (c *ApplicationRoleClient) Query() *ApplicationRoleQuery {
+	return &ApplicationRoleQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ApplicationRole entity by its id.
+func (c *ApplicationRoleClient) Get(ctx context.Context, id uuid.UUID) (*ApplicationRole, error) {
+	return c.Query().Where(applicationrole.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApplicationRoleClient) GetX(ctx context.Context, id uuid.UUID) *ApplicationRole {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApplicationRoleClient) Hooks() []Hook {
+	return c.hooks.ApplicationRole
+}
+
+// ApplicationRoleUserClient is a client for the ApplicationRoleUser schema.
+type ApplicationRoleUserClient struct {
+	config
+}
+
+// NewApplicationRoleUserClient returns a client for the ApplicationRoleUser from the given config.
+func NewApplicationRoleUserClient(c config) *ApplicationRoleUserClient {
+	return &ApplicationRoleUserClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `applicationroleuser.Hooks(f(g(h())))`.
+func (c *ApplicationRoleUserClient) Use(hooks ...Hook) {
+	c.hooks.ApplicationRoleUser = append(c.hooks.ApplicationRoleUser, hooks...)
+}
+
+// Create returns a create builder for ApplicationRoleUser.
+func (c *ApplicationRoleUserClient) Create() *ApplicationRoleUserCreate {
+	mutation := newApplicationRoleUserMutation(c.config, OpCreate)
+	return &ApplicationRoleUserCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ApplicationRoleUser entities.
+func (c *ApplicationRoleUserClient) CreateBulk(builders ...*ApplicationRoleUserCreate) *ApplicationRoleUserCreateBulk {
+	return &ApplicationRoleUserCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ApplicationRoleUser.
+func (c *ApplicationRoleUserClient) Update() *ApplicationRoleUserUpdate {
+	mutation := newApplicationRoleUserMutation(c.config, OpUpdate)
+	return &ApplicationRoleUserUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApplicationRoleUserClient) UpdateOne(aru *ApplicationRoleUser) *ApplicationRoleUserUpdateOne {
+	mutation := newApplicationRoleUserMutation(c.config, OpUpdateOne, withApplicationRoleUser(aru))
+	return &ApplicationRoleUserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApplicationRoleUserClient) UpdateOneID(id uuid.UUID) *ApplicationRoleUserUpdateOne {
+	mutation := newApplicationRoleUserMutation(c.config, OpUpdateOne, withApplicationRoleUserID(id))
+	return &ApplicationRoleUserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ApplicationRoleUser.
+func (c *ApplicationRoleUserClient) Delete() *ApplicationRoleUserDelete {
+	mutation := newApplicationRoleUserMutation(c.config, OpDelete)
+	return &ApplicationRoleUserDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ApplicationRoleUserClient) DeleteOne(aru *ApplicationRoleUser) *ApplicationRoleUserDeleteOne {
+	return c.DeleteOneID(aru.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ApplicationRoleUserClient) DeleteOneID(id uuid.UUID) *ApplicationRoleUserDeleteOne {
+	builder := c.Delete().Where(applicationroleuser.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApplicationRoleUserDeleteOne{builder}
+}
+
+// Query returns a query builder for ApplicationRoleUser.
+func (c *ApplicationRoleUserClient) Query() *ApplicationRoleUserQuery {
+	return &ApplicationRoleUserQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ApplicationRoleUser entity by its id.
+func (c *ApplicationRoleUserClient) Get(ctx context.Context, id uuid.UUID) (*ApplicationRoleUser, error) {
+	return c.Query().Where(applicationroleuser.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApplicationRoleUserClient) GetX(ctx context.Context, id uuid.UUID) *ApplicationRoleUser {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApplicationRoleUserClient) Hooks() []Hook {
+	return c.hooks.ApplicationRoleUser
+}
+
+// ApplicationUserClient is a client for the ApplicationUser schema.
+type ApplicationUserClient struct {
+	config
+}
+
+// NewApplicationUserClient returns a client for the ApplicationUser from the given config.
+func NewApplicationUserClient(c config) *ApplicationUserClient {
+	return &ApplicationUserClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `applicationuser.Hooks(f(g(h())))`.
+func (c *ApplicationUserClient) Use(hooks ...Hook) {
+	c.hooks.ApplicationUser = append(c.hooks.ApplicationUser, hooks...)
+}
+
+// Create returns a create builder for ApplicationUser.
+func (c *ApplicationUserClient) Create() *ApplicationUserCreate {
+	mutation := newApplicationUserMutation(c.config, OpCreate)
+	return &ApplicationUserCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ApplicationUser entities.
+func (c *ApplicationUserClient) CreateBulk(builders ...*ApplicationUserCreate) *ApplicationUserCreateBulk {
+	return &ApplicationUserCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ApplicationUser.
+func (c *ApplicationUserClient) Update() *ApplicationUserUpdate {
+	mutation := newApplicationUserMutation(c.config, OpUpdate)
+	return &ApplicationUserUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ApplicationUserClient) UpdateOne(au *ApplicationUser) *ApplicationUserUpdateOne {
+	mutation := newApplicationUserMutation(c.config, OpUpdateOne, withApplicationUser(au))
+	return &ApplicationUserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ApplicationUserClient) UpdateOneID(id uuid.UUID) *ApplicationUserUpdateOne {
+	mutation := newApplicationUserMutation(c.config, OpUpdateOne, withApplicationUserID(id))
+	return &ApplicationUserUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ApplicationUser.
+func (c *ApplicationUserClient) Delete() *ApplicationUserDelete {
+	mutation := newApplicationUserMutation(c.config, OpDelete)
+	return &ApplicationUserDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a delete builder for the given entity.
+func (c *ApplicationUserClient) DeleteOne(au *ApplicationUser) *ApplicationUserDeleteOne {
+	return c.DeleteOneID(au.ID)
+}
+
+// DeleteOneID returns a delete builder for the given id.
+func (c *ApplicationUserClient) DeleteOneID(id uuid.UUID) *ApplicationUserDeleteOne {
+	builder := c.Delete().Where(applicationuser.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ApplicationUserDeleteOne{builder}
+}
+
+// Query returns a query builder for ApplicationUser.
+func (c *ApplicationUserClient) Query() *ApplicationUserQuery {
+	return &ApplicationUserQuery{
+		config: c.config,
+	}
+}
+
+// Get returns a ApplicationUser entity by its id.
+func (c *ApplicationUserClient) Get(ctx context.Context, id uuid.UUID) (*ApplicationUser, error) {
+	return c.Query().Where(applicationuser.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ApplicationUserClient) GetX(ctx context.Context, id uuid.UUID) *ApplicationUser {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ApplicationUserClient) Hooks() []Hook {
+	return c.hooks.ApplicationUser
 }

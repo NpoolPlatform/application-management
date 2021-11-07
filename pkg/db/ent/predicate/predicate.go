@@ -6,5 +6,23 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// Empty is the predicate function for empty builders.
-type Empty func(*sql.Selector)
+// Application is the predicate function for application builders.
+type Application func(*sql.Selector)
+
+// ApplicationGroup is the predicate function for applicationgroup builders.
+type ApplicationGroup func(*sql.Selector)
+
+// ApplicationGroupUser is the predicate function for applicationgroupuser builders.
+type ApplicationGroupUser func(*sql.Selector)
+
+// ApplicationResource is the predicate function for applicationresource builders.
+type ApplicationResource func(*sql.Selector)
+
+// ApplicationRole is the predicate function for applicationrole builders.
+type ApplicationRole func(*sql.Selector)
+
+// ApplicationRoleUser is the predicate function for applicationroleuser builders.
+type ApplicationRoleUser func(*sql.Selector)
+
+// ApplicationUser is the predicate function for applicationuser builders.
+type ApplicationUser func(*sql.Selector)

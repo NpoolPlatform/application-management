@@ -7,8 +7,17 @@ import (
 	"fmt"
 	"sync"
 
-	"entgo.io/ent"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/application"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroup"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroupuser"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationresource"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationrole"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationroleuser"
+	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationuser"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/predicate"
+	"github.com/google/uuid"
+
+	"entgo.io/ent"
 )
 
 const (
@@ -20,32 +29,50 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeEmpty = "Empty"
+	TypeApplication          = "Application"
+	TypeApplicationGroup     = "ApplicationGroup"
+	TypeApplicationGroupUser = "ApplicationGroupUser"
+	TypeApplicationResource  = "ApplicationResource"
+	TypeApplicationRole      = "ApplicationRole"
+	TypeApplicationRoleUser  = "ApplicationRoleUser"
+	TypeApplicationUser      = "ApplicationUser"
 )
 
-// EmptyMutation represents an operation that mutates the Empty nodes in the graph.
-type EmptyMutation struct {
+// ApplicationMutation represents an operation that mutates the Application nodes in the graph.
+type ApplicationMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *int
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*Empty, error)
-	predicates    []predicate.Empty
+	op                Op
+	typ               string
+	id                *string
+	application_name  *string
+	application_owner *uuid.UUID
+	homepage_url      *string
+	redirect_url      *string
+	client_secret     *string
+	application_logo  *string
+	create_at         *int64
+	addcreate_at      *int64
+	update_at         *int64
+	addupdate_at      *int64
+	delete_at         *int64
+	adddelete_at      *int64
+	clearedFields     map[string]struct{}
+	done              bool
+	oldValue          func(context.Context) (*Application, error)
+	predicates        []predicate.Application
 }
 
-var _ ent.Mutation = (*EmptyMutation)(nil)
+var _ ent.Mutation = (*ApplicationMutation)(nil)
 
-// emptyOption allows management of the mutation configuration using functional options.
-type emptyOption func(*EmptyMutation)
+// applicationOption allows management of the mutation configuration using functional options.
+type applicationOption func(*ApplicationMutation)
 
-// newEmptyMutation creates new mutation for the Empty entity.
-func newEmptyMutation(c config, op Op, opts ...emptyOption) *EmptyMutation {
-	m := &EmptyMutation{
+// newApplicationMutation creates new mutation for the Application entity.
+func newApplicationMutation(c config, op Op, opts ...applicationOption) *ApplicationMutation {
+	m := &ApplicationMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeEmpty,
+		typ:           TypeApplication,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -54,20 +81,20 @@ func newEmptyMutation(c config, op Op, opts ...emptyOption) *EmptyMutation {
 	return m
 }
 
-// withEmptyID sets the ID field of the mutation.
-func withEmptyID(id int) emptyOption {
-	return func(m *EmptyMutation) {
+// withApplicationID sets the ID field of the mutation.
+func withApplicationID(id string) applicationOption {
+	return func(m *ApplicationMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *Empty
+			value *Application
 		)
-		m.oldValue = func(ctx context.Context) (*Empty, error) {
+		m.oldValue = func(ctx context.Context) (*Application, error) {
 			once.Do(func() {
 				if m.done {
 					err = fmt.Errorf("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().Empty.Get(ctx, id)
+					value, err = m.Client().Application.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -76,10 +103,10 @@ func withEmptyID(id int) emptyOption {
 	}
 }
 
-// withEmpty sets the old Empty of the mutation.
-func withEmpty(node *Empty) emptyOption {
-	return func(m *EmptyMutation) {
-		m.oldValue = func(context.Context) (*Empty, error) {
+// withApplication sets the old Application of the mutation.
+func withApplication(node *Application) applicationOption {
+	return func(m *ApplicationMutation) {
+		m.oldValue = func(context.Context) (*Application, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -88,7 +115,7 @@ func withEmpty(node *Empty) emptyOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m EmptyMutation) Client() *Client {
+func (m ApplicationMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -96,7 +123,7 @@ func (m EmptyMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m EmptyMutation) Tx() (*Tx, error) {
+func (m ApplicationMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
 	}
@@ -105,150 +132,4889 @@ func (m EmptyMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Application entities.
+func (m *ApplicationMutation) SetID(id string) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *EmptyMutation) ID() (id int, exists bool) {
+func (m *ApplicationMutation) ID() (id string, exists bool) {
 	if m.id == nil {
 		return
 	}
 	return *m.id, true
 }
 
-// Where appends a list predicates to the EmptyMutation builder.
-func (m *EmptyMutation) Where(ps ...predicate.Empty) {
+// SetApplicationName sets the "application_name" field.
+func (m *ApplicationMutation) SetApplicationName(s string) {
+	m.application_name = &s
+}
+
+// ApplicationName returns the value of the "application_name" field in the mutation.
+func (m *ApplicationMutation) ApplicationName() (r string, exists bool) {
+	v := m.application_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApplicationName returns the old "application_name" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldApplicationName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldApplicationName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldApplicationName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApplicationName: %w", err)
+	}
+	return oldValue.ApplicationName, nil
+}
+
+// ResetApplicationName resets all changes to the "application_name" field.
+func (m *ApplicationMutation) ResetApplicationName() {
+	m.application_name = nil
+}
+
+// SetApplicationOwner sets the "application_owner" field.
+func (m *ApplicationMutation) SetApplicationOwner(u uuid.UUID) {
+	m.application_owner = &u
+}
+
+// ApplicationOwner returns the value of the "application_owner" field in the mutation.
+func (m *ApplicationMutation) ApplicationOwner() (r uuid.UUID, exists bool) {
+	v := m.application_owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApplicationOwner returns the old "application_owner" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldApplicationOwner(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldApplicationOwner is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldApplicationOwner requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApplicationOwner: %w", err)
+	}
+	return oldValue.ApplicationOwner, nil
+}
+
+// ResetApplicationOwner resets all changes to the "application_owner" field.
+func (m *ApplicationMutation) ResetApplicationOwner() {
+	m.application_owner = nil
+}
+
+// SetHomepageURL sets the "homepage_url" field.
+func (m *ApplicationMutation) SetHomepageURL(s string) {
+	m.homepage_url = &s
+}
+
+// HomepageURL returns the value of the "homepage_url" field in the mutation.
+func (m *ApplicationMutation) HomepageURL() (r string, exists bool) {
+	v := m.homepage_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldHomepageURL returns the old "homepage_url" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldHomepageURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldHomepageURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldHomepageURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldHomepageURL: %w", err)
+	}
+	return oldValue.HomepageURL, nil
+}
+
+// ResetHomepageURL resets all changes to the "homepage_url" field.
+func (m *ApplicationMutation) ResetHomepageURL() {
+	m.homepage_url = nil
+}
+
+// SetRedirectURL sets the "redirect_url" field.
+func (m *ApplicationMutation) SetRedirectURL(s string) {
+	m.redirect_url = &s
+}
+
+// RedirectURL returns the value of the "redirect_url" field in the mutation.
+func (m *ApplicationMutation) RedirectURL() (r string, exists bool) {
+	v := m.redirect_url
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRedirectURL returns the old "redirect_url" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldRedirectURL(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldRedirectURL is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldRedirectURL requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRedirectURL: %w", err)
+	}
+	return oldValue.RedirectURL, nil
+}
+
+// ResetRedirectURL resets all changes to the "redirect_url" field.
+func (m *ApplicationMutation) ResetRedirectURL() {
+	m.redirect_url = nil
+}
+
+// SetClientSecret sets the "client_secret" field.
+func (m *ApplicationMutation) SetClientSecret(s string) {
+	m.client_secret = &s
+}
+
+// ClientSecret returns the value of the "client_secret" field in the mutation.
+func (m *ApplicationMutation) ClientSecret() (r string, exists bool) {
+	v := m.client_secret
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldClientSecret returns the old "client_secret" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldClientSecret(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldClientSecret is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldClientSecret requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldClientSecret: %w", err)
+	}
+	return oldValue.ClientSecret, nil
+}
+
+// ResetClientSecret resets all changes to the "client_secret" field.
+func (m *ApplicationMutation) ResetClientSecret() {
+	m.client_secret = nil
+}
+
+// SetApplicationLogo sets the "application_logo" field.
+func (m *ApplicationMutation) SetApplicationLogo(s string) {
+	m.application_logo = &s
+}
+
+// ApplicationLogo returns the value of the "application_logo" field in the mutation.
+func (m *ApplicationMutation) ApplicationLogo() (r string, exists bool) {
+	v := m.application_logo
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldApplicationLogo returns the old "application_logo" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldApplicationLogo(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldApplicationLogo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldApplicationLogo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldApplicationLogo: %w", err)
+	}
+	return oldValue.ApplicationLogo, nil
+}
+
+// ResetApplicationLogo resets all changes to the "application_logo" field.
+func (m *ApplicationMutation) ResetApplicationLogo() {
+	m.application_logo = nil
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *ApplicationMutation) SetCreateAt(i int64) {
+	m.create_at = &i
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *ApplicationMutation) CreateAt() (r int64, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds i to the "create_at" field.
+func (m *ApplicationMutation) AddCreateAt(i int64) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += i
+	} else {
+		m.addcreate_at = &i
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *ApplicationMutation) AddedCreateAt() (r int64, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *ApplicationMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (m *ApplicationMutation) SetUpdateAt(i int64) {
+	m.update_at = &i
+	m.addupdate_at = nil
+}
+
+// UpdateAt returns the value of the "update_at" field in the mutation.
+func (m *ApplicationMutation) UpdateAt() (r int64, exists bool) {
+	v := m.update_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateAt returns the old "update_at" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUpdateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
+	}
+	return oldValue.UpdateAt, nil
+}
+
+// AddUpdateAt adds i to the "update_at" field.
+func (m *ApplicationMutation) AddUpdateAt(i int64) {
+	if m.addupdate_at != nil {
+		*m.addupdate_at += i
+	} else {
+		m.addupdate_at = &i
+	}
+}
+
+// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
+func (m *ApplicationMutation) AddedUpdateAt() (r int64, exists bool) {
+	v := m.addupdate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdateAt resets all changes to the "update_at" field.
+func (m *ApplicationMutation) ResetUpdateAt() {
+	m.update_at = nil
+	m.addupdate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *ApplicationMutation) SetDeleteAt(i int64) {
+	m.delete_at = &i
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *ApplicationMutation) DeleteAt() (r int64, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds i to the "delete_at" field.
+func (m *ApplicationMutation) AddDeleteAt(i int64) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += i
+	} else {
+		m.adddelete_at = &i
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *ApplicationMutation) AddedDeleteAt() (r int64, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *ApplicationMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// Where appends a list predicates to the ApplicationMutation builder.
+func (m *ApplicationMutation) Where(ps ...predicate.Application) {
 	m.predicates = append(m.predicates, ps...)
 }
 
 // Op returns the operation name.
-func (m *EmptyMutation) Op() Op {
+func (m *ApplicationMutation) Op() Op {
 	return m.op
 }
 
-// Type returns the node type of this mutation (Empty).
-func (m *EmptyMutation) Type() string {
+// Type returns the node type of this mutation (Application).
+func (m *ApplicationMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *EmptyMutation) Fields() []string {
-	fields := make([]string, 0, 0)
+func (m *ApplicationMutation) Fields() []string {
+	fields := make([]string, 0, 9)
+	if m.application_name != nil {
+		fields = append(fields, application.FieldApplicationName)
+	}
+	if m.application_owner != nil {
+		fields = append(fields, application.FieldApplicationOwner)
+	}
+	if m.homepage_url != nil {
+		fields = append(fields, application.FieldHomepageURL)
+	}
+	if m.redirect_url != nil {
+		fields = append(fields, application.FieldRedirectURL)
+	}
+	if m.client_secret != nil {
+		fields = append(fields, application.FieldClientSecret)
+	}
+	if m.application_logo != nil {
+		fields = append(fields, application.FieldApplicationLogo)
+	}
+	if m.create_at != nil {
+		fields = append(fields, application.FieldCreateAt)
+	}
+	if m.update_at != nil {
+		fields = append(fields, application.FieldUpdateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, application.FieldDeleteAt)
+	}
 	return fields
 }
 
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *EmptyMutation) Field(name string) (ent.Value, bool) {
+func (m *ApplicationMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case application.FieldApplicationName:
+		return m.ApplicationName()
+	case application.FieldApplicationOwner:
+		return m.ApplicationOwner()
+	case application.FieldHomepageURL:
+		return m.HomepageURL()
+	case application.FieldRedirectURL:
+		return m.RedirectURL()
+	case application.FieldClientSecret:
+		return m.ClientSecret()
+	case application.FieldApplicationLogo:
+		return m.ApplicationLogo()
+	case application.FieldCreateAt:
+		return m.CreateAt()
+	case application.FieldUpdateAt:
+		return m.UpdateAt()
+	case application.FieldDeleteAt:
+		return m.DeleteAt()
+	}
 	return nil, false
 }
 
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *EmptyMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	return nil, fmt.Errorf("unknown Empty field %s", name)
+func (m *ApplicationMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case application.FieldApplicationName:
+		return m.OldApplicationName(ctx)
+	case application.FieldApplicationOwner:
+		return m.OldApplicationOwner(ctx)
+	case application.FieldHomepageURL:
+		return m.OldHomepageURL(ctx)
+	case application.FieldRedirectURL:
+		return m.OldRedirectURL(ctx)
+	case application.FieldClientSecret:
+		return m.OldClientSecret(ctx)
+	case application.FieldApplicationLogo:
+		return m.OldApplicationLogo(ctx)
+	case application.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case application.FieldUpdateAt:
+		return m.OldUpdateAt(ctx)
+	case application.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown Application field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *EmptyMutation) SetField(name string, value ent.Value) error {
+func (m *ApplicationMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case application.FieldApplicationName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApplicationName(v)
+		return nil
+	case application.FieldApplicationOwner:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApplicationOwner(v)
+		return nil
+	case application.FieldHomepageURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetHomepageURL(v)
+		return nil
+	case application.FieldRedirectURL:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRedirectURL(v)
+		return nil
+	case application.FieldClientSecret:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetClientSecret(v)
+		return nil
+	case application.FieldApplicationLogo:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetApplicationLogo(v)
+		return nil
+	case application.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case application.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateAt(v)
+		return nil
+	case application.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
 	}
-	return fmt.Errorf("unknown Empty field %s", name)
+	return fmt.Errorf("unknown Application field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *EmptyMutation) AddedFields() []string {
-	return nil
+func (m *ApplicationMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, application.FieldCreateAt)
+	}
+	if m.addupdate_at != nil {
+		fields = append(fields, application.FieldUpdateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, application.FieldDeleteAt)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *EmptyMutation) AddedField(name string) (ent.Value, bool) {
+func (m *ApplicationMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case application.FieldCreateAt:
+		return m.AddedCreateAt()
+	case application.FieldUpdateAt:
+		return m.AddedUpdateAt()
+	case application.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
 	return nil, false
 }
 
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *EmptyMutation) AddField(name string, value ent.Value) error {
-	return fmt.Errorf("unknown Empty numeric field %s", name)
+func (m *ApplicationMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case application.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case application.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateAt(v)
+		return nil
+	case application.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Application numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *EmptyMutation) ClearedFields() []string {
+func (m *ApplicationMutation) ClearedFields() []string {
 	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *EmptyMutation) FieldCleared(name string) bool {
+func (m *ApplicationMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *EmptyMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown Empty nullable field %s", name)
+func (m *ApplicationMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Application nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *EmptyMutation) ResetField(name string) error {
-	return fmt.Errorf("unknown Empty field %s", name)
+func (m *ApplicationMutation) ResetField(name string) error {
+	switch name {
+	case application.FieldApplicationName:
+		m.ResetApplicationName()
+		return nil
+	case application.FieldApplicationOwner:
+		m.ResetApplicationOwner()
+		return nil
+	case application.FieldHomepageURL:
+		m.ResetHomepageURL()
+		return nil
+	case application.FieldRedirectURL:
+		m.ResetRedirectURL()
+		return nil
+	case application.FieldClientSecret:
+		m.ResetClientSecret()
+		return nil
+	case application.FieldApplicationLogo:
+		m.ResetApplicationLogo()
+		return nil
+	case application.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case application.FieldUpdateAt:
+		m.ResetUpdateAt()
+		return nil
+	case application.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
+	return fmt.Errorf("unknown Application field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *EmptyMutation) AddedEdges() []string {
+func (m *ApplicationMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *EmptyMutation) AddedIDs(name string) []ent.Value {
+func (m *ApplicationMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *EmptyMutation) RemovedEdges() []string {
+func (m *ApplicationMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *EmptyMutation) RemovedIDs(name string) []ent.Value {
+func (m *ApplicationMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *EmptyMutation) ClearedEdges() []string {
+func (m *ApplicationMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *EmptyMutation) EdgeCleared(name string) bool {
+func (m *ApplicationMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *EmptyMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown Empty unique edge %s", name)
+func (m *ApplicationMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown Application unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *EmptyMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown Empty edge %s", name)
+func (m *ApplicationMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown Application edge %s", name)
+}
+
+// ApplicationGroupMutation represents an operation that mutates the ApplicationGroup nodes in the graph.
+type ApplicationGroupMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	app_id        *string
+	group_name    *string
+	group_logo    *string
+	group_owner   *uuid.UUID
+	annotation    *string
+	create_at     *int64
+	addcreate_at  *int64
+	update_at     *int64
+	addupdate_at  *int64
+	delete_at     *int64
+	adddelete_at  *int64
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ApplicationGroup, error)
+	predicates    []predicate.ApplicationGroup
+}
+
+var _ ent.Mutation = (*ApplicationGroupMutation)(nil)
+
+// applicationgroupOption allows management of the mutation configuration using functional options.
+type applicationgroupOption func(*ApplicationGroupMutation)
+
+// newApplicationGroupMutation creates new mutation for the ApplicationGroup entity.
+func newApplicationGroupMutation(c config, op Op, opts ...applicationgroupOption) *ApplicationGroupMutation {
+	m := &ApplicationGroupMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeApplicationGroup,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withApplicationGroupID sets the ID field of the mutation.
+func withApplicationGroupID(id uuid.UUID) applicationgroupOption {
+	return func(m *ApplicationGroupMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ApplicationGroup
+		)
+		m.oldValue = func(ctx context.Context) (*ApplicationGroup, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ApplicationGroup.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withApplicationGroup sets the old ApplicationGroup of the mutation.
+func withApplicationGroup(node *ApplicationGroup) applicationgroupOption {
+	return func(m *ApplicationGroupMutation) {
+		m.oldValue = func(context.Context) (*ApplicationGroup, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ApplicationGroupMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ApplicationGroupMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ApplicationGroup entities.
+func (m *ApplicationGroupMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ApplicationGroupMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetAppID sets the "app_id" field.
+func (m *ApplicationGroupMutation) SetAppID(s string) {
+	m.app_id = &s
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *ApplicationGroupMutation) AppID() (r string, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldAppID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *ApplicationGroupMutation) ResetAppID() {
+	m.app_id = nil
+}
+
+// SetGroupName sets the "group_name" field.
+func (m *ApplicationGroupMutation) SetGroupName(s string) {
+	m.group_name = &s
+}
+
+// GroupName returns the value of the "group_name" field in the mutation.
+func (m *ApplicationGroupMutation) GroupName() (r string, exists bool) {
+	v := m.group_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGroupName returns the old "group_name" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldGroupName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldGroupName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldGroupName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGroupName: %w", err)
+	}
+	return oldValue.GroupName, nil
+}
+
+// ResetGroupName resets all changes to the "group_name" field.
+func (m *ApplicationGroupMutation) ResetGroupName() {
+	m.group_name = nil
+}
+
+// SetGroupLogo sets the "group_logo" field.
+func (m *ApplicationGroupMutation) SetGroupLogo(s string) {
+	m.group_logo = &s
+}
+
+// GroupLogo returns the value of the "group_logo" field in the mutation.
+func (m *ApplicationGroupMutation) GroupLogo() (r string, exists bool) {
+	v := m.group_logo
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGroupLogo returns the old "group_logo" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldGroupLogo(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldGroupLogo is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldGroupLogo requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGroupLogo: %w", err)
+	}
+	return oldValue.GroupLogo, nil
+}
+
+// ResetGroupLogo resets all changes to the "group_logo" field.
+func (m *ApplicationGroupMutation) ResetGroupLogo() {
+	m.group_logo = nil
+}
+
+// SetGroupOwner sets the "group_owner" field.
+func (m *ApplicationGroupMutation) SetGroupOwner(u uuid.UUID) {
+	m.group_owner = &u
+}
+
+// GroupOwner returns the value of the "group_owner" field in the mutation.
+func (m *ApplicationGroupMutation) GroupOwner() (r uuid.UUID, exists bool) {
+	v := m.group_owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGroupOwner returns the old "group_owner" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldGroupOwner(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldGroupOwner is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldGroupOwner requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGroupOwner: %w", err)
+	}
+	return oldValue.GroupOwner, nil
+}
+
+// ResetGroupOwner resets all changes to the "group_owner" field.
+func (m *ApplicationGroupMutation) ResetGroupOwner() {
+	m.group_owner = nil
+}
+
+// SetAnnotation sets the "annotation" field.
+func (m *ApplicationGroupMutation) SetAnnotation(s string) {
+	m.annotation = &s
+}
+
+// Annotation returns the value of the "annotation" field in the mutation.
+func (m *ApplicationGroupMutation) Annotation() (r string, exists bool) {
+	v := m.annotation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnnotation returns the old "annotation" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldAnnotation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAnnotation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAnnotation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnnotation: %w", err)
+	}
+	return oldValue.Annotation, nil
+}
+
+// ClearAnnotation clears the value of the "annotation" field.
+func (m *ApplicationGroupMutation) ClearAnnotation() {
+	m.annotation = nil
+	m.clearedFields[applicationgroup.FieldAnnotation] = struct{}{}
+}
+
+// AnnotationCleared returns if the "annotation" field was cleared in this mutation.
+func (m *ApplicationGroupMutation) AnnotationCleared() bool {
+	_, ok := m.clearedFields[applicationgroup.FieldAnnotation]
+	return ok
+}
+
+// ResetAnnotation resets all changes to the "annotation" field.
+func (m *ApplicationGroupMutation) ResetAnnotation() {
+	m.annotation = nil
+	delete(m.clearedFields, applicationgroup.FieldAnnotation)
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *ApplicationGroupMutation) SetCreateAt(i int64) {
+	m.create_at = &i
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *ApplicationGroupMutation) CreateAt() (r int64, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds i to the "create_at" field.
+func (m *ApplicationGroupMutation) AddCreateAt(i int64) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += i
+	} else {
+		m.addcreate_at = &i
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *ApplicationGroupMutation) AddedCreateAt() (r int64, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *ApplicationGroupMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (m *ApplicationGroupMutation) SetUpdateAt(i int64) {
+	m.update_at = &i
+	m.addupdate_at = nil
+}
+
+// UpdateAt returns the value of the "update_at" field in the mutation.
+func (m *ApplicationGroupMutation) UpdateAt() (r int64, exists bool) {
+	v := m.update_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateAt returns the old "update_at" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUpdateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
+	}
+	return oldValue.UpdateAt, nil
+}
+
+// AddUpdateAt adds i to the "update_at" field.
+func (m *ApplicationGroupMutation) AddUpdateAt(i int64) {
+	if m.addupdate_at != nil {
+		*m.addupdate_at += i
+	} else {
+		m.addupdate_at = &i
+	}
+}
+
+// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
+func (m *ApplicationGroupMutation) AddedUpdateAt() (r int64, exists bool) {
+	v := m.addupdate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdateAt resets all changes to the "update_at" field.
+func (m *ApplicationGroupMutation) ResetUpdateAt() {
+	m.update_at = nil
+	m.addupdate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *ApplicationGroupMutation) SetDeleteAt(i int64) {
+	m.delete_at = &i
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *ApplicationGroupMutation) DeleteAt() (r int64, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the ApplicationGroup entity.
+// If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds i to the "delete_at" field.
+func (m *ApplicationGroupMutation) AddDeleteAt(i int64) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += i
+	} else {
+		m.adddelete_at = &i
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *ApplicationGroupMutation) AddedDeleteAt() (r int64, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *ApplicationGroupMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// Where appends a list predicates to the ApplicationGroupMutation builder.
+func (m *ApplicationGroupMutation) Where(ps ...predicate.ApplicationGroup) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ApplicationGroupMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ApplicationGroup).
+func (m *ApplicationGroupMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ApplicationGroupMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.app_id != nil {
+		fields = append(fields, applicationgroup.FieldAppID)
+	}
+	if m.group_name != nil {
+		fields = append(fields, applicationgroup.FieldGroupName)
+	}
+	if m.group_logo != nil {
+		fields = append(fields, applicationgroup.FieldGroupLogo)
+	}
+	if m.group_owner != nil {
+		fields = append(fields, applicationgroup.FieldGroupOwner)
+	}
+	if m.annotation != nil {
+		fields = append(fields, applicationgroup.FieldAnnotation)
+	}
+	if m.create_at != nil {
+		fields = append(fields, applicationgroup.FieldCreateAt)
+	}
+	if m.update_at != nil {
+		fields = append(fields, applicationgroup.FieldUpdateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, applicationgroup.FieldDeleteAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ApplicationGroupMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case applicationgroup.FieldAppID:
+		return m.AppID()
+	case applicationgroup.FieldGroupName:
+		return m.GroupName()
+	case applicationgroup.FieldGroupLogo:
+		return m.GroupLogo()
+	case applicationgroup.FieldGroupOwner:
+		return m.GroupOwner()
+	case applicationgroup.FieldAnnotation:
+		return m.Annotation()
+	case applicationgroup.FieldCreateAt:
+		return m.CreateAt()
+	case applicationgroup.FieldUpdateAt:
+		return m.UpdateAt()
+	case applicationgroup.FieldDeleteAt:
+		return m.DeleteAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ApplicationGroupMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case applicationgroup.FieldAppID:
+		return m.OldAppID(ctx)
+	case applicationgroup.FieldGroupName:
+		return m.OldGroupName(ctx)
+	case applicationgroup.FieldGroupLogo:
+		return m.OldGroupLogo(ctx)
+	case applicationgroup.FieldGroupOwner:
+		return m.OldGroupOwner(ctx)
+	case applicationgroup.FieldAnnotation:
+		return m.OldAnnotation(ctx)
+	case applicationgroup.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case applicationgroup.FieldUpdateAt:
+		return m.OldUpdateAt(ctx)
+	case applicationgroup.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown ApplicationGroup field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationGroupMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case applicationgroup.FieldAppID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
+		return nil
+	case applicationgroup.FieldGroupName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGroupName(v)
+		return nil
+	case applicationgroup.FieldGroupLogo:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGroupLogo(v)
+		return nil
+	case applicationgroup.FieldGroupOwner:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGroupOwner(v)
+		return nil
+	case applicationgroup.FieldAnnotation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnnotation(v)
+		return nil
+	case applicationgroup.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case applicationgroup.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateAt(v)
+		return nil
+	case applicationgroup.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroup field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ApplicationGroupMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, applicationgroup.FieldCreateAt)
+	}
+	if m.addupdate_at != nil {
+		fields = append(fields, applicationgroup.FieldUpdateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, applicationgroup.FieldDeleteAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ApplicationGroupMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case applicationgroup.FieldCreateAt:
+		return m.AddedCreateAt()
+	case applicationgroup.FieldUpdateAt:
+		return m.AddedUpdateAt()
+	case applicationgroup.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationGroupMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case applicationgroup.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case applicationgroup.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateAt(v)
+		return nil
+	case applicationgroup.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroup numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ApplicationGroupMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(applicationgroup.FieldAnnotation) {
+		fields = append(fields, applicationgroup.FieldAnnotation)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ApplicationGroupMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ApplicationGroupMutation) ClearField(name string) error {
+	switch name {
+	case applicationgroup.FieldAnnotation:
+		m.ClearAnnotation()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroup nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ApplicationGroupMutation) ResetField(name string) error {
+	switch name {
+	case applicationgroup.FieldAppID:
+		m.ResetAppID()
+		return nil
+	case applicationgroup.FieldGroupName:
+		m.ResetGroupName()
+		return nil
+	case applicationgroup.FieldGroupLogo:
+		m.ResetGroupLogo()
+		return nil
+	case applicationgroup.FieldGroupOwner:
+		m.ResetGroupOwner()
+		return nil
+	case applicationgroup.FieldAnnotation:
+		m.ResetAnnotation()
+		return nil
+	case applicationgroup.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case applicationgroup.FieldUpdateAt:
+		m.ResetUpdateAt()
+		return nil
+	case applicationgroup.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroup field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ApplicationGroupMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ApplicationGroupMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ApplicationGroupMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ApplicationGroupMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ApplicationGroupMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ApplicationGroupMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ApplicationGroupMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationGroup unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ApplicationGroupMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationGroup edge %s", name)
+}
+
+// ApplicationGroupUserMutation represents an operation that mutates the ApplicationGroupUser nodes in the graph.
+type ApplicationGroupUserMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	group_id      *uuid.UUID
+	app_id        *string
+	user_id       *uuid.UUID
+	annotation    *string
+	create_at     *int64
+	addcreate_at  *int64
+	delete_at     *int64
+	adddelete_at  *int64
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ApplicationGroupUser, error)
+	predicates    []predicate.ApplicationGroupUser
+}
+
+var _ ent.Mutation = (*ApplicationGroupUserMutation)(nil)
+
+// applicationgroupuserOption allows management of the mutation configuration using functional options.
+type applicationgroupuserOption func(*ApplicationGroupUserMutation)
+
+// newApplicationGroupUserMutation creates new mutation for the ApplicationGroupUser entity.
+func newApplicationGroupUserMutation(c config, op Op, opts ...applicationgroupuserOption) *ApplicationGroupUserMutation {
+	m := &ApplicationGroupUserMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeApplicationGroupUser,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withApplicationGroupUserID sets the ID field of the mutation.
+func withApplicationGroupUserID(id uuid.UUID) applicationgroupuserOption {
+	return func(m *ApplicationGroupUserMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ApplicationGroupUser
+		)
+		m.oldValue = func(ctx context.Context) (*ApplicationGroupUser, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ApplicationGroupUser.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withApplicationGroupUser sets the old ApplicationGroupUser of the mutation.
+func withApplicationGroupUser(node *ApplicationGroupUser) applicationgroupuserOption {
+	return func(m *ApplicationGroupUserMutation) {
+		m.oldValue = func(context.Context) (*ApplicationGroupUser, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ApplicationGroupUserMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ApplicationGroupUserMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ApplicationGroupUser entities.
+func (m *ApplicationGroupUserMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ApplicationGroupUserMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetGroupID sets the "group_id" field.
+func (m *ApplicationGroupUserMutation) SetGroupID(u uuid.UUID) {
+	m.group_id = &u
+}
+
+// GroupID returns the value of the "group_id" field in the mutation.
+func (m *ApplicationGroupUserMutation) GroupID() (r uuid.UUID, exists bool) {
+	v := m.group_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGroupID returns the old "group_id" field's value of the ApplicationGroupUser entity.
+// If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupUserMutation) OldGroupID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldGroupID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldGroupID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGroupID: %w", err)
+	}
+	return oldValue.GroupID, nil
+}
+
+// ResetGroupID resets all changes to the "group_id" field.
+func (m *ApplicationGroupUserMutation) ResetGroupID() {
+	m.group_id = nil
+}
+
+// SetAppID sets the "app_id" field.
+func (m *ApplicationGroupUserMutation) SetAppID(s string) {
+	m.app_id = &s
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *ApplicationGroupUserMutation) AppID() (r string, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the ApplicationGroupUser entity.
+// If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupUserMutation) OldAppID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *ApplicationGroupUserMutation) ResetAppID() {
+	m.app_id = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *ApplicationGroupUserMutation) SetUserID(u uuid.UUID) {
+	m.user_id = &u
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *ApplicationGroupUserMutation) UserID() (r uuid.UUID, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the ApplicationGroupUser entity.
+// If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupUserMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *ApplicationGroupUserMutation) ResetUserID() {
+	m.user_id = nil
+}
+
+// SetAnnotation sets the "annotation" field.
+func (m *ApplicationGroupUserMutation) SetAnnotation(s string) {
+	m.annotation = &s
+}
+
+// Annotation returns the value of the "annotation" field in the mutation.
+func (m *ApplicationGroupUserMutation) Annotation() (r string, exists bool) {
+	v := m.annotation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnnotation returns the old "annotation" field's value of the ApplicationGroupUser entity.
+// If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupUserMutation) OldAnnotation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAnnotation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAnnotation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnnotation: %w", err)
+	}
+	return oldValue.Annotation, nil
+}
+
+// ClearAnnotation clears the value of the "annotation" field.
+func (m *ApplicationGroupUserMutation) ClearAnnotation() {
+	m.annotation = nil
+	m.clearedFields[applicationgroupuser.FieldAnnotation] = struct{}{}
+}
+
+// AnnotationCleared returns if the "annotation" field was cleared in this mutation.
+func (m *ApplicationGroupUserMutation) AnnotationCleared() bool {
+	_, ok := m.clearedFields[applicationgroupuser.FieldAnnotation]
+	return ok
+}
+
+// ResetAnnotation resets all changes to the "annotation" field.
+func (m *ApplicationGroupUserMutation) ResetAnnotation() {
+	m.annotation = nil
+	delete(m.clearedFields, applicationgroupuser.FieldAnnotation)
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *ApplicationGroupUserMutation) SetCreateAt(i int64) {
+	m.create_at = &i
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *ApplicationGroupUserMutation) CreateAt() (r int64, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the ApplicationGroupUser entity.
+// If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupUserMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds i to the "create_at" field.
+func (m *ApplicationGroupUserMutation) AddCreateAt(i int64) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += i
+	} else {
+		m.addcreate_at = &i
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *ApplicationGroupUserMutation) AddedCreateAt() (r int64, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *ApplicationGroupUserMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *ApplicationGroupUserMutation) SetDeleteAt(i int64) {
+	m.delete_at = &i
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *ApplicationGroupUserMutation) DeleteAt() (r int64, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the ApplicationGroupUser entity.
+// If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationGroupUserMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds i to the "delete_at" field.
+func (m *ApplicationGroupUserMutation) AddDeleteAt(i int64) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += i
+	} else {
+		m.adddelete_at = &i
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *ApplicationGroupUserMutation) AddedDeleteAt() (r int64, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *ApplicationGroupUserMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// Where appends a list predicates to the ApplicationGroupUserMutation builder.
+func (m *ApplicationGroupUserMutation) Where(ps ...predicate.ApplicationGroupUser) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ApplicationGroupUserMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ApplicationGroupUser).
+func (m *ApplicationGroupUserMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ApplicationGroupUserMutation) Fields() []string {
+	fields := make([]string, 0, 6)
+	if m.group_id != nil {
+		fields = append(fields, applicationgroupuser.FieldGroupID)
+	}
+	if m.app_id != nil {
+		fields = append(fields, applicationgroupuser.FieldAppID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, applicationgroupuser.FieldUserID)
+	}
+	if m.annotation != nil {
+		fields = append(fields, applicationgroupuser.FieldAnnotation)
+	}
+	if m.create_at != nil {
+		fields = append(fields, applicationgroupuser.FieldCreateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, applicationgroupuser.FieldDeleteAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ApplicationGroupUserMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case applicationgroupuser.FieldGroupID:
+		return m.GroupID()
+	case applicationgroupuser.FieldAppID:
+		return m.AppID()
+	case applicationgroupuser.FieldUserID:
+		return m.UserID()
+	case applicationgroupuser.FieldAnnotation:
+		return m.Annotation()
+	case applicationgroupuser.FieldCreateAt:
+		return m.CreateAt()
+	case applicationgroupuser.FieldDeleteAt:
+		return m.DeleteAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ApplicationGroupUserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case applicationgroupuser.FieldGroupID:
+		return m.OldGroupID(ctx)
+	case applicationgroupuser.FieldAppID:
+		return m.OldAppID(ctx)
+	case applicationgroupuser.FieldUserID:
+		return m.OldUserID(ctx)
+	case applicationgroupuser.FieldAnnotation:
+		return m.OldAnnotation(ctx)
+	case applicationgroupuser.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case applicationgroupuser.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown ApplicationGroupUser field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationGroupUserMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case applicationgroupuser.FieldGroupID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGroupID(v)
+		return nil
+	case applicationgroupuser.FieldAppID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
+		return nil
+	case applicationgroupuser.FieldUserID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case applicationgroupuser.FieldAnnotation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnnotation(v)
+		return nil
+	case applicationgroupuser.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case applicationgroupuser.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroupUser field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ApplicationGroupUserMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, applicationgroupuser.FieldCreateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, applicationgroupuser.FieldDeleteAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ApplicationGroupUserMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case applicationgroupuser.FieldCreateAt:
+		return m.AddedCreateAt()
+	case applicationgroupuser.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationGroupUserMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case applicationgroupuser.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case applicationgroupuser.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroupUser numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ApplicationGroupUserMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(applicationgroupuser.FieldAnnotation) {
+		fields = append(fields, applicationgroupuser.FieldAnnotation)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ApplicationGroupUserMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ApplicationGroupUserMutation) ClearField(name string) error {
+	switch name {
+	case applicationgroupuser.FieldAnnotation:
+		m.ClearAnnotation()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroupUser nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ApplicationGroupUserMutation) ResetField(name string) error {
+	switch name {
+	case applicationgroupuser.FieldGroupID:
+		m.ResetGroupID()
+		return nil
+	case applicationgroupuser.FieldAppID:
+		m.ResetAppID()
+		return nil
+	case applicationgroupuser.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case applicationgroupuser.FieldAnnotation:
+		m.ResetAnnotation()
+		return nil
+	case applicationgroupuser.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case applicationgroupuser.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationGroupUser field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ApplicationGroupUserMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ApplicationGroupUserMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ApplicationGroupUserMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ApplicationGroupUserMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ApplicationGroupUserMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ApplicationGroupUserMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ApplicationGroupUserMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationGroupUser unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ApplicationGroupUserMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationGroupUser edge %s", name)
+}
+
+// ApplicationResourceMutation represents an operation that mutates the ApplicationResource nodes in the graph.
+type ApplicationResourceMutation struct {
+	config
+	op                   Op
+	typ                  string
+	id                   *uuid.UUID
+	app_id               *string
+	resource_name        *string
+	resource_description *string
+	_type                *applicationresource.Type
+	creator              *uuid.UUID
+	create_at            *int64
+	addcreate_at         *int64
+	update_at            *int64
+	addupdate_at         *int64
+	delete_at            *int64
+	adddelete_at         *int64
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*ApplicationResource, error)
+	predicates           []predicate.ApplicationResource
+}
+
+var _ ent.Mutation = (*ApplicationResourceMutation)(nil)
+
+// applicationresourceOption allows management of the mutation configuration using functional options.
+type applicationresourceOption func(*ApplicationResourceMutation)
+
+// newApplicationResourceMutation creates new mutation for the ApplicationResource entity.
+func newApplicationResourceMutation(c config, op Op, opts ...applicationresourceOption) *ApplicationResourceMutation {
+	m := &ApplicationResourceMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeApplicationResource,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withApplicationResourceID sets the ID field of the mutation.
+func withApplicationResourceID(id uuid.UUID) applicationresourceOption {
+	return func(m *ApplicationResourceMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ApplicationResource
+		)
+		m.oldValue = func(ctx context.Context) (*ApplicationResource, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ApplicationResource.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withApplicationResource sets the old ApplicationResource of the mutation.
+func withApplicationResource(node *ApplicationResource) applicationresourceOption {
+	return func(m *ApplicationResourceMutation) {
+		m.oldValue = func(context.Context) (*ApplicationResource, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ApplicationResourceMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ApplicationResourceMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ApplicationResource entities.
+func (m *ApplicationResourceMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ApplicationResourceMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetAppID sets the "app_id" field.
+func (m *ApplicationResourceMutation) SetAppID(s string) {
+	m.app_id = &s
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *ApplicationResourceMutation) AppID() (r string, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldAppID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *ApplicationResourceMutation) ResetAppID() {
+	m.app_id = nil
+}
+
+// SetResourceName sets the "resource_name" field.
+func (m *ApplicationResourceMutation) SetResourceName(s string) {
+	m.resource_name = &s
+}
+
+// ResourceName returns the value of the "resource_name" field in the mutation.
+func (m *ApplicationResourceMutation) ResourceName() (r string, exists bool) {
+	v := m.resource_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldResourceName returns the old "resource_name" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldResourceName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldResourceName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldResourceName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldResourceName: %w", err)
+	}
+	return oldValue.ResourceName, nil
+}
+
+// ResetResourceName resets all changes to the "resource_name" field.
+func (m *ApplicationResourceMutation) ResetResourceName() {
+	m.resource_name = nil
+}
+
+// SetResourceDescription sets the "resource_description" field.
+func (m *ApplicationResourceMutation) SetResourceDescription(s string) {
+	m.resource_description = &s
+}
+
+// ResourceDescription returns the value of the "resource_description" field in the mutation.
+func (m *ApplicationResourceMutation) ResourceDescription() (r string, exists bool) {
+	v := m.resource_description
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldResourceDescription returns the old "resource_description" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldResourceDescription(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldResourceDescription is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldResourceDescription requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldResourceDescription: %w", err)
+	}
+	return oldValue.ResourceDescription, nil
+}
+
+// ResetResourceDescription resets all changes to the "resource_description" field.
+func (m *ApplicationResourceMutation) ResetResourceDescription() {
+	m.resource_description = nil
+}
+
+// SetType sets the "type" field.
+func (m *ApplicationResourceMutation) SetType(a applicationresource.Type) {
+	m._type = &a
+}
+
+// GetType returns the value of the "type" field in the mutation.
+func (m *ApplicationResourceMutation) GetType() (r applicationresource.Type, exists bool) {
+	v := m._type
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldType returns the old "type" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldType(ctx context.Context) (v applicationresource.Type, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldType is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldType requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
+	}
+	return oldValue.Type, nil
+}
+
+// ResetType resets all changes to the "type" field.
+func (m *ApplicationResourceMutation) ResetType() {
+	m._type = nil
+}
+
+// SetCreator sets the "creator" field.
+func (m *ApplicationResourceMutation) SetCreator(u uuid.UUID) {
+	m.creator = &u
+}
+
+// Creator returns the value of the "creator" field in the mutation.
+func (m *ApplicationResourceMutation) Creator() (r uuid.UUID, exists bool) {
+	v := m.creator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreator returns the old "creator" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldCreator(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreator: %w", err)
+	}
+	return oldValue.Creator, nil
+}
+
+// ResetCreator resets all changes to the "creator" field.
+func (m *ApplicationResourceMutation) ResetCreator() {
+	m.creator = nil
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *ApplicationResourceMutation) SetCreateAt(i int64) {
+	m.create_at = &i
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *ApplicationResourceMutation) CreateAt() (r int64, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds i to the "create_at" field.
+func (m *ApplicationResourceMutation) AddCreateAt(i int64) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += i
+	} else {
+		m.addcreate_at = &i
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *ApplicationResourceMutation) AddedCreateAt() (r int64, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *ApplicationResourceMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (m *ApplicationResourceMutation) SetUpdateAt(i int64) {
+	m.update_at = &i
+	m.addupdate_at = nil
+}
+
+// UpdateAt returns the value of the "update_at" field in the mutation.
+func (m *ApplicationResourceMutation) UpdateAt() (r int64, exists bool) {
+	v := m.update_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateAt returns the old "update_at" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUpdateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
+	}
+	return oldValue.UpdateAt, nil
+}
+
+// AddUpdateAt adds i to the "update_at" field.
+func (m *ApplicationResourceMutation) AddUpdateAt(i int64) {
+	if m.addupdate_at != nil {
+		*m.addupdate_at += i
+	} else {
+		m.addupdate_at = &i
+	}
+}
+
+// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
+func (m *ApplicationResourceMutation) AddedUpdateAt() (r int64, exists bool) {
+	v := m.addupdate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdateAt resets all changes to the "update_at" field.
+func (m *ApplicationResourceMutation) ResetUpdateAt() {
+	m.update_at = nil
+	m.addupdate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *ApplicationResourceMutation) SetDeleteAt(i int64) {
+	m.delete_at = &i
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *ApplicationResourceMutation) DeleteAt() (r int64, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the ApplicationResource entity.
+// If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationResourceMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds i to the "delete_at" field.
+func (m *ApplicationResourceMutation) AddDeleteAt(i int64) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += i
+	} else {
+		m.adddelete_at = &i
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *ApplicationResourceMutation) AddedDeleteAt() (r int64, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *ApplicationResourceMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// Where appends a list predicates to the ApplicationResourceMutation builder.
+func (m *ApplicationResourceMutation) Where(ps ...predicate.ApplicationResource) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ApplicationResourceMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ApplicationResource).
+func (m *ApplicationResourceMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ApplicationResourceMutation) Fields() []string {
+	fields := make([]string, 0, 8)
+	if m.app_id != nil {
+		fields = append(fields, applicationresource.FieldAppID)
+	}
+	if m.resource_name != nil {
+		fields = append(fields, applicationresource.FieldResourceName)
+	}
+	if m.resource_description != nil {
+		fields = append(fields, applicationresource.FieldResourceDescription)
+	}
+	if m._type != nil {
+		fields = append(fields, applicationresource.FieldType)
+	}
+	if m.creator != nil {
+		fields = append(fields, applicationresource.FieldCreator)
+	}
+	if m.create_at != nil {
+		fields = append(fields, applicationresource.FieldCreateAt)
+	}
+	if m.update_at != nil {
+		fields = append(fields, applicationresource.FieldUpdateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, applicationresource.FieldDeleteAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ApplicationResourceMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case applicationresource.FieldAppID:
+		return m.AppID()
+	case applicationresource.FieldResourceName:
+		return m.ResourceName()
+	case applicationresource.FieldResourceDescription:
+		return m.ResourceDescription()
+	case applicationresource.FieldType:
+		return m.GetType()
+	case applicationresource.FieldCreator:
+		return m.Creator()
+	case applicationresource.FieldCreateAt:
+		return m.CreateAt()
+	case applicationresource.FieldUpdateAt:
+		return m.UpdateAt()
+	case applicationresource.FieldDeleteAt:
+		return m.DeleteAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ApplicationResourceMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case applicationresource.FieldAppID:
+		return m.OldAppID(ctx)
+	case applicationresource.FieldResourceName:
+		return m.OldResourceName(ctx)
+	case applicationresource.FieldResourceDescription:
+		return m.OldResourceDescription(ctx)
+	case applicationresource.FieldType:
+		return m.OldType(ctx)
+	case applicationresource.FieldCreator:
+		return m.OldCreator(ctx)
+	case applicationresource.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case applicationresource.FieldUpdateAt:
+		return m.OldUpdateAt(ctx)
+	case applicationresource.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown ApplicationResource field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationResourceMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case applicationresource.FieldAppID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
+		return nil
+	case applicationresource.FieldResourceName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetResourceName(v)
+		return nil
+	case applicationresource.FieldResourceDescription:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetResourceDescription(v)
+		return nil
+	case applicationresource.FieldType:
+		v, ok := value.(applicationresource.Type)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetType(v)
+		return nil
+	case applicationresource.FieldCreator:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreator(v)
+		return nil
+	case applicationresource.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case applicationresource.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateAt(v)
+		return nil
+	case applicationresource.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationResource field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ApplicationResourceMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, applicationresource.FieldCreateAt)
+	}
+	if m.addupdate_at != nil {
+		fields = append(fields, applicationresource.FieldUpdateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, applicationresource.FieldDeleteAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ApplicationResourceMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case applicationresource.FieldCreateAt:
+		return m.AddedCreateAt()
+	case applicationresource.FieldUpdateAt:
+		return m.AddedUpdateAt()
+	case applicationresource.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationResourceMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case applicationresource.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case applicationresource.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateAt(v)
+		return nil
+	case applicationresource.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationResource numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ApplicationResourceMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ApplicationResourceMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ApplicationResourceMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ApplicationResource nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ApplicationResourceMutation) ResetField(name string) error {
+	switch name {
+	case applicationresource.FieldAppID:
+		m.ResetAppID()
+		return nil
+	case applicationresource.FieldResourceName:
+		m.ResetResourceName()
+		return nil
+	case applicationresource.FieldResourceDescription:
+		m.ResetResourceDescription()
+		return nil
+	case applicationresource.FieldType:
+		m.ResetType()
+		return nil
+	case applicationresource.FieldCreator:
+		m.ResetCreator()
+		return nil
+	case applicationresource.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case applicationresource.FieldUpdateAt:
+		m.ResetUpdateAt()
+		return nil
+	case applicationresource.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationResource field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ApplicationResourceMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ApplicationResourceMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ApplicationResourceMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ApplicationResourceMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ApplicationResourceMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ApplicationResourceMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ApplicationResourceMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationResource unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ApplicationResourceMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationResource edge %s", name)
+}
+
+// ApplicationRoleMutation represents an operation that mutates the ApplicationRole nodes in the graph.
+type ApplicationRoleMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	app_id        *string
+	role_name     *string
+	creator       *uuid.UUID
+	create_at     *int64
+	addcreate_at  *int64
+	update_at     *int64
+	addupdate_at  *int64
+	delete_at     *int64
+	adddelete_at  *int64
+	annotation    *string
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ApplicationRole, error)
+	predicates    []predicate.ApplicationRole
+}
+
+var _ ent.Mutation = (*ApplicationRoleMutation)(nil)
+
+// applicationroleOption allows management of the mutation configuration using functional options.
+type applicationroleOption func(*ApplicationRoleMutation)
+
+// newApplicationRoleMutation creates new mutation for the ApplicationRole entity.
+func newApplicationRoleMutation(c config, op Op, opts ...applicationroleOption) *ApplicationRoleMutation {
+	m := &ApplicationRoleMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeApplicationRole,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withApplicationRoleID sets the ID field of the mutation.
+func withApplicationRoleID(id uuid.UUID) applicationroleOption {
+	return func(m *ApplicationRoleMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ApplicationRole
+		)
+		m.oldValue = func(ctx context.Context) (*ApplicationRole, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ApplicationRole.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withApplicationRole sets the old ApplicationRole of the mutation.
+func withApplicationRole(node *ApplicationRole) applicationroleOption {
+	return func(m *ApplicationRoleMutation) {
+		m.oldValue = func(context.Context) (*ApplicationRole, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ApplicationRoleMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ApplicationRoleMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ApplicationRole entities.
+func (m *ApplicationRoleMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ApplicationRoleMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetAppID sets the "app_id" field.
+func (m *ApplicationRoleMutation) SetAppID(s string) {
+	m.app_id = &s
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *ApplicationRoleMutation) AppID() (r string, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the ApplicationRole entity.
+// If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleMutation) OldAppID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *ApplicationRoleMutation) ResetAppID() {
+	m.app_id = nil
+}
+
+// SetRoleName sets the "role_name" field.
+func (m *ApplicationRoleMutation) SetRoleName(s string) {
+	m.role_name = &s
+}
+
+// RoleName returns the value of the "role_name" field in the mutation.
+func (m *ApplicationRoleMutation) RoleName() (r string, exists bool) {
+	v := m.role_name
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRoleName returns the old "role_name" field's value of the ApplicationRole entity.
+// If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleMutation) OldRoleName(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldRoleName is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldRoleName requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRoleName: %w", err)
+	}
+	return oldValue.RoleName, nil
+}
+
+// ResetRoleName resets all changes to the "role_name" field.
+func (m *ApplicationRoleMutation) ResetRoleName() {
+	m.role_name = nil
+}
+
+// SetCreator sets the "creator" field.
+func (m *ApplicationRoleMutation) SetCreator(u uuid.UUID) {
+	m.creator = &u
+}
+
+// Creator returns the value of the "creator" field in the mutation.
+func (m *ApplicationRoleMutation) Creator() (r uuid.UUID, exists bool) {
+	v := m.creator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreator returns the old "creator" field's value of the ApplicationRole entity.
+// If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleMutation) OldCreator(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreator: %w", err)
+	}
+	return oldValue.Creator, nil
+}
+
+// ResetCreator resets all changes to the "creator" field.
+func (m *ApplicationRoleMutation) ResetCreator() {
+	m.creator = nil
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *ApplicationRoleMutation) SetCreateAt(i int64) {
+	m.create_at = &i
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *ApplicationRoleMutation) CreateAt() (r int64, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the ApplicationRole entity.
+// If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds i to the "create_at" field.
+func (m *ApplicationRoleMutation) AddCreateAt(i int64) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += i
+	} else {
+		m.addcreate_at = &i
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *ApplicationRoleMutation) AddedCreateAt() (r int64, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *ApplicationRoleMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetUpdateAt sets the "update_at" field.
+func (m *ApplicationRoleMutation) SetUpdateAt(i int64) {
+	m.update_at = &i
+	m.addupdate_at = nil
+}
+
+// UpdateAt returns the value of the "update_at" field in the mutation.
+func (m *ApplicationRoleMutation) UpdateAt() (r int64, exists bool) {
+	v := m.update_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdateAt returns the old "update_at" field's value of the ApplicationRole entity.
+// If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUpdateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdateAt: %w", err)
+	}
+	return oldValue.UpdateAt, nil
+}
+
+// AddUpdateAt adds i to the "update_at" field.
+func (m *ApplicationRoleMutation) AddUpdateAt(i int64) {
+	if m.addupdate_at != nil {
+		*m.addupdate_at += i
+	} else {
+		m.addupdate_at = &i
+	}
+}
+
+// AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
+func (m *ApplicationRoleMutation) AddedUpdateAt() (r int64, exists bool) {
+	v := m.addupdate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUpdateAt resets all changes to the "update_at" field.
+func (m *ApplicationRoleMutation) ResetUpdateAt() {
+	m.update_at = nil
+	m.addupdate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *ApplicationRoleMutation) SetDeleteAt(i int64) {
+	m.delete_at = &i
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *ApplicationRoleMutation) DeleteAt() (r int64, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the ApplicationRole entity.
+// If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds i to the "delete_at" field.
+func (m *ApplicationRoleMutation) AddDeleteAt(i int64) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += i
+	} else {
+		m.adddelete_at = &i
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *ApplicationRoleMutation) AddedDeleteAt() (r int64, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *ApplicationRoleMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// SetAnnotation sets the "annotation" field.
+func (m *ApplicationRoleMutation) SetAnnotation(s string) {
+	m.annotation = &s
+}
+
+// Annotation returns the value of the "annotation" field in the mutation.
+func (m *ApplicationRoleMutation) Annotation() (r string, exists bool) {
+	v := m.annotation
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAnnotation returns the old "annotation" field's value of the ApplicationRole entity.
+// If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleMutation) OldAnnotation(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAnnotation is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAnnotation requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAnnotation: %w", err)
+	}
+	return oldValue.Annotation, nil
+}
+
+// ClearAnnotation clears the value of the "annotation" field.
+func (m *ApplicationRoleMutation) ClearAnnotation() {
+	m.annotation = nil
+	m.clearedFields[applicationrole.FieldAnnotation] = struct{}{}
+}
+
+// AnnotationCleared returns if the "annotation" field was cleared in this mutation.
+func (m *ApplicationRoleMutation) AnnotationCleared() bool {
+	_, ok := m.clearedFields[applicationrole.FieldAnnotation]
+	return ok
+}
+
+// ResetAnnotation resets all changes to the "annotation" field.
+func (m *ApplicationRoleMutation) ResetAnnotation() {
+	m.annotation = nil
+	delete(m.clearedFields, applicationrole.FieldAnnotation)
+}
+
+// Where appends a list predicates to the ApplicationRoleMutation builder.
+func (m *ApplicationRoleMutation) Where(ps ...predicate.ApplicationRole) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ApplicationRoleMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ApplicationRole).
+func (m *ApplicationRoleMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ApplicationRoleMutation) Fields() []string {
+	fields := make([]string, 0, 7)
+	if m.app_id != nil {
+		fields = append(fields, applicationrole.FieldAppID)
+	}
+	if m.role_name != nil {
+		fields = append(fields, applicationrole.FieldRoleName)
+	}
+	if m.creator != nil {
+		fields = append(fields, applicationrole.FieldCreator)
+	}
+	if m.create_at != nil {
+		fields = append(fields, applicationrole.FieldCreateAt)
+	}
+	if m.update_at != nil {
+		fields = append(fields, applicationrole.FieldUpdateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, applicationrole.FieldDeleteAt)
+	}
+	if m.annotation != nil {
+		fields = append(fields, applicationrole.FieldAnnotation)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ApplicationRoleMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case applicationrole.FieldAppID:
+		return m.AppID()
+	case applicationrole.FieldRoleName:
+		return m.RoleName()
+	case applicationrole.FieldCreator:
+		return m.Creator()
+	case applicationrole.FieldCreateAt:
+		return m.CreateAt()
+	case applicationrole.FieldUpdateAt:
+		return m.UpdateAt()
+	case applicationrole.FieldDeleteAt:
+		return m.DeleteAt()
+	case applicationrole.FieldAnnotation:
+		return m.Annotation()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ApplicationRoleMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case applicationrole.FieldAppID:
+		return m.OldAppID(ctx)
+	case applicationrole.FieldRoleName:
+		return m.OldRoleName(ctx)
+	case applicationrole.FieldCreator:
+		return m.OldCreator(ctx)
+	case applicationrole.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case applicationrole.FieldUpdateAt:
+		return m.OldUpdateAt(ctx)
+	case applicationrole.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	case applicationrole.FieldAnnotation:
+		return m.OldAnnotation(ctx)
+	}
+	return nil, fmt.Errorf("unknown ApplicationRole field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationRoleMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case applicationrole.FieldAppID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
+		return nil
+	case applicationrole.FieldRoleName:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRoleName(v)
+		return nil
+	case applicationrole.FieldCreator:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreator(v)
+		return nil
+	case applicationrole.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case applicationrole.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdateAt(v)
+		return nil
+	case applicationrole.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	case applicationrole.FieldAnnotation:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAnnotation(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationRole field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ApplicationRoleMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, applicationrole.FieldCreateAt)
+	}
+	if m.addupdate_at != nil {
+		fields = append(fields, applicationrole.FieldUpdateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, applicationrole.FieldDeleteAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ApplicationRoleMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case applicationrole.FieldCreateAt:
+		return m.AddedCreateAt()
+	case applicationrole.FieldUpdateAt:
+		return m.AddedUpdateAt()
+	case applicationrole.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationRoleMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case applicationrole.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case applicationrole.FieldUpdateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUpdateAt(v)
+		return nil
+	case applicationrole.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationRole numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ApplicationRoleMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(applicationrole.FieldAnnotation) {
+		fields = append(fields, applicationrole.FieldAnnotation)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ApplicationRoleMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ApplicationRoleMutation) ClearField(name string) error {
+	switch name {
+	case applicationrole.FieldAnnotation:
+		m.ClearAnnotation()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationRole nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ApplicationRoleMutation) ResetField(name string) error {
+	switch name {
+	case applicationrole.FieldAppID:
+		m.ResetAppID()
+		return nil
+	case applicationrole.FieldRoleName:
+		m.ResetRoleName()
+		return nil
+	case applicationrole.FieldCreator:
+		m.ResetCreator()
+		return nil
+	case applicationrole.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case applicationrole.FieldUpdateAt:
+		m.ResetUpdateAt()
+		return nil
+	case applicationrole.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	case applicationrole.FieldAnnotation:
+		m.ResetAnnotation()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationRole field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ApplicationRoleMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ApplicationRoleMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ApplicationRoleMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ApplicationRoleMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ApplicationRoleMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ApplicationRoleMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ApplicationRoleMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationRole unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ApplicationRoleMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationRole edge %s", name)
+}
+
+// ApplicationRoleUserMutation represents an operation that mutates the ApplicationRoleUser nodes in the graph.
+type ApplicationRoleUserMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	app_id        *string
+	role_id       *uuid.UUID
+	user_id       *uuid.UUID
+	create_at     *int64
+	addcreate_at  *int64
+	delete_at     *int64
+	adddelete_at  *int64
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ApplicationRoleUser, error)
+	predicates    []predicate.ApplicationRoleUser
+}
+
+var _ ent.Mutation = (*ApplicationRoleUserMutation)(nil)
+
+// applicationroleuserOption allows management of the mutation configuration using functional options.
+type applicationroleuserOption func(*ApplicationRoleUserMutation)
+
+// newApplicationRoleUserMutation creates new mutation for the ApplicationRoleUser entity.
+func newApplicationRoleUserMutation(c config, op Op, opts ...applicationroleuserOption) *ApplicationRoleUserMutation {
+	m := &ApplicationRoleUserMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeApplicationRoleUser,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withApplicationRoleUserID sets the ID field of the mutation.
+func withApplicationRoleUserID(id uuid.UUID) applicationroleuserOption {
+	return func(m *ApplicationRoleUserMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ApplicationRoleUser
+		)
+		m.oldValue = func(ctx context.Context) (*ApplicationRoleUser, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ApplicationRoleUser.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withApplicationRoleUser sets the old ApplicationRoleUser of the mutation.
+func withApplicationRoleUser(node *ApplicationRoleUser) applicationroleuserOption {
+	return func(m *ApplicationRoleUserMutation) {
+		m.oldValue = func(context.Context) (*ApplicationRoleUser, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ApplicationRoleUserMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ApplicationRoleUserMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ApplicationRoleUser entities.
+func (m *ApplicationRoleUserMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ApplicationRoleUserMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetAppID sets the "app_id" field.
+func (m *ApplicationRoleUserMutation) SetAppID(s string) {
+	m.app_id = &s
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *ApplicationRoleUserMutation) AppID() (r string, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the ApplicationRoleUser entity.
+// If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleUserMutation) OldAppID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *ApplicationRoleUserMutation) ResetAppID() {
+	m.app_id = nil
+}
+
+// SetRoleID sets the "role_id" field.
+func (m *ApplicationRoleUserMutation) SetRoleID(u uuid.UUID) {
+	m.role_id = &u
+}
+
+// RoleID returns the value of the "role_id" field in the mutation.
+func (m *ApplicationRoleUserMutation) RoleID() (r uuid.UUID, exists bool) {
+	v := m.role_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldRoleID returns the old "role_id" field's value of the ApplicationRoleUser entity.
+// If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleUserMutation) OldRoleID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldRoleID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldRoleID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldRoleID: %w", err)
+	}
+	return oldValue.RoleID, nil
+}
+
+// ResetRoleID resets all changes to the "role_id" field.
+func (m *ApplicationRoleUserMutation) ResetRoleID() {
+	m.role_id = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *ApplicationRoleUserMutation) SetUserID(u uuid.UUID) {
+	m.user_id = &u
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *ApplicationRoleUserMutation) UserID() (r uuid.UUID, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the ApplicationRoleUser entity.
+// If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleUserMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *ApplicationRoleUserMutation) ResetUserID() {
+	m.user_id = nil
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *ApplicationRoleUserMutation) SetCreateAt(i int64) {
+	m.create_at = &i
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *ApplicationRoleUserMutation) CreateAt() (r int64, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the ApplicationRoleUser entity.
+// If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleUserMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds i to the "create_at" field.
+func (m *ApplicationRoleUserMutation) AddCreateAt(i int64) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += i
+	} else {
+		m.addcreate_at = &i
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *ApplicationRoleUserMutation) AddedCreateAt() (r int64, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *ApplicationRoleUserMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *ApplicationRoleUserMutation) SetDeleteAt(i int64) {
+	m.delete_at = &i
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *ApplicationRoleUserMutation) DeleteAt() (r int64, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the ApplicationRoleUser entity.
+// If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationRoleUserMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds i to the "delete_at" field.
+func (m *ApplicationRoleUserMutation) AddDeleteAt(i int64) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += i
+	} else {
+		m.adddelete_at = &i
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *ApplicationRoleUserMutation) AddedDeleteAt() (r int64, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *ApplicationRoleUserMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// Where appends a list predicates to the ApplicationRoleUserMutation builder.
+func (m *ApplicationRoleUserMutation) Where(ps ...predicate.ApplicationRoleUser) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ApplicationRoleUserMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ApplicationRoleUser).
+func (m *ApplicationRoleUserMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ApplicationRoleUserMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.app_id != nil {
+		fields = append(fields, applicationroleuser.FieldAppID)
+	}
+	if m.role_id != nil {
+		fields = append(fields, applicationroleuser.FieldRoleID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, applicationroleuser.FieldUserID)
+	}
+	if m.create_at != nil {
+		fields = append(fields, applicationroleuser.FieldCreateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, applicationroleuser.FieldDeleteAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ApplicationRoleUserMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case applicationroleuser.FieldAppID:
+		return m.AppID()
+	case applicationroleuser.FieldRoleID:
+		return m.RoleID()
+	case applicationroleuser.FieldUserID:
+		return m.UserID()
+	case applicationroleuser.FieldCreateAt:
+		return m.CreateAt()
+	case applicationroleuser.FieldDeleteAt:
+		return m.DeleteAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ApplicationRoleUserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case applicationroleuser.FieldAppID:
+		return m.OldAppID(ctx)
+	case applicationroleuser.FieldRoleID:
+		return m.OldRoleID(ctx)
+	case applicationroleuser.FieldUserID:
+		return m.OldUserID(ctx)
+	case applicationroleuser.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case applicationroleuser.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown ApplicationRoleUser field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationRoleUserMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case applicationroleuser.FieldAppID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
+		return nil
+	case applicationroleuser.FieldRoleID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetRoleID(v)
+		return nil
+	case applicationroleuser.FieldUserID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case applicationroleuser.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case applicationroleuser.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationRoleUser field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ApplicationRoleUserMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, applicationroleuser.FieldCreateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, applicationroleuser.FieldDeleteAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ApplicationRoleUserMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case applicationroleuser.FieldCreateAt:
+		return m.AddedCreateAt()
+	case applicationroleuser.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationRoleUserMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case applicationroleuser.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case applicationroleuser.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationRoleUser numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ApplicationRoleUserMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ApplicationRoleUserMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ApplicationRoleUserMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ApplicationRoleUser nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ApplicationRoleUserMutation) ResetField(name string) error {
+	switch name {
+	case applicationroleuser.FieldAppID:
+		m.ResetAppID()
+		return nil
+	case applicationroleuser.FieldRoleID:
+		m.ResetRoleID()
+		return nil
+	case applicationroleuser.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case applicationroleuser.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case applicationroleuser.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationRoleUser field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ApplicationRoleUserMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ApplicationRoleUserMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ApplicationRoleUserMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ApplicationRoleUserMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ApplicationRoleUserMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ApplicationRoleUserMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ApplicationRoleUserMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationRoleUser unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ApplicationRoleUserMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationRoleUser edge %s", name)
+}
+
+// ApplicationUserMutation represents an operation that mutates the ApplicationUser nodes in the graph.
+type ApplicationUserMutation struct {
+	config
+	op            Op
+	typ           string
+	id            *uuid.UUID
+	app_id        *string
+	user_id       *uuid.UUID
+	create_method *applicationuser.CreateMethod
+	create_at     *int64
+	addcreate_at  *int64
+	delete_at     *int64
+	adddelete_at  *int64
+	clearedFields map[string]struct{}
+	done          bool
+	oldValue      func(context.Context) (*ApplicationUser, error)
+	predicates    []predicate.ApplicationUser
+}
+
+var _ ent.Mutation = (*ApplicationUserMutation)(nil)
+
+// applicationuserOption allows management of the mutation configuration using functional options.
+type applicationuserOption func(*ApplicationUserMutation)
+
+// newApplicationUserMutation creates new mutation for the ApplicationUser entity.
+func newApplicationUserMutation(c config, op Op, opts ...applicationuserOption) *ApplicationUserMutation {
+	m := &ApplicationUserMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeApplicationUser,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withApplicationUserID sets the ID field of the mutation.
+func withApplicationUserID(id uuid.UUID) applicationuserOption {
+	return func(m *ApplicationUserMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *ApplicationUser
+		)
+		m.oldValue = func(ctx context.Context) (*ApplicationUser, error) {
+			once.Do(func() {
+				if m.done {
+					err = fmt.Errorf("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().ApplicationUser.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withApplicationUser sets the old ApplicationUser of the mutation.
+func withApplicationUser(node *ApplicationUser) applicationuserOption {
+	return func(m *ApplicationUserMutation) {
+		m.oldValue = func(context.Context) (*ApplicationUser, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m ApplicationUserMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m ApplicationUserMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, fmt.Errorf("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of ApplicationUser entities.
+func (m *ApplicationUserMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *ApplicationUserMutation) ID() (id uuid.UUID, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// SetAppID sets the "app_id" field.
+func (m *ApplicationUserMutation) SetAppID(s string) {
+	m.app_id = &s
+}
+
+// AppID returns the value of the "app_id" field in the mutation.
+func (m *ApplicationUserMutation) AppID() (r string, exists bool) {
+	v := m.app_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAppID returns the old "app_id" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldAppID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldAppID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAppID: %w", err)
+	}
+	return oldValue.AppID, nil
+}
+
+// ResetAppID resets all changes to the "app_id" field.
+func (m *ApplicationUserMutation) ResetAppID() {
+	m.app_id = nil
+}
+
+// SetUserID sets the "user_id" field.
+func (m *ApplicationUserMutation) SetUserID(u uuid.UUID) {
+	m.user_id = &u
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *ApplicationUserMutation) UserID() (r uuid.UUID, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *ApplicationUserMutation) ResetUserID() {
+	m.user_id = nil
+}
+
+// SetCreateMethod sets the "create_method" field.
+func (m *ApplicationUserMutation) SetCreateMethod(am applicationuser.CreateMethod) {
+	m.create_method = &am
+}
+
+// CreateMethod returns the value of the "create_method" field in the mutation.
+func (m *ApplicationUserMutation) CreateMethod() (r applicationuser.CreateMethod, exists bool) {
+	v := m.create_method
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateMethod returns the old "create_method" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldCreateMethod(ctx context.Context) (v applicationuser.CreateMethod, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateMethod is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateMethod requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateMethod: %w", err)
+	}
+	return oldValue.CreateMethod, nil
+}
+
+// ResetCreateMethod resets all changes to the "create_method" field.
+func (m *ApplicationUserMutation) ResetCreateMethod() {
+	m.create_method = nil
+}
+
+// SetCreateAt sets the "create_at" field.
+func (m *ApplicationUserMutation) SetCreateAt(i int64) {
+	m.create_at = &i
+	m.addcreate_at = nil
+}
+
+// CreateAt returns the value of the "create_at" field in the mutation.
+func (m *ApplicationUserMutation) CreateAt() (r int64, exists bool) {
+	v := m.create_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreateAt returns the old "create_at" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldCreateAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreateAt: %w", err)
+	}
+	return oldValue.CreateAt, nil
+}
+
+// AddCreateAt adds i to the "create_at" field.
+func (m *ApplicationUserMutation) AddCreateAt(i int64) {
+	if m.addcreate_at != nil {
+		*m.addcreate_at += i
+	} else {
+		m.addcreate_at = &i
+	}
+}
+
+// AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
+func (m *ApplicationUserMutation) AddedCreateAt() (r int64, exists bool) {
+	v := m.addcreate_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetCreateAt resets all changes to the "create_at" field.
+func (m *ApplicationUserMutation) ResetCreateAt() {
+	m.create_at = nil
+	m.addcreate_at = nil
+}
+
+// SetDeleteAt sets the "delete_at" field.
+func (m *ApplicationUserMutation) SetDeleteAt(i int64) {
+	m.delete_at = &i
+	m.adddelete_at = nil
+}
+
+// DeleteAt returns the value of the "delete_at" field in the mutation.
+func (m *ApplicationUserMutation) DeleteAt() (r int64, exists bool) {
+	v := m.delete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeleteAt returns the old "delete_at" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldDeleteAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeleteAt: %w", err)
+	}
+	return oldValue.DeleteAt, nil
+}
+
+// AddDeleteAt adds i to the "delete_at" field.
+func (m *ApplicationUserMutation) AddDeleteAt(i int64) {
+	if m.adddelete_at != nil {
+		*m.adddelete_at += i
+	} else {
+		m.adddelete_at = &i
+	}
+}
+
+// AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
+func (m *ApplicationUserMutation) AddedDeleteAt() (r int64, exists bool) {
+	v := m.adddelete_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetDeleteAt resets all changes to the "delete_at" field.
+func (m *ApplicationUserMutation) ResetDeleteAt() {
+	m.delete_at = nil
+	m.adddelete_at = nil
+}
+
+// Where appends a list predicates to the ApplicationUserMutation builder.
+func (m *ApplicationUserMutation) Where(ps ...predicate.ApplicationUser) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// Op returns the operation name.
+func (m *ApplicationUserMutation) Op() Op {
+	return m.op
+}
+
+// Type returns the node type of this mutation (ApplicationUser).
+func (m *ApplicationUserMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *ApplicationUserMutation) Fields() []string {
+	fields := make([]string, 0, 5)
+	if m.app_id != nil {
+		fields = append(fields, applicationuser.FieldAppID)
+	}
+	if m.user_id != nil {
+		fields = append(fields, applicationuser.FieldUserID)
+	}
+	if m.create_method != nil {
+		fields = append(fields, applicationuser.FieldCreateMethod)
+	}
+	if m.create_at != nil {
+		fields = append(fields, applicationuser.FieldCreateAt)
+	}
+	if m.delete_at != nil {
+		fields = append(fields, applicationuser.FieldDeleteAt)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *ApplicationUserMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case applicationuser.FieldAppID:
+		return m.AppID()
+	case applicationuser.FieldUserID:
+		return m.UserID()
+	case applicationuser.FieldCreateMethod:
+		return m.CreateMethod()
+	case applicationuser.FieldCreateAt:
+		return m.CreateAt()
+	case applicationuser.FieldDeleteAt:
+		return m.DeleteAt()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *ApplicationUserMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case applicationuser.FieldAppID:
+		return m.OldAppID(ctx)
+	case applicationuser.FieldUserID:
+		return m.OldUserID(ctx)
+	case applicationuser.FieldCreateMethod:
+		return m.OldCreateMethod(ctx)
+	case applicationuser.FieldCreateAt:
+		return m.OldCreateAt(ctx)
+	case applicationuser.FieldDeleteAt:
+		return m.OldDeleteAt(ctx)
+	}
+	return nil, fmt.Errorf("unknown ApplicationUser field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationUserMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case applicationuser.FieldAppID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAppID(v)
+		return nil
+	case applicationuser.FieldUserID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
+	case applicationuser.FieldCreateMethod:
+		v, ok := value.(applicationuser.CreateMethod)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateMethod(v)
+		return nil
+	case applicationuser.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreateAt(v)
+		return nil
+	case applicationuser.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationUser field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *ApplicationUserMutation) AddedFields() []string {
+	var fields []string
+	if m.addcreate_at != nil {
+		fields = append(fields, applicationuser.FieldCreateAt)
+	}
+	if m.adddelete_at != nil {
+		fields = append(fields, applicationuser.FieldDeleteAt)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *ApplicationUserMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case applicationuser.FieldCreateAt:
+		return m.AddedCreateAt()
+	case applicationuser.FieldDeleteAt:
+		return m.AddedDeleteAt()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *ApplicationUserMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case applicationuser.FieldCreateAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddCreateAt(v)
+		return nil
+	case applicationuser.FieldDeleteAt:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddDeleteAt(v)
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationUser numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *ApplicationUserMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *ApplicationUserMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *ApplicationUserMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown ApplicationUser nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *ApplicationUserMutation) ResetField(name string) error {
+	switch name {
+	case applicationuser.FieldAppID:
+		m.ResetAppID()
+		return nil
+	case applicationuser.FieldUserID:
+		m.ResetUserID()
+		return nil
+	case applicationuser.FieldCreateMethod:
+		m.ResetCreateMethod()
+		return nil
+	case applicationuser.FieldCreateAt:
+		m.ResetCreateAt()
+		return nil
+	case applicationuser.FieldDeleteAt:
+		m.ResetDeleteAt()
+		return nil
+	}
+	return fmt.Errorf("unknown ApplicationUser field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *ApplicationUserMutation) AddedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *ApplicationUserMutation) AddedIDs(name string) []ent.Value {
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *ApplicationUserMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *ApplicationUserMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *ApplicationUserMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 0)
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *ApplicationUserMutation) EdgeCleared(name string) bool {
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *ApplicationUserMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationUser unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *ApplicationUserMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown ApplicationUser edge %s", name)
 }
