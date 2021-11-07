@@ -1,20 +1,20 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: service-example-npool-top-ingress
+  name: application-management-npool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: service-example
-    k8s.kuboard.cn/workload: service-example
+    k8s.kuboard.cn/displayName: application-management
+    k8s.kuboard.cn/workload: application-management
     kubernetes.io/ingress.class: "traefik-internet"
 spec:
   rules:
   - host: api.npool.top
     http:
       paths:
-      - path: /service-example
+      - path: /application-management
         backend:
-          serviceName: service-example
+          serviceName: application-management
           servicePort: http
 
 ---
@@ -22,18 +22,18 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: service-example-xpool-top-ingress
+  name: application-management-xpool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: service-example
-    k8s.kuboard.cn/workload: service-example
+    k8s.kuboard.cn/displayName: application-management
+    k8s.kuboard.cn/workload: application-management
     kubernetes.io/ingress.class: "traefik-internet"
 spec:
   rules:
   - host: api.xpool.top
     http:
       paths:
-      - path: /service-example
+      - path: /application-management
         backend:
-          serviceName: service-example
+          serviceName: application-management
           servicePort: http

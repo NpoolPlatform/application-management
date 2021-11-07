@@ -1,0 +1,6 @@
+commonLabels:
+  # app: application-management
+
+resources:
+- 01-application-management.yaml
+- 02-ingress.yaml

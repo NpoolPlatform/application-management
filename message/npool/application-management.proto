@@ -1,0 +1,493 @@
+syntax = "proto3";
+
+package application.management.v1;
+
+option go_package = "github.com/NpoolPlatform/application-management/message/npool";
+
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
+
+service ApplicationManagement {
+    // rpc Echo (StringMessage) returns (StringMessage){
+    //     option (google.api.http) = {
+    //         post: "/v1/echo"
+    //         body: "*"
+    //     };
+    // }
+
+    // Method Version
+    rpc Version (google.protobuf.Empty) returns (VersionResponse){
+        option (google.api.http) = {
+            post: "/version"
+            body: "*"
+        };
+    }
+    /*
+    Create an application.
+    */
+    rpc CreateApplication (CreateApplicationRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/app"
+            body: "*"
+        };
+    };
+    /*
+    Update an application's basic info.
+    */
+    rpc UpdateApplication (UpdateApplicationRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/app"
+            body: "*"
+        };
+    };
+    /*
+    Delete an application. During Deleting, system will use apis to delete app group, delete app resources and app's policies in anubis.
+    Need apis: 
+    */
+    rpc DeleteApplication (DeleteApplicationRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/delete/app"
+            body: "*"
+        };
+    };
+    /*
+    Create a role in app. When create a role, we can authorise policies to it or not.
+    Need APIs: https://anubis.npool.top/v1/role, https://anubis.npool.top/v1/authorise-role.
+    */
+    rpc CreateRole (CreateRoleRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/role"
+            body: "*"
+        };
+    };
+    /*
+    Update role's policies.
+    Need APIs: https://anubis.npool.top/v1/authorise-role
+    */
+    rpc UpdateRolePolicies (UpdateRolePoliciesRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/role/policies"
+            body: "*"
+        };
+    };
+    /*
+    Update role's basic info.
+    */
+    rpc UpdateRole (UpdateRoleRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/role"
+            body: "*"
+        };
+    };
+    /*
+    Delete role from app.
+    Need APIs: https://anubis.npool.top/v1/cancel-role-policies, https://anubis.npool.top/v1/remove-role.
+    */
+    rpc DeleteRole (DeleteRoleRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/delete/role"
+        };
+    };
+    /*
+    Set role to user. When set role to a user, we will use api to authorise policies to user.
+    Need APIs: https://anubis.npool.top/v1/user/role.
+    */
+    rpc SetUserRole (SetUserRoleRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/set/user/role"
+            body: "*"
+        };
+    };
+    /*
+    Unset role of user. When unset role to user, we also need to use api to remove role from user.
+    Need APIs: https://anubis.npool.top/v1/remove-user.
+    */
+    rpc UnSetUserRole (UnSetUserRoleRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/unassign-user-role"
+            body: "*"
+        };
+    };
+    /*
+    Get all roles of an application. When get roles, we need to get all infos of roles which include its policies.
+    Need APIs:  https://anubis.npool.top/v1/role/{role_id}/policies, https://pyramids.npool.top/v1/role/{RoleId}/users, https://user.npool.top/v1/user/{UserId}.
+    */
+    rpc GetRoles (GetRolesRequest) returns (GetRolesResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/roles"
+            body: "*"
+        };
+    };
+    /*
+    Get users from app.
+    */
+    rpc GetUsers (GetUsersRequest) returns (GetUsersResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/users"
+            body: "*"
+        };
+    };
+    /*
+    Get all roles of the user.
+    */
+    rpc GetUserRole (GetUserRoleRequest) returns (GetUserRoleResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/user/role"
+            body: "*"
+        };
+    };
+    /*
+    Add users into app. When add users, admin can choose to authorise policies to user and authorise roles to user.
+    Need APIs: https://pyramids.npool.top/set-user-role, https://pyramids.npool.top/user/policies.
+    */
+    rpc CreateUsers (CreateUsersRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/users"
+            body: "*"
+        };
+    };
+    /*
+    Create group in an application. When create a group, admin can add users into this group at the same time.
+    */
+    rpc CreateGroup (CreateGroupRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/group"
+            body: "*"
+        };
+    };
+    /*
+    Add users into group.
+    */
+    rpc AddGroupUsers (AddGroupUsersRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/add/group/users"
+            body: "*"
+        };
+    };
+    /*
+    Remove users from group.
+    */
+    rpc DeleteGroupUsers (DeleteGroupUsersRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/delete/group/users"
+            body: "*"
+        };
+    };
+    /*
+    Update group info.
+    */
+    rpc UpdateGroup (UpdateGroupRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/group"
+            body: "*"
+        };
+    };
+    /*
+    Delete group from app. When Delete group, we also need to remove users out from group.
+    Need api: https://user.npool.top/v1/remove/group/users.
+    */
+    rpc DeleteGroup (DeleteGroupRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/delete/group"
+            body: "*"
+        };
+    };
+    /*
+    Get groups from app.
+    */
+    rpc GetGroups (GetGroupsRequest) returns (GetGroupsResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/groups"
+            body: "*"
+        };
+    };
+    /*
+    Create resource for app.
+    */
+    rpc CreateResource (CreateResourceRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/create/resource"
+            body: "*"
+        };
+    };
+    /*
+    Update resource of app.
+    */
+    rpc UpdateResource (UpdateResourceRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/resource"
+            body: "*"
+        };
+    };
+    /*
+    Get all resources from app.
+    */
+    rpc GetResources (GetResourcesRequest) returns (GetResourcesResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/resources"
+            body: "*"
+        };
+    };
+    /*
+    Delete resource from app.
+    */
+    rpc DeleteResource (DeleteResourceRequest) returns (NoDataResponse) {
+        option (google.api.http) = {
+            post: "/v1/delete/resource"
+            body: "*"
+        };
+    };
+}
+
+// request body and response
+message VersionResponse {
+    string Info = 100;
+}
+
+message PageInfo {
+    int32 PageIndex = 1;
+    int32 PageCount = 2;
+    int32 Total = 3;
+}
+
+message NoDataResponse {
+    string info = 1;
+}
+
+message CreateApplicationRequest {
+    string ApplicationName = 1;
+    string ApplicationOwner = 2;
+    string HomepageUrl = 3;
+    string RedirectUrl = 4;
+    string ApplicationLogo = 5;
+}
+
+message UpdateApplicationRequest {
+    string AppId = 1;
+    string ApplicationName = 2;
+    string ApplicationOwner = 3;
+    string HomepageUrl = 4;
+    string RedirectUrl = 5;
+    string ApplicationLogo = 6;
+}
+
+message DeleteApplicationRequest {
+    string AppId = 1;
+}
+
+message ResourcePolicy {
+    string ResourceId = 1;
+    string Action = 2;
+}
+
+message CreateRoleRequest {
+    string AppId = 1;
+    string RoleName = 2;
+    string Description = 3;
+    // Optional.
+    repeated ResourcePolicy Policies = 4;
+}
+
+message UpdateRolePoliciesRequest {
+    string RoleId = 1;
+    string AppId = 2;
+    repeated ResourcePolicy Policies = 4;
+}
+
+message UpdateRoleRequest {
+    string AppId = 1;
+    string RoleId = 2;
+    string RoleName = 3;
+    string Description = 4;
+}
+
+message DeleteRoleRequest {
+    string RoleId = 1;
+    string AppId = 2;
+}
+
+message SetUserRoleRequest {
+    repeated string UserId = 1;
+    string RoleId = 2;
+    string AppId = 3;
+}
+
+message UnSetUserRoleRequest {
+    repeated string UserId = 1;
+    string RoleId = 2;
+    string AppId = 3;
+}
+
+message GetRolesRequest {
+    string AppId = 1;
+}
+
+message UserInfo {
+    string UserId = 1;
+    string Username = 2;
+    string Avatar = 3;
+    int32 Age = 4;
+    string Gender = 5;
+    string Region = 6;
+    string Birthday = 7;
+    string Country = 8;
+    string Province = 9;
+    string City = 10;
+    string PhoneNumber = 11;
+    string EmailAddress = 12;
+}
+
+message RolesInfo {
+    string RoleId = 1;
+    string AppId = 2;
+    repeated ResourcePolicy Policies = 3;
+    repeated UserInfo users = 4;
+}
+
+message GetRolesResponse {
+    message Response {
+        PageInfo PageInfo = 1;
+        repeated RolesInfo RolesInfo = 2;
+    }
+    Response Infos = 1;
+
+}
+
+message GetUserRoleRequest {
+    string AppId = 1;
+    string UserId = 2;
+}
+
+message GetUserRoleResponse {
+    message Role {
+        string RoleId = 1;
+    }
+    message RoleResponse {
+        repeated Role Roles = 1;
+        PageInfo PageInfo = 2;
+    }
+    RoleResponse Infos = 3;
+}
+
+message CreateUsersRequest {
+    repeated string Users = 1;
+    string AppId = 2;
+}
+
+message AuthoriseUserRequest {
+    string AppId = 1;
+    string UserId = 2;
+    repeated ResourcePolicy Policies = 3;
+}
+
+message RemoveUserPoliciesRequest {
+    string AppId = 1;
+    string UserId = 2;
+    repeated ResourcePolicy Policies = 3;
+}
+
+message GroupInfo {
+    string GroupId = 1;
+    string GroupName = 2;
+    string GroupType = 3;
+    string GroupLogo = 4;
+    string GroupOwner = 5;
+}
+
+message CreateGroupRequest {
+    string AppId = 1;
+    GroupInfo Group = 2;
+}
+
+message AddGroupUsersRequest {
+    string AppId = 1;
+    string GroupId = 2;
+    repeated string Users = 3;
+}
+
+message DeleteGroupUsersRequest {
+    string AppId = 1;
+    string GroupId = 2;
+    repeated string Users = 3;
+}
+
+message UpdateGroupRequest {
+    string AppId = 1;
+    string GroupId = 2;
+    GroupInfo Group = 3;
+}
+
+message DeleteGroupRequest {
+    string GroupId = 1;
+    string AppId = 2;
+}
+
+message GetGroupsRequest {
+    string AppId = 1;
+}
+
+message GetGroupsResponse {
+    message GroupResponse {
+        repeated GroupInfo GroupInfos = 1;
+        PageInfo PageInfo = 2;
+    }
+    GroupResponse Infos = 3;
+}
+
+message ResourceInfo {
+    string ResourceId = 1;
+    string ResourceName = 2;
+    string ResourceDescription = 3;
+    string Type = 4;
+    string Creator = 5;
+}
+
+message CreateResourceRequest {
+    string AppId = 1;
+    ResourceInfo Resource = 2;
+}
+
+message UpdateResourceRequest {
+    string AppId = 1;
+    string ResourceId = 2;
+    ResourceInfo Resource = 3;
+}
+
+message GetResourcesRequest {
+    string AppId = 1;
+}
+
+message GetResourcesResponse {
+    message ResourceResponse {
+        repeated ResourceInfo ResourceInfos = 1;
+        PageInfo PageInfo = 2;
+    }
+    ResourceResponse Infos = 3;
+}
+
+message DeleteResourceRequest {
+    string AppId = 1;
+    string ResourceId = 2;
+}
+
+message GrantUserLoginPolicyRequest {
+    string AppId = 1;
+    repeated string Users = 2;
+}
+
+message RemoveUserLoginPoliciesRequest {
+    string AppId = 1;
+    repeated string Users = 2;
+}
+
+message GetUsersRequest {
+    string AppId = 1;
+}
+
+message GetUsersResponse {
+    message UsersResponse {
+        repeated UserInfo UserInfos = 1;
+        PageInfo PageInfo = 2;
+    }
+    UsersResponse Infos = 3;
+}
