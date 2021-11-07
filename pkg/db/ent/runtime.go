@@ -78,6 +78,10 @@ func init() {
 	applicationgroupuser.DefaultID = applicationgroupuserDescID.Default.(func() uuid.UUID)
 	applicationresourceFields := schema.ApplicationResource{}.Fields()
 	_ = applicationresourceFields
+	// applicationresourceDescType is the schema descriptor for type field.
+	applicationresourceDescType := applicationresourceFields[4].Descriptor()
+	// applicationresource.DefaultType holds the default value on creation for the type field.
+	applicationresource.DefaultType = applicationresourceDescType.Default.(string)
 	// applicationresourceDescCreateAt is the schema descriptor for create_at field.
 	applicationresourceDescCreateAt := applicationresourceFields[6].Descriptor()
 	// applicationresource.DefaultCreateAt holds the default value on creation for the create_at field.
@@ -132,6 +136,10 @@ func init() {
 	applicationroleuser.DefaultID = applicationroleuserDescID.Default.(func() uuid.UUID)
 	applicationuserFields := schema.ApplicationUser{}.Fields()
 	_ = applicationuserFields
+	// applicationuserDescOriginal is the schema descriptor for original field.
+	applicationuserDescOriginal := applicationuserFields[3].Descriptor()
+	// applicationuser.DefaultOriginal holds the default value on creation for the original field.
+	applicationuser.DefaultOriginal = applicationuserDescOriginal.Default.(bool)
 	// applicationuserDescCreateAt is the schema descriptor for create_at field.
 	applicationuserDescCreateAt := applicationuserFields[4].Descriptor()
 	// applicationuser.DefaultCreateAt holds the default value on creation for the create_at field.

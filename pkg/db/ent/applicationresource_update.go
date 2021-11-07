@@ -45,16 +45,30 @@ func (aru *ApplicationResourceUpdate) SetResourceDescription(s string) *Applicat
 	return aru
 }
 
+// SetNillableResourceDescription sets the "resource_description" field if the given value is not nil.
+func (aru *ApplicationResourceUpdate) SetNillableResourceDescription(s *string) *ApplicationResourceUpdate {
+	if s != nil {
+		aru.SetResourceDescription(*s)
+	}
+	return aru
+}
+
+// ClearResourceDescription clears the value of the "resource_description" field.
+func (aru *ApplicationResourceUpdate) ClearResourceDescription() *ApplicationResourceUpdate {
+	aru.mutation.ClearResourceDescription()
+	return aru
+}
+
 // SetType sets the "type" field.
-func (aru *ApplicationResourceUpdate) SetType(a applicationresource.Type) *ApplicationResourceUpdate {
-	aru.mutation.SetType(a)
+func (aru *ApplicationResourceUpdate) SetType(s string) *ApplicationResourceUpdate {
+	aru.mutation.SetType(s)
 	return aru
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (aru *ApplicationResourceUpdate) SetNillableType(a *applicationresource.Type) *ApplicationResourceUpdate {
-	if a != nil {
-		aru.SetType(*a)
+func (aru *ApplicationResourceUpdate) SetNillableType(s *string) *ApplicationResourceUpdate {
+	if s != nil {
+		aru.SetType(*s)
 	}
 	return aru
 }
@@ -133,18 +147,12 @@ func (aru *ApplicationResourceUpdate) Save(ctx context.Context) (int, error) {
 	)
 	aru.defaults()
 	if len(aru.hooks) == 0 {
-		if err = aru.check(); err != nil {
-			return 0, err
-		}
 		affected, err = aru.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*ApplicationResourceMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = aru.check(); err != nil {
-				return 0, err
 			}
 			aru.mutation = mutation
 			affected, err = aru.sqlSave(ctx)
@@ -194,16 +202,6 @@ func (aru *ApplicationResourceUpdate) defaults() {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (aru *ApplicationResourceUpdate) check() error {
-	if v, ok := aru.mutation.GetType(); ok {
-		if err := applicationresource.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf("ent: validator failed for field \"type\": %w", err)}
-		}
-	}
-	return nil
-}
-
 func (aru *ApplicationResourceUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -243,9 +241,15 @@ func (aru *ApplicationResourceUpdate) sqlSave(ctx context.Context) (n int, err e
 			Column: applicationresource.FieldResourceDescription,
 		})
 	}
+	if aru.mutation.ResourceDescriptionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: applicationresource.FieldResourceDescription,
+		})
+	}
 	if value, ok := aru.mutation.GetType(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: applicationresource.FieldType,
 		})
@@ -336,16 +340,30 @@ func (aruo *ApplicationResourceUpdateOne) SetResourceDescription(s string) *Appl
 	return aruo
 }
 
+// SetNillableResourceDescription sets the "resource_description" field if the given value is not nil.
+func (aruo *ApplicationResourceUpdateOne) SetNillableResourceDescription(s *string) *ApplicationResourceUpdateOne {
+	if s != nil {
+		aruo.SetResourceDescription(*s)
+	}
+	return aruo
+}
+
+// ClearResourceDescription clears the value of the "resource_description" field.
+func (aruo *ApplicationResourceUpdateOne) ClearResourceDescription() *ApplicationResourceUpdateOne {
+	aruo.mutation.ClearResourceDescription()
+	return aruo
+}
+
 // SetType sets the "type" field.
-func (aruo *ApplicationResourceUpdateOne) SetType(a applicationresource.Type) *ApplicationResourceUpdateOne {
-	aruo.mutation.SetType(a)
+func (aruo *ApplicationResourceUpdateOne) SetType(s string) *ApplicationResourceUpdateOne {
+	aruo.mutation.SetType(s)
 	return aruo
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (aruo *ApplicationResourceUpdateOne) SetNillableType(a *applicationresource.Type) *ApplicationResourceUpdateOne {
-	if a != nil {
-		aruo.SetType(*a)
+func (aruo *ApplicationResourceUpdateOne) SetNillableType(s *string) *ApplicationResourceUpdateOne {
+	if s != nil {
+		aruo.SetType(*s)
 	}
 	return aruo
 }
@@ -431,18 +449,12 @@ func (aruo *ApplicationResourceUpdateOne) Save(ctx context.Context) (*Applicatio
 	)
 	aruo.defaults()
 	if len(aruo.hooks) == 0 {
-		if err = aruo.check(); err != nil {
-			return nil, err
-		}
 		node, err = aruo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*ApplicationResourceMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = aruo.check(); err != nil {
-				return nil, err
 			}
 			aruo.mutation = mutation
 			node, err = aruo.sqlSave(ctx)
@@ -490,16 +502,6 @@ func (aruo *ApplicationResourceUpdateOne) defaults() {
 		v := applicationresource.UpdateDefaultUpdateAt()
 		aruo.mutation.SetUpdateAt(v)
 	}
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (aruo *ApplicationResourceUpdateOne) check() error {
-	if v, ok := aruo.mutation.GetType(); ok {
-		if err := applicationresource.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf("ent: validator failed for field \"type\": %w", err)}
-		}
-	}
-	return nil
 }
 
 func (aruo *ApplicationResourceUpdateOne) sqlSave(ctx context.Context) (_node *ApplicationResource, err error) {
@@ -558,9 +560,15 @@ func (aruo *ApplicationResourceUpdateOne) sqlSave(ctx context.Context) (_node *A
 			Column: applicationresource.FieldResourceDescription,
 		})
 	}
+	if aruo.mutation.ResourceDescriptionCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: applicationresource.FieldResourceDescription,
+		})
+	}
 	if value, ok := aruo.mutation.GetType(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: applicationresource.FieldType,
 		})

@@ -438,6 +438,20 @@ func HomepageURLHasSuffix(v string) predicate.Application {
 	})
 }
 
+// HomepageURLIsNil applies the IsNil predicate on the "homepage_url" field.
+func HomepageURLIsNil() predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldHomepageURL)))
+	})
+}
+
+// HomepageURLNotNil applies the NotNil predicate on the "homepage_url" field.
+func HomepageURLNotNil() predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldHomepageURL)))
+	})
+}
+
 // HomepageURLEqualFold applies the EqualFold predicate on the "homepage_url" field.
 func HomepageURLEqualFold(v string) predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
@@ -546,6 +560,20 @@ func RedirectURLHasPrefix(v string) predicate.Application {
 func RedirectURLHasSuffix(v string) predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldRedirectURL), v))
+	})
+}
+
+// RedirectURLIsNil applies the IsNil predicate on the "redirect_url" field.
+func RedirectURLIsNil() predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldRedirectURL)))
+	})
+}
+
+// RedirectURLNotNil applies the NotNil predicate on the "redirect_url" field.
+func RedirectURLNotNil() predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldRedirectURL)))
 	})
 }
 
@@ -768,6 +796,20 @@ func ApplicationLogoHasPrefix(v string) predicate.Application {
 func ApplicationLogoHasSuffix(v string) predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
 		s.Where(sql.HasSuffix(s.C(FieldApplicationLogo), v))
+	})
+}
+
+// ApplicationLogoIsNil applies the IsNil predicate on the "application_logo" field.
+func ApplicationLogoIsNil() predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldApplicationLogo)))
+	})
+}
+
+// ApplicationLogoNotNil applies the NotNil predicate on the "application_logo" field.
+func ApplicationLogoNotNil() predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldApplicationLogo)))
 	})
 }
 

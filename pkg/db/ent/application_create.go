@@ -38,9 +38,25 @@ func (ac *ApplicationCreate) SetHomepageURL(s string) *ApplicationCreate {
 	return ac
 }
 
+// SetNillableHomepageURL sets the "homepage_url" field if the given value is not nil.
+func (ac *ApplicationCreate) SetNillableHomepageURL(s *string) *ApplicationCreate {
+	if s != nil {
+		ac.SetHomepageURL(*s)
+	}
+	return ac
+}
+
 // SetRedirectURL sets the "redirect_url" field.
 func (ac *ApplicationCreate) SetRedirectURL(s string) *ApplicationCreate {
 	ac.mutation.SetRedirectURL(s)
+	return ac
+}
+
+// SetNillableRedirectURL sets the "redirect_url" field if the given value is not nil.
+func (ac *ApplicationCreate) SetNillableRedirectURL(s *string) *ApplicationCreate {
+	if s != nil {
+		ac.SetRedirectURL(*s)
+	}
 	return ac
 }
 
@@ -61,6 +77,14 @@ func (ac *ApplicationCreate) SetNillableClientSecret(s *string) *ApplicationCrea
 // SetApplicationLogo sets the "application_logo" field.
 func (ac *ApplicationCreate) SetApplicationLogo(s string) *ApplicationCreate {
 	ac.mutation.SetApplicationLogo(s)
+	return ac
+}
+
+// SetNillableApplicationLogo sets the "application_logo" field if the given value is not nil.
+func (ac *ApplicationCreate) SetNillableApplicationLogo(s *string) *ApplicationCreate {
+	if s != nil {
+		ac.SetApplicationLogo(*s)
+	}
 	return ac
 }
 
@@ -221,17 +245,8 @@ func (ac *ApplicationCreate) check() error {
 	if _, ok := ac.mutation.ApplicationOwner(); !ok {
 		return &ValidationError{Name: "application_owner", err: errors.New(`ent: missing required field "application_owner"`)}
 	}
-	if _, ok := ac.mutation.HomepageURL(); !ok {
-		return &ValidationError{Name: "homepage_url", err: errors.New(`ent: missing required field "homepage_url"`)}
-	}
-	if _, ok := ac.mutation.RedirectURL(); !ok {
-		return &ValidationError{Name: "redirect_url", err: errors.New(`ent: missing required field "redirect_url"`)}
-	}
 	if _, ok := ac.mutation.ClientSecret(); !ok {
 		return &ValidationError{Name: "client_secret", err: errors.New(`ent: missing required field "client_secret"`)}
-	}
-	if _, ok := ac.mutation.ApplicationLogo(); !ok {
-		return &ValidationError{Name: "application_logo", err: errors.New(`ent: missing required field "application_logo"`)}
 	}
 	if _, ok := ac.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}

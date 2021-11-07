@@ -3,8 +3,6 @@
 package applicationresource
 
 import (
-	"fmt"
-
 	"github.com/google/uuid"
 )
 
@@ -57,6 +55,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultType holds the default value on creation for the "type" field.
+	DefaultType string
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.
 	DefaultCreateAt func() int64
 	// DefaultUpdateAt holds the default value on creation for the "update_at" field.
@@ -68,31 +68,3 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
-
-// Type defines the type for the "type" enum field.
-type Type string
-
-// TypeAPI is the default value of the Type enum.
-const DefaultType = TypeAPI
-
-// Type values.
-const (
-	TypeAPI    Type = "API"
-	TypeBUTTON Type = "BUTTON"
-	TypeDATA   Type = "DATA"
-	TypeMENU   Type = "MENU"
-)
-
-func (_type Type) String() string {
-	return string(_type)
-}
-
-// TypeValidator is a validator for the "type" field enum values. It is called by the builders before save.
-func TypeValidator(_type Type) error {
-	switch _type {
-	case TypeAPI, TypeBUTTON, TypeDATA, TypeMENU:
-		return nil
-	default:
-		return fmt.Errorf("applicationresource: invalid enum value for type field: %q", _type)
-	}
-}

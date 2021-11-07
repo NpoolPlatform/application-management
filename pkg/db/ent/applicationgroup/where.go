@@ -466,6 +466,20 @@ func GroupLogoHasSuffix(v string) predicate.ApplicationGroup {
 	})
 }
 
+// GroupLogoIsNil applies the IsNil predicate on the "group_logo" field.
+func GroupLogoIsNil() predicate.ApplicationGroup {
+	return predicate.ApplicationGroup(func(s *sql.Selector) {
+		s.Where(sql.IsNull(s.C(FieldGroupLogo)))
+	})
+}
+
+// GroupLogoNotNil applies the NotNil predicate on the "group_logo" field.
+func GroupLogoNotNil() predicate.ApplicationGroup {
+	return predicate.ApplicationGroup(func(s *sql.Selector) {
+		s.Where(sql.NotNull(s.C(FieldGroupLogo)))
+	})
+}
+
 // GroupLogoEqualFold applies the EqualFold predicate on the "group_logo" field.
 func GroupLogoEqualFold(v string) predicate.ApplicationGroup {
 	return predicate.ApplicationGroup(func(s *sql.Selector) {

@@ -45,6 +45,20 @@ func (agu *ApplicationGroupUpdate) SetGroupLogo(s string) *ApplicationGroupUpdat
 	return agu
 }
 
+// SetNillableGroupLogo sets the "group_logo" field if the given value is not nil.
+func (agu *ApplicationGroupUpdate) SetNillableGroupLogo(s *string) *ApplicationGroupUpdate {
+	if s != nil {
+		agu.SetGroupLogo(*s)
+	}
+	return agu
+}
+
+// ClearGroupLogo clears the value of the "group_logo" field.
+func (agu *ApplicationGroupUpdate) ClearGroupLogo() *ApplicationGroupUpdate {
+	agu.mutation.ClearGroupLogo()
+	return agu
+}
+
 // SetGroupOwner sets the "group_owner" field.
 func (agu *ApplicationGroupUpdate) SetGroupOwner(u uuid.UUID) *ApplicationGroupUpdate {
 	agu.mutation.SetGroupOwner(u)
@@ -233,6 +247,12 @@ func (agu *ApplicationGroupUpdate) sqlSave(ctx context.Context) (n int, err erro
 			Column: applicationgroup.FieldGroupLogo,
 		})
 	}
+	if agu.mutation.GroupLogoCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: applicationgroup.FieldGroupLogo,
+		})
+	}
 	if value, ok := agu.mutation.GroupOwner(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUUID,
@@ -329,6 +349,20 @@ func (aguo *ApplicationGroupUpdateOne) SetGroupName(s string) *ApplicationGroupU
 // SetGroupLogo sets the "group_logo" field.
 func (aguo *ApplicationGroupUpdateOne) SetGroupLogo(s string) *ApplicationGroupUpdateOne {
 	aguo.mutation.SetGroupLogo(s)
+	return aguo
+}
+
+// SetNillableGroupLogo sets the "group_logo" field if the given value is not nil.
+func (aguo *ApplicationGroupUpdateOne) SetNillableGroupLogo(s *string) *ApplicationGroupUpdateOne {
+	if s != nil {
+		aguo.SetGroupLogo(*s)
+	}
+	return aguo
+}
+
+// ClearGroupLogo clears the value of the "group_logo" field.
+func (aguo *ApplicationGroupUpdateOne) ClearGroupLogo() *ApplicationGroupUpdateOne {
+	aguo.mutation.ClearGroupLogo()
 	return aguo
 }
 
@@ -541,6 +575,12 @@ func (aguo *ApplicationGroupUpdateOne) sqlSave(ctx context.Context) (_node *Appl
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: applicationgroup.FieldGroupLogo,
+		})
+	}
+	if aguo.mutation.GroupLogoCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: applicationgroup.FieldGroupLogo,
 		})
 	}

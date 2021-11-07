@@ -3,8 +3,6 @@
 package applicationuser
 
 import (
-	"fmt"
-
 	"github.com/google/uuid"
 )
 
@@ -17,8 +15,8 @@ const (
 	FieldAppID = "app_id"
 	// FieldUserID holds the string denoting the user_id field in the database.
 	FieldUserID = "user_id"
-	// FieldCreateMethod holds the string denoting the create_method field in the database.
-	FieldCreateMethod = "create_method"
+	// FieldOriginal holds the string denoting the original field in the database.
+	FieldOriginal = "original"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
 	FieldCreateAt = "create_at"
 	// FieldDeleteAt holds the string denoting the delete_at field in the database.
@@ -32,7 +30,7 @@ var Columns = []string{
 	FieldID,
 	FieldAppID,
 	FieldUserID,
-	FieldCreateMethod,
+	FieldOriginal,
 	FieldCreateAt,
 	FieldDeleteAt,
 }
@@ -48,6 +46,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultOriginal holds the default value on creation for the "original" field.
+	DefaultOriginal bool
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.
 	DefaultCreateAt func() int64
 	// DefaultDeleteAt holds the default value on creation for the "delete_at" field.
@@ -55,29 +55,3 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )
-
-// CreateMethod defines the type for the "create_method" enum field.
-type CreateMethod string
-
-// CreateMethodSignup is the default value of the CreateMethod enum.
-const DefaultCreateMethod = CreateMethodSignup
-
-// CreateMethod values.
-const (
-	CreateMethodSignup   CreateMethod = "signup"
-	CreateMethodAdminAdd CreateMethod = "admin_add"
-)
-
-func (cm CreateMethod) String() string {
-	return string(cm)
-}
-
-// CreateMethodValidator is a validator for the "create_method" field enum values. It is called by the builders before save.
-func CreateMethodValidator(cm CreateMethod) error {
-	switch cm {
-	case CreateMethodSignup, CreateMethodAdminAdd:
-		return nil
-	default:
-		return fmt.Errorf("applicationuser: invalid enum value for create_method field: %q", cm)
-	}
-}

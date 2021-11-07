@@ -39,16 +39,16 @@ func (auu *ApplicationUserUpdate) SetUserID(u uuid.UUID) *ApplicationUserUpdate 
 	return auu
 }
 
-// SetCreateMethod sets the "create_method" field.
-func (auu *ApplicationUserUpdate) SetCreateMethod(am applicationuser.CreateMethod) *ApplicationUserUpdate {
-	auu.mutation.SetCreateMethod(am)
+// SetOriginal sets the "original" field.
+func (auu *ApplicationUserUpdate) SetOriginal(b bool) *ApplicationUserUpdate {
+	auu.mutation.SetOriginal(b)
 	return auu
 }
 
-// SetNillableCreateMethod sets the "create_method" field if the given value is not nil.
-func (auu *ApplicationUserUpdate) SetNillableCreateMethod(am *applicationuser.CreateMethod) *ApplicationUserUpdate {
-	if am != nil {
-		auu.SetCreateMethod(*am)
+// SetNillableOriginal sets the "original" field if the given value is not nil.
+func (auu *ApplicationUserUpdate) SetNillableOriginal(b *bool) *ApplicationUserUpdate {
+	if b != nil {
+		auu.SetOriginal(*b)
 	}
 	return auu
 }
@@ -107,18 +107,12 @@ func (auu *ApplicationUserUpdate) Save(ctx context.Context) (int, error) {
 		affected int
 	)
 	if len(auu.hooks) == 0 {
-		if err = auu.check(); err != nil {
-			return 0, err
-		}
 		affected, err = auu.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*ApplicationUserMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = auu.check(); err != nil {
-				return 0, err
 			}
 			auu.mutation = mutation
 			affected, err = auu.sqlSave(ctx)
@@ -160,16 +154,6 @@ func (auu *ApplicationUserUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (auu *ApplicationUserUpdate) check() error {
-	if v, ok := auu.mutation.CreateMethod(); ok {
-		if err := applicationuser.CreateMethodValidator(v); err != nil {
-			return &ValidationError{Name: "create_method", err: fmt.Errorf("ent: validator failed for field \"create_method\": %w", err)}
-		}
-	}
-	return nil
-}
-
 func (auu *ApplicationUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	_spec := &sqlgraph.UpdateSpec{
 		Node: &sqlgraph.NodeSpec{
@@ -202,11 +186,11 @@ func (auu *ApplicationUserUpdate) sqlSave(ctx context.Context) (n int, err error
 			Column: applicationuser.FieldUserID,
 		})
 	}
-	if value, ok := auu.mutation.CreateMethod(); ok {
+	if value, ok := auu.mutation.Original(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeBool,
 			Value:  value,
-			Column: applicationuser.FieldCreateMethod,
+			Column: applicationuser.FieldOriginal,
 		})
 	}
 	if value, ok := auu.mutation.CreateAt(); ok {
@@ -268,16 +252,16 @@ func (auuo *ApplicationUserUpdateOne) SetUserID(u uuid.UUID) *ApplicationUserUpd
 	return auuo
 }
 
-// SetCreateMethod sets the "create_method" field.
-func (auuo *ApplicationUserUpdateOne) SetCreateMethod(am applicationuser.CreateMethod) *ApplicationUserUpdateOne {
-	auuo.mutation.SetCreateMethod(am)
+// SetOriginal sets the "original" field.
+func (auuo *ApplicationUserUpdateOne) SetOriginal(b bool) *ApplicationUserUpdateOne {
+	auuo.mutation.SetOriginal(b)
 	return auuo
 }
 
-// SetNillableCreateMethod sets the "create_method" field if the given value is not nil.
-func (auuo *ApplicationUserUpdateOne) SetNillableCreateMethod(am *applicationuser.CreateMethod) *ApplicationUserUpdateOne {
-	if am != nil {
-		auuo.SetCreateMethod(*am)
+// SetNillableOriginal sets the "original" field if the given value is not nil.
+func (auuo *ApplicationUserUpdateOne) SetNillableOriginal(b *bool) *ApplicationUserUpdateOne {
+	if b != nil {
+		auuo.SetOriginal(*b)
 	}
 	return auuo
 }
@@ -343,18 +327,12 @@ func (auuo *ApplicationUserUpdateOne) Save(ctx context.Context) (*ApplicationUse
 		node *ApplicationUser
 	)
 	if len(auuo.hooks) == 0 {
-		if err = auuo.check(); err != nil {
-			return nil, err
-		}
 		node, err = auuo.sqlSave(ctx)
 	} else {
 		var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 			mutation, ok := m.(*ApplicationUserMutation)
 			if !ok {
 				return nil, fmt.Errorf("unexpected mutation type %T", m)
-			}
-			if err = auuo.check(); err != nil {
-				return nil, err
 			}
 			auuo.mutation = mutation
 			node, err = auuo.sqlSave(ctx)
@@ -394,16 +372,6 @@ func (auuo *ApplicationUserUpdateOne) ExecX(ctx context.Context) {
 	if err := auuo.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (auuo *ApplicationUserUpdateOne) check() error {
-	if v, ok := auuo.mutation.CreateMethod(); ok {
-		if err := applicationuser.CreateMethodValidator(v); err != nil {
-			return &ValidationError{Name: "create_method", err: fmt.Errorf("ent: validator failed for field \"create_method\": %w", err)}
-		}
-	}
-	return nil
 }
 
 func (auuo *ApplicationUserUpdateOne) sqlSave(ctx context.Context) (_node *ApplicationUser, err error) {
@@ -455,11 +423,11 @@ func (auuo *ApplicationUserUpdateOne) sqlSave(ctx context.Context) (_node *Appli
 			Column: applicationuser.FieldUserID,
 		})
 	}
-	if value, ok := auuo.mutation.CreateMethod(); ok {
+	if value, ok := auuo.mutation.Original(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeBool,
 			Value:  value,
-			Column: applicationuser.FieldCreateMethod,
+			Column: applicationuser.FieldOriginal,
 		})
 	}
 	if value, ok := auuo.mutation.CreateAt(); ok {

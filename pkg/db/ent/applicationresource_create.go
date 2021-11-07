@@ -38,16 +38,24 @@ func (arc *ApplicationResourceCreate) SetResourceDescription(s string) *Applicat
 	return arc
 }
 
+// SetNillableResourceDescription sets the "resource_description" field if the given value is not nil.
+func (arc *ApplicationResourceCreate) SetNillableResourceDescription(s *string) *ApplicationResourceCreate {
+	if s != nil {
+		arc.SetResourceDescription(*s)
+	}
+	return arc
+}
+
 // SetType sets the "type" field.
-func (arc *ApplicationResourceCreate) SetType(a applicationresource.Type) *ApplicationResourceCreate {
-	arc.mutation.SetType(a)
+func (arc *ApplicationResourceCreate) SetType(s string) *ApplicationResourceCreate {
+	arc.mutation.SetType(s)
 	return arc
 }
 
 // SetNillableType sets the "type" field if the given value is not nil.
-func (arc *ApplicationResourceCreate) SetNillableType(a *applicationresource.Type) *ApplicationResourceCreate {
-	if a != nil {
-		arc.SetType(*a)
+func (arc *ApplicationResourceCreate) SetNillableType(s *string) *ApplicationResourceCreate {
+	if s != nil {
+		arc.SetType(*s)
 	}
 	return arc
 }
@@ -207,16 +215,8 @@ func (arc *ApplicationResourceCreate) check() error {
 	if _, ok := arc.mutation.ResourceName(); !ok {
 		return &ValidationError{Name: "resource_name", err: errors.New(`ent: missing required field "resource_name"`)}
 	}
-	if _, ok := arc.mutation.ResourceDescription(); !ok {
-		return &ValidationError{Name: "resource_description", err: errors.New(`ent: missing required field "resource_description"`)}
-	}
 	if _, ok := arc.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "type"`)}
-	}
-	if v, ok := arc.mutation.GetType(); ok {
-		if err := applicationresource.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "type": %w`, err)}
-		}
 	}
 	if _, ok := arc.mutation.Creator(); !ok {
 		return &ValidationError{Name: "creator", err: errors.New(`ent: missing required field "creator"`)}
@@ -288,7 +288,7 @@ func (arc *ApplicationResourceCreate) createSpec() (*ApplicationResource, *sqlgr
 	}
 	if value, ok := arc.mutation.GetType(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeString,
 			Value:  value,
 			Column: applicationresource.FieldType,
 		})

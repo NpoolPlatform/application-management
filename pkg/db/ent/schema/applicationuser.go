@@ -22,9 +22,7 @@ func (ApplicationUser) Fields() []ent.Field {
 			Unique(),
 		field.String("app_id"),
 		field.UUID("user_id", uuid.UUID{}),
-		field.Enum("create_method").
-			Values("signup", "admin_add").
-			Default("signup"),
+		field.Bool("original").Default(true),
 		field.Int64("create_at").
 			DefaultFunc(func() int64 {
 				return time.Now().Unix()
@@ -46,6 +44,6 @@ func (ApplicationUser) Indexes() []ent.Index {
 		index.Fields("app_id", "user_id"),
 		index.Fields("app_id"),
 		index.Fields("user_id"),
-		index.Fields("create_method"),
+		index.Fields("original"),
 	}
 }

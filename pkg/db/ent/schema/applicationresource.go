@@ -22,9 +22,8 @@ func (ApplicationResource) Fields() []ent.Field {
 			Unique(),
 		field.String("app_id"),
 		field.String("resource_name"),
-		field.String("resource_description"),
-		field.Enum("type").
-			Values("API", "BUTTON", "DATA", "MENU").
+		field.String("resource_description").Optional(),
+		field.String("type").
 			Default("API"),
 		field.UUID("creator", uuid.UUID{}),
 		field.Int64("create_at").

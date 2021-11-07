@@ -105,6 +105,13 @@ func UserID(v uuid.UUID) predicate.ApplicationUser {
 	})
 }
 
+// Original applies equality check predicate on the "original" field. It's identical to OriginalEQ.
+func Original(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldOriginal), v))
+	})
+}
+
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
 func CreateAt(v int64) predicate.ApplicationUser {
 	return predicate.ApplicationUser(func(s *sql.Selector) {
@@ -306,51 +313,17 @@ func UserIDLTE(v uuid.UUID) predicate.ApplicationUser {
 	})
 }
 
-// CreateMethodEQ applies the EQ predicate on the "create_method" field.
-func CreateMethodEQ(v CreateMethod) predicate.ApplicationUser {
+// OriginalEQ applies the EQ predicate on the "original" field.
+func OriginalEQ(v bool) predicate.ApplicationUser {
 	return predicate.ApplicationUser(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(FieldCreateMethod), v))
+		s.Where(sql.EQ(s.C(FieldOriginal), v))
 	})
 }
 
-// CreateMethodNEQ applies the NEQ predicate on the "create_method" field.
-func CreateMethodNEQ(v CreateMethod) predicate.ApplicationUser {
+// OriginalNEQ applies the NEQ predicate on the "original" field.
+func OriginalNEQ(v bool) predicate.ApplicationUser {
 	return predicate.ApplicationUser(func(s *sql.Selector) {
-		s.Where(sql.NEQ(s.C(FieldCreateMethod), v))
-	})
-}
-
-// CreateMethodIn applies the In predicate on the "create_method" field.
-func CreateMethodIn(vs ...CreateMethod) predicate.ApplicationUser {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ApplicationUser(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.In(s.C(FieldCreateMethod), v...))
-	})
-}
-
-// CreateMethodNotIn applies the NotIn predicate on the "create_method" field.
-func CreateMethodNotIn(vs ...CreateMethod) predicate.ApplicationUser {
-	v := make([]interface{}, len(vs))
-	for i := range v {
-		v[i] = vs[i]
-	}
-	return predicate.ApplicationUser(func(s *sql.Selector) {
-		// if not arguments were provided, append the FALSE constants,
-		// since we can't apply "IN ()". This will make this predicate falsy.
-		if len(v) == 0 {
-			s.Where(sql.False())
-			return
-		}
-		s.Where(sql.NotIn(s.C(FieldCreateMethod), v...))
+		s.Where(sql.NEQ(s.C(FieldOriginal), v))
 	})
 }
 

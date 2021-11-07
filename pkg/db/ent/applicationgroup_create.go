@@ -38,6 +38,14 @@ func (agc *ApplicationGroupCreate) SetGroupLogo(s string) *ApplicationGroupCreat
 	return agc
 }
 
+// SetNillableGroupLogo sets the "group_logo" field if the given value is not nil.
+func (agc *ApplicationGroupCreate) SetNillableGroupLogo(s *string) *ApplicationGroupCreate {
+	if s != nil {
+		agc.SetGroupLogo(*s)
+	}
+	return agc
+}
+
 // SetGroupOwner sets the "group_owner" field.
 func (agc *ApplicationGroupCreate) SetGroupOwner(u uuid.UUID) *ApplicationGroupCreate {
 	agc.mutation.SetGroupOwner(u)
@@ -202,9 +210,6 @@ func (agc *ApplicationGroupCreate) check() error {
 	}
 	if _, ok := agc.mutation.GroupName(); !ok {
 		return &ValidationError{Name: "group_name", err: errors.New(`ent: missing required field "group_name"`)}
-	}
-	if _, ok := agc.mutation.GroupLogo(); !ok {
-		return &ValidationError{Name: "group_logo", err: errors.New(`ent: missing required field "group_logo"`)}
 	}
 	if _, ok := agc.mutation.GroupOwner(); !ok {
 		return &ValidationError{Name: "group_owner", err: errors.New(`ent: missing required field "group_owner"`)}

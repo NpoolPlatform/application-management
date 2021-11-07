@@ -5,50 +5,73 @@
 
 - [npool/application-management.proto](#npool/application-management.proto)
     - [AddGroupUsersRequest](#application.management.v1.AddGroupUsersRequest)
-    - [AuthoriseUserRequest](#application.management.v1.AuthoriseUserRequest)
+    - [AddGroupUsersResponse](#application.management.v1.AddGroupUsersResponse)
+    - [AddUsersToApplicationRequest](#application.management.v1.AddUsersToApplicationRequest)
+    - [AddUsersToApplicationResponse](#application.management.v1.AddUsersToApplicationResponse)
+    - [ApplicationInfo](#application.management.v1.ApplicationInfo)
+    - [ApplicationUserInfo](#application.management.v1.ApplicationUserInfo)
     - [CreateApplicationRequest](#application.management.v1.CreateApplicationRequest)
+    - [CreateApplicationResponse](#application.management.v1.CreateApplicationResponse)
     - [CreateGroupRequest](#application.management.v1.CreateGroupRequest)
+    - [CreateGroupResponse](#application.management.v1.CreateGroupResponse)
     - [CreateResourceRequest](#application.management.v1.CreateResourceRequest)
+    - [CreateResourceResponse](#application.management.v1.CreateResourceResponse)
     - [CreateRoleRequest](#application.management.v1.CreateRoleRequest)
-    - [CreateUsersRequest](#application.management.v1.CreateUsersRequest)
+    - [CreateRoleResponse](#application.management.v1.CreateRoleResponse)
     - [DeleteApplicationRequest](#application.management.v1.DeleteApplicationRequest)
+    - [DeleteApplicationResponse](#application.management.v1.DeleteApplicationResponse)
     - [DeleteGroupRequest](#application.management.v1.DeleteGroupRequest)
-    - [DeleteGroupUsersRequest](#application.management.v1.DeleteGroupUsersRequest)
+    - [DeleteGroupResponse](#application.management.v1.DeleteGroupResponse)
     - [DeleteResourceRequest](#application.management.v1.DeleteResourceRequest)
+    - [DeleteResourceResponse](#application.management.v1.DeleteResourceResponse)
     - [DeleteRoleRequest](#application.management.v1.DeleteRoleRequest)
-    - [GetGroupsRequest](#application.management.v1.GetGroupsRequest)
-    - [GetGroupsResponse](#application.management.v1.GetGroupsResponse)
-    - [GetGroupsResponse.GroupResponse](#application.management.v1.GetGroupsResponse.GroupResponse)
+    - [DeleteRoleResponse](#application.management.v1.DeleteRoleResponse)
+    - [GetAllGroupsRequest](#application.management.v1.GetAllGroupsRequest)
+    - [GetAllGroupsResponse](#application.management.v1.GetAllGroupsResponse)
+    - [GetApplicationRequest](#application.management.v1.GetApplicationRequest)
+    - [GetApplicationResponse](#application.management.v1.GetApplicationResponse)
+    - [GetApplicationsRequest](#application.management.v1.GetApplicationsRequest)
+    - [GetApplicationsResponse](#application.management.v1.GetApplicationsResponse)
+    - [GetGroupRequest](#application.management.v1.GetGroupRequest)
+    - [GetGroupResponse](#application.management.v1.GetGroupResponse)
+    - [GetGroupUsersRequest](#application.management.v1.GetGroupUsersRequest)
+    - [GetGroupUsersResponse](#application.management.v1.GetGroupUsersResponse)
+    - [GetResourceRequest](#application.management.v1.GetResourceRequest)
+    - [GetResourceResponse](#application.management.v1.GetResourceResponse)
     - [GetResourcesRequest](#application.management.v1.GetResourcesRequest)
     - [GetResourcesResponse](#application.management.v1.GetResourcesResponse)
-    - [GetResourcesResponse.ResourceResponse](#application.management.v1.GetResourcesResponse.ResourceResponse)
+    - [GetRoleRequest](#application.management.v1.GetRoleRequest)
+    - [GetRoleResponse](#application.management.v1.GetRoleResponse)
+    - [GetRoleUsersRequest](#application.management.v1.GetRoleUsersRequest)
+    - [GetRoleUsersResponse](#application.management.v1.GetRoleUsersResponse)
     - [GetRolesRequest](#application.management.v1.GetRolesRequest)
     - [GetRolesResponse](#application.management.v1.GetRolesResponse)
-    - [GetRolesResponse.Response](#application.management.v1.GetRolesResponse.Response)
     - [GetUserRoleRequest](#application.management.v1.GetUserRoleRequest)
     - [GetUserRoleResponse](#application.management.v1.GetUserRoleResponse)
-    - [GetUserRoleResponse.Role](#application.management.v1.GetUserRoleResponse.Role)
-    - [GetUserRoleResponse.RoleResponse](#application.management.v1.GetUserRoleResponse.RoleResponse)
     - [GetUsersRequest](#application.management.v1.GetUsersRequest)
     - [GetUsersResponse](#application.management.v1.GetUsersResponse)
-    - [GetUsersResponse.UsersResponse](#application.management.v1.GetUsersResponse.UsersResponse)
-    - [GrantUserLoginPolicyRequest](#application.management.v1.GrantUserLoginPolicyRequest)
     - [GroupInfo](#application.management.v1.GroupInfo)
-    - [NoDataResponse](#application.management.v1.NoDataResponse)
+    - [GroupUserInfo](#application.management.v1.GroupUserInfo)
     - [PageInfo](#application.management.v1.PageInfo)
-    - [RemoveUserLoginPoliciesRequest](#application.management.v1.RemoveUserLoginPoliciesRequest)
-    - [RemoveUserPoliciesRequest](#application.management.v1.RemoveUserPoliciesRequest)
+    - [RemoveGroupUsersNoDataResponse](#application.management.v1.RemoveGroupUsersNoDataResponse)
+    - [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest)
+    - [RemoveUsersFromApplicationRequest](#application.management.v1.RemoveUsersFromApplicationRequest)
+    - [RemoveUsersFromApplicationResponse](#application.management.v1.RemoveUsersFromApplicationResponse)
     - [ResourceInfo](#application.management.v1.ResourceInfo)
-    - [ResourcePolicy](#application.management.v1.ResourcePolicy)
-    - [RolesInfo](#application.management.v1.RolesInfo)
+    - [RoleInfo](#application.management.v1.RoleInfo)
+    - [RoleUserInfo](#application.management.v1.RoleUserInfo)
     - [SetUserRoleRequest](#application.management.v1.SetUserRoleRequest)
+    - [SetUserRoleResponse](#application.management.v1.SetUserRoleResponse)
     - [UnSetUserRoleRequest](#application.management.v1.UnSetUserRoleRequest)
+    - [UnSetUserRoleResponse](#application.management.v1.UnSetUserRoleResponse)
     - [UpdateApplicationRequest](#application.management.v1.UpdateApplicationRequest)
+    - [UpdateApplicationResponse](#application.management.v1.UpdateApplicationResponse)
     - [UpdateGroupRequest](#application.management.v1.UpdateGroupRequest)
+    - [UpdateGroupResponse](#application.management.v1.UpdateGroupResponse)
     - [UpdateResourceRequest](#application.management.v1.UpdateResourceRequest)
-    - [UpdateRolePoliciesRequest](#application.management.v1.UpdateRolePoliciesRequest)
+    - [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse)
     - [UpdateRoleRequest](#application.management.v1.UpdateRoleRequest)
-    - [UserInfo](#application.management.v1.UserInfo)
+    - [UpdateRoleResponse](#application.management.v1.UpdateRoleResponse)
     - [VersionResponse](#application.management.v1.VersionResponse)
   
     - [ApplicationManagement](#application.management.v1.ApplicationManagement)
@@ -72,26 +95,97 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| GroupId | [string](#string) |  |  |
-| Users | [string](#string) | repeated |  |
+| UserIDs | [string](#string) | repeated |  |
+| GroupID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.AuthoriseUserRequest"></a>
+<a name="application.management.v1.AddGroupUsersResponse"></a>
 
-### AuthoriseUserRequest
+### AddGroupUsersResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| UserId | [string](#string) |  |  |
-| Policies | [ResourcePolicy](#application.management.v1.ResourcePolicy) | repeated |  |
+| Infos | [GroupUserInfo](#application.management.v1.GroupUserInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.AddUsersToApplicationRequest"></a>
+
+### AddUsersToApplicationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserIDs | [string](#string) | repeated |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.AddUsersToApplicationResponse"></a>
+
+### AddUsersToApplicationResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [ApplicationUserInfo](#application.management.v1.ApplicationUserInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.ApplicationInfo"></a>
+
+### ApplicationInfo
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ID | [string](#string) |  |  |
+| ApplicationName | [string](#string) |  |  |
+| ApplicationOwner | [string](#string) |  |  |
+| HomepageUrl | [string](#string) |  |  |
+| RedirectUrl | [string](#string) |  |  |
+| ApplicationLogo | [string](#string) |  |  |
+| CreateAT | [int32](#int32) |  |  |
+| UpdateAT | [int32](#int32) |  |  |
+| ClientSecret | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.ApplicationUserInfo"></a>
+
+### ApplicationUserInfo
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| Original | [bool](#bool) |  |  |
+| CreateAT | [int32](#int32) |  |  |
 
 
 
@@ -106,11 +200,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| ApplicationName | [string](#string) |  |  |
-| ApplicationOwner | [string](#string) |  |  |
-| HomepageUrl | [string](#string) |  |  |
-| RedirectUrl | [string](#string) |  |  |
-| ApplicationLogo | [string](#string) |  |  |
+| Request | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.CreateApplicationResponse"></a>
+
+### CreateApplicationResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
 
 
 
@@ -125,8 +230,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| Group | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
+| Request | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.CreateGroupResponse"></a>
+
+### CreateGroupResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
 
 
 
@@ -141,8 +260,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| Resource | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
+| Request | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.CreateResourceResponse"></a>
+
+### CreateResourceResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
 
 
 
@@ -157,26 +290,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| RoleName | [string](#string) |  |  |
-| Description | [string](#string) |  |  |
-| Policies | [ResourcePolicy](#application.management.v1.ResourcePolicy) | repeated | Optional. |
+| Request | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.CreateUsersRequest"></a>
+<a name="application.management.v1.CreateRoleResponse"></a>
 
-### CreateUsersRequest
+### CreateRoleResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Users | [string](#string) | repeated |  |
-| AppId | [string](#string) |  |  |
+| Info | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
 
 
 
@@ -198,6 +327,21 @@
 
 
 
+<a name="application.management.v1.DeleteApplicationResponse"></a>
+
+### DeleteApplicationResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="application.management.v1.DeleteGroupRequest"></a>
 
 ### DeleteGroupRequest
@@ -206,25 +350,23 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| GroupId | [string](#string) |  |  |
-| AppId | [string](#string) |  |  |
+| GroupID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.DeleteGroupUsersRequest"></a>
+<a name="application.management.v1.DeleteGroupResponse"></a>
 
-### DeleteGroupUsersRequest
+### DeleteGroupResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| GroupId | [string](#string) |  |  |
-| Users | [string](#string) | repeated |  |
+| Info | [string](#string) |  |  |
 
 
 
@@ -239,8 +381,23 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| ResourceId | [string](#string) |  |  |
+| ResourceID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.DeleteResourceResponse"></a>
+
+### DeleteResourceResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
 
 
 
@@ -255,54 +412,206 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| RoleId | [string](#string) |  |  |
-| AppId | [string](#string) |  |  |
+| RoleID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.GetGroupsRequest"></a>
+<a name="application.management.v1.DeleteRoleResponse"></a>
 
-### GetGroupsRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="application.management.v1.GetGroupsResponse"></a>
-
-### GetGroupsResponse
+### DeleteRoleResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Infos | [GetGroupsResponse.GroupResponse](#application.management.v1.GetGroupsResponse.GroupResponse) |  |  |
+| Info | [string](#string) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.GetGroupsResponse.GroupResponse"></a>
+<a name="application.management.v1.GetAllGroupsRequest"></a>
 
-### GetGroupsResponse.GroupResponse
+### GetAllGroupsRequest
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| GroupInfos | [GroupInfo](#application.management.v1.GroupInfo) | repeated |  |
-| PageInfo | [PageInfo](#application.management.v1.PageInfo) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetAllGroupsResponse"></a>
+
+### GetAllGroupsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [GroupInfo](#application.management.v1.GroupInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetApplicationRequest"></a>
+
+### GetApplicationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetApplicationResponse"></a>
+
+### GetApplicationResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetApplicationsRequest"></a>
+
+### GetApplicationsRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Request | [PageInfo](#application.management.v1.PageInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetApplicationsResponse"></a>
+
+### GetApplicationsResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [ApplicationInfo](#application.management.v1.ApplicationInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetGroupRequest"></a>
+
+### GetGroupRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| GroupID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetGroupResponse"></a>
+
+### GetGroupResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetGroupUsersRequest"></a>
+
+### GetGroupUsersRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| GroupID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetGroupUsersResponse"></a>
+
+### GetGroupUsersResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [GroupUserInfo](#application.management.v1.GroupUserInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetResourceRequest"></a>
+
+### GetResourceRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ResourceID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetResourceResponse"></a>
+
+### GetResourceResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
 
 
 
@@ -317,7 +626,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
@@ -332,23 +641,69 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Infos | [GetResourcesResponse.ResourceResponse](#application.management.v1.GetResourcesResponse.ResourceResponse) |  |  |
+| Infos | [ResourceInfo](#application.management.v1.ResourceInfo) | repeated |  |
 
 
 
 
 
 
-<a name="application.management.v1.GetResourcesResponse.ResourceResponse"></a>
+<a name="application.management.v1.GetRoleRequest"></a>
 
-### GetResourcesResponse.ResourceResponse
+### GetRoleRequest
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| ResourceInfos | [ResourceInfo](#application.management.v1.ResourceInfo) | repeated |  |
-| PageInfo | [PageInfo](#application.management.v1.PageInfo) |  |  |
+| AppID | [string](#string) |  |  |
+| RoleID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetRoleResponse"></a>
+
+### GetRoleResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetRoleUsersRequest"></a>
+
+### GetRoleUsersRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| RoleID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetRoleUsersResponse"></a>
+
+### GetRoleUsersResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [RoleUserInfo](#application.management.v1.RoleUserInfo) | repeated |  |
 
 
 
@@ -363,7 +718,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
@@ -378,23 +733,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Infos | [GetRolesResponse.Response](#application.management.v1.GetRolesResponse.Response) |  |  |
-
-
-
-
-
-
-<a name="application.management.v1.GetRolesResponse.Response"></a>
-
-### GetRolesResponse.Response
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| PageInfo | [PageInfo](#application.management.v1.PageInfo) |  |  |
-| RolesInfo | [RolesInfo](#application.management.v1.RolesInfo) | repeated |  |
+| Infos | [RoleInfo](#application.management.v1.RoleInfo) | repeated |  |
 
 
 
@@ -409,8 +748,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| UserId | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
@@ -425,38 +764,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Infos | [GetUserRoleResponse.RoleResponse](#application.management.v1.GetUserRoleResponse.RoleResponse) |  |  |
-
-
-
-
-
-
-<a name="application.management.v1.GetUserRoleResponse.Role"></a>
-
-### GetUserRoleResponse.Role
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| RoleId | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="application.management.v1.GetUserRoleResponse.RoleResponse"></a>
-
-### GetUserRoleResponse.RoleResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| Roles | [GetUserRoleResponse.Role](#application.management.v1.GetUserRoleResponse.Role) | repeated |  |
-| PageInfo | [PageInfo](#application.management.v1.PageInfo) |  |  |
+| Infos | [RoleInfo](#application.management.v1.RoleInfo) | repeated |  |
 
 
 
@@ -471,7 +779,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 
@@ -486,39 +794,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Infos | [GetUsersResponse.UsersResponse](#application.management.v1.GetUsersResponse.UsersResponse) |  |  |
-
-
-
-
-
-
-<a name="application.management.v1.GetUsersResponse.UsersResponse"></a>
-
-### GetUsersResponse.UsersResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| UserInfos | [UserInfo](#application.management.v1.UserInfo) | repeated |  |
-| PageInfo | [PageInfo](#application.management.v1.PageInfo) |  |  |
-
-
-
-
-
-
-<a name="application.management.v1.GrantUserLoginPolicyRequest"></a>
-
-### GrantUserLoginPolicyRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| Users | [string](#string) | repeated |  |
+| Infos | [ApplicationUserInfo](#application.management.v1.ApplicationUserInfo) | repeated |  |
 
 
 
@@ -533,26 +809,34 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| GroupId | [string](#string) |  |  |
+| ID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 | GroupName | [string](#string) |  |  |
-| GroupType | [string](#string) |  |  |
-| GroupLogo | [string](#string) |  |  |
 | GroupOwner | [string](#string) |  |  |
+| GroupLogo | [string](#string) |  |  |
+| Annotation | [string](#string) |  |  |
+| CreateAT | [int32](#int32) |  |  |
+| UpdateAT | [int32](#int32) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.NoDataResponse"></a>
+<a name="application.management.v1.GroupUserInfo"></a>
 
-### NoDataResponse
+### GroupUserInfo
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| info | [string](#string) |  |  |
+| ID | [string](#string) |  |  |
+| GroupID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| Annotation | [string](#string) |  |  |
+| CreateAT | [string](#string) |  |  |
 
 
 
@@ -568,41 +852,70 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | PageIndex | [int32](#int32) |  |  |
-| PageCount | [int32](#int32) |  |  |
-| Total | [int32](#int32) |  |  |
+| PageSize | [int32](#int32) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.RemoveUserLoginPoliciesRequest"></a>
+<a name="application.management.v1.RemoveGroupUsersNoDataResponse"></a>
 
-### RemoveUserLoginPoliciesRequest
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| Users | [string](#string) | repeated |  |
-
-
-
-
-
-
-<a name="application.management.v1.RemoveUserPoliciesRequest"></a>
-
-### RemoveUserPoliciesRequest
+### RemoveGroupUsersNoDataResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| UserId | [string](#string) |  |  |
-| Policies | [ResourcePolicy](#application.management.v1.ResourcePolicy) | repeated |  |
+| Info | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.RemoveGroupUsersRequest"></a>
+
+### RemoveGroupUsersRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserIDs | [string](#string) | repeated |  |
+| GroupID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.RemoveUsersFromApplicationRequest"></a>
+
+### RemoveUsersFromApplicationRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserIDs | [string](#string) | repeated |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.RemoveUsersFromApplicationResponse"></a>
+
+### RemoveUsersFromApplicationResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
 
 
 
@@ -617,45 +930,54 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| ResourceId | [string](#string) |  |  |
+| ID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 | ResourceName | [string](#string) |  |  |
 | ResourceDescription | [string](#string) |  |  |
 | Type | [string](#string) |  |  |
 | Creator | [string](#string) |  |  |
+| CreateAT | [int32](#int32) |  |  |
+| UpdateAT | [int32](#int32) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.ResourcePolicy"></a>
+<a name="application.management.v1.RoleInfo"></a>
 
-### ResourcePolicy
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| ResourceId | [string](#string) |  |  |
-| Action | [string](#string) |  |  |
-
-
-
-
-
-
-<a name="application.management.v1.RolesInfo"></a>
-
-### RolesInfo
+### RoleInfo
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| RoleId | [string](#string) |  |  |
-| AppId | [string](#string) |  |  |
-| Policies | [ResourcePolicy](#application.management.v1.ResourcePolicy) | repeated |  |
-| users | [UserInfo](#application.management.v1.UserInfo) | repeated |  |
+| ID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+| RoleName | [string](#string) |  |  |
+| Creator | [string](#string) |  |  |
+| CreateAT | [int32](#int32) |  |  |
+| UpdateAT | [int32](#int32) |  |  |
+| Annotation | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.RoleUserInfo"></a>
+
+### RoleUserInfo
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+| RoleID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| CreateAT | [int32](#int32) |  |  |
 
 
 
@@ -679,6 +1001,21 @@
 
 
 
+<a name="application.management.v1.SetUserRoleResponse"></a>
+
+### SetUserRoleResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [RoleUserInfo](#application.management.v1.RoleUserInfo) | repeated |  |
+
+
+
+
+
+
 <a name="application.management.v1.UnSetUserRoleRequest"></a>
 
 ### UnSetUserRoleRequest
@@ -687,9 +1024,24 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| UserId | [string](#string) | repeated |  |
-| RoleId | [string](#string) |  |  |
-| AppId | [string](#string) |  |  |
+| UserIDs | [string](#string) | repeated |  |
+| RoleID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.UnSetUserRoleResponse"></a>
+
+### UnSetUserRoleResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
 
 
 
@@ -704,12 +1056,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| ApplicationName | [string](#string) |  |  |
-| ApplicationOwner | [string](#string) |  |  |
-| HomepageUrl | [string](#string) |  |  |
-| RedirectUrl | [string](#string) |  |  |
-| ApplicationLogo | [string](#string) |  |  |
+| Request | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.UpdateApplicationResponse"></a>
+
+### UpdateApplicationResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
 
 
 
@@ -724,9 +1086,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| GroupId | [string](#string) |  |  |
-| Group | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
+| Request | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.UpdateGroupResponse"></a>
+
+### UpdateGroupResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
 
 
 
@@ -741,26 +1116,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| ResourceId | [string](#string) |  |  |
-| Resource | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
+| Request | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.UpdateRolePoliciesRequest"></a>
+<a name="application.management.v1.UpdateResourceResponse"></a>
 
-### UpdateRolePoliciesRequest
+### UpdateResourceResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| RoleId | [string](#string) |  |  |
-| AppId | [string](#string) |  |  |
-| Policies | [ResourcePolicy](#application.management.v1.ResourcePolicy) | repeated |  |
+| Info | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
 
 
 
@@ -775,36 +1146,22 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
-| RoleId | [string](#string) |  |  |
-| RoleName | [string](#string) |  |  |
-| Description | [string](#string) |  |  |
+| Request | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
 
 
 
 
 
 
-<a name="application.management.v1.UserInfo"></a>
+<a name="application.management.v1.UpdateRoleResponse"></a>
 
-### UserInfo
+### UpdateRoleResponse
 
 
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| UserId | [string](#string) |  |  |
-| Username | [string](#string) |  |  |
-| Avatar | [string](#string) |  |  |
-| Age | [int32](#int32) |  |  |
-| Gender | [string](#string) |  |  |
-| Region | [string](#string) |  |  |
-| Birthday | [string](#string) |  |  |
-| Country | [string](#string) |  |  |
-| Province | [string](#string) |  |  |
-| City | [string](#string) |  |  |
-| PhoneNumber | [string](#string) |  |  |
-| EmailAddress | [string](#string) |  |  |
+| Info | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
 
 
 
@@ -845,29 +1202,36 @@ rpc Echo (StringMessage) returns (StringMessage){
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | Version | [.google.protobuf.Empty](#google.protobuf.Empty) | [VersionResponse](#application.management.v1.VersionResponse) | Method Version |
-| CreateApplication | [CreateApplicationRequest](#application.management.v1.CreateApplicationRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Create an application. |
-| UpdateApplication | [UpdateApplicationRequest](#application.management.v1.UpdateApplicationRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Update an application&#39;s basic info. |
-| DeleteApplication | [DeleteApplicationRequest](#application.management.v1.DeleteApplicationRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Delete an application. During Deleting, system will use apis to delete app group, delete app resources and app&#39;s policies in anubis. Need apis: |
-| CreateRole | [CreateRoleRequest](#application.management.v1.CreateRoleRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Create a role in app. When create a role, we can authorise policies to it or not. Need APIs: https://anubis.npool.top/v1/role, https://anubis.npool.top/v1/authorise-role. |
-| UpdateRolePolicies | [UpdateRolePoliciesRequest](#application.management.v1.UpdateRolePoliciesRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Update role&#39;s policies. Need APIs: https://anubis.npool.top/v1/authorise-role |
-| UpdateRole | [UpdateRoleRequest](#application.management.v1.UpdateRoleRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Update role&#39;s basic info. |
-| DeleteRole | [DeleteRoleRequest](#application.management.v1.DeleteRoleRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Delete role from app. Need APIs: https://anubis.npool.top/v1/cancel-role-policies, https://anubis.npool.top/v1/remove-role. |
-| SetUserRole | [SetUserRoleRequest](#application.management.v1.SetUserRoleRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Set role to user. When set role to a user, we will use api to authorise policies to user. Need APIs: https://anubis.npool.top/v1/user/role. |
-| UnSetUserRole | [UnSetUserRoleRequest](#application.management.v1.UnSetUserRoleRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Unset role of user. When unset role to user, we also need to use api to remove role from user. Need APIs: https://anubis.npool.top/v1/remove-user. |
-| GetRoles | [GetRolesRequest](#application.management.v1.GetRolesRequest) | [GetRolesResponse](#application.management.v1.GetRolesResponse) | Get all roles of an application. When get roles, we need to get all infos of roles which include its policies. Need APIs: https://anubis.npool.top/v1/role/{role_id}/policies, https://pyramids.npool.top/v1/role/{RoleId}/users, https://user.npool.top/v1/user/{UserId}. |
-| GetUsers | [GetUsersRequest](#application.management.v1.GetUsersRequest) | [GetUsersResponse](#application.management.v1.GetUsersResponse) | Get users from app. |
-| GetUserRole | [GetUserRoleRequest](#application.management.v1.GetUserRoleRequest) | [GetUserRoleResponse](#application.management.v1.GetUserRoleResponse) | Get all roles of the user. |
-| CreateUsers | [CreateUsersRequest](#application.management.v1.CreateUsersRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Add users into app. When add users, admin can choose to authorise policies to user and authorise roles to user. Need APIs: https://pyramids.npool.top/set-user-role, https://pyramids.npool.top/user/policies. |
-| CreateGroup | [CreateGroupRequest](#application.management.v1.CreateGroupRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Create group in an application. When create a group, admin can add users into this group at the same time. |
-| AddGroupUsers | [AddGroupUsersRequest](#application.management.v1.AddGroupUsersRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Add users into group. |
-| DeleteGroupUsers | [DeleteGroupUsersRequest](#application.management.v1.DeleteGroupUsersRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Remove users from group. |
-| UpdateGroup | [UpdateGroupRequest](#application.management.v1.UpdateGroupRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Update group info. |
-| DeleteGroup | [DeleteGroupRequest](#application.management.v1.DeleteGroupRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Delete group from app. When Delete group, we also need to remove users out from group. Need api: https://user.npool.top/v1/remove/group/users. |
-| GetGroups | [GetGroupsRequest](#application.management.v1.GetGroupsRequest) | [GetGroupsResponse](#application.management.v1.GetGroupsResponse) | Get groups from app. |
-| CreateResource | [CreateResourceRequest](#application.management.v1.CreateResourceRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Create resource for app. |
-| UpdateResource | [UpdateResourceRequest](#application.management.v1.UpdateResourceRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Update resource of app. |
+| CreateApplication | [CreateApplicationRequest](#application.management.v1.CreateApplicationRequest) | [CreateApplicationResponse](#application.management.v1.CreateApplicationResponse) | Create an application. |
+| UpdateApplication | [UpdateApplicationRequest](#application.management.v1.UpdateApplicationRequest) | [UpdateApplicationResponse](#application.management.v1.UpdateApplicationResponse) | Update an application&#39;s basic info. |
+| GetApplication | [GetApplicationRequest](#application.management.v1.GetApplicationRequest) | [GetApplicationResponse](#application.management.v1.GetApplicationResponse) | Get application. |
+| GetApplications | [GetApplicationsRequest](#application.management.v1.GetApplicationsRequest) | [GetApplicationsResponse](#application.management.v1.GetApplicationsResponse) | Get all applications. |
+| DeleteApplication | [DeleteApplicationRequest](#application.management.v1.DeleteApplicationRequest) | [DeleteApplicationResponse](#application.management.v1.DeleteApplicationResponse) | Delete an application. |
+| CreateRole | [CreateRoleRequest](#application.management.v1.CreateRoleRequest) | [CreateRoleResponse](#application.management.v1.CreateRoleResponse) | Create a role in app. |
+| UpdateRole | [UpdateRoleRequest](#application.management.v1.UpdateRoleRequest) | [UpdateRoleResponse](#application.management.v1.UpdateRoleResponse) | Update role&#39;s basic info. |
+| GetRole | [GetRoleRequest](#application.management.v1.GetRoleRequest) | [GetRoleResponse](#application.management.v1.GetRoleResponse) | Get Role. |
+| GetRoles | [GetRolesRequest](#application.management.v1.GetRolesRequest) | [GetRolesResponse](#application.management.v1.GetRolesResponse) | Get Roles. |
+| DeleteRole | [DeleteRoleRequest](#application.management.v1.DeleteRoleRequest) | [DeleteRoleResponse](#application.management.v1.DeleteRoleResponse) | Delete role from app. |
+| SetUserRole | [SetUserRoleRequest](#application.management.v1.SetUserRoleRequest) | [SetUserRoleResponse](#application.management.v1.SetUserRoleResponse) | Set role to user. |
+| GetUserRole | [GetUserRoleRequest](#application.management.v1.GetUserRoleRequest) | [GetUserRoleResponse](#application.management.v1.GetUserRoleResponse) | Get user role. |
+| GetRoleUsers | [GetRoleUsersRequest](#application.management.v1.GetRoleUsersRequest) | [GetRoleUsersResponse](#application.management.v1.GetRoleUsersResponse) | Get role users. |
+| UnSetUserRole | [UnSetUserRoleRequest](#application.management.v1.UnSetUserRoleRequest) | [UnSetUserRoleResponse](#application.management.v1.UnSetUserRoleResponse) | Unset user role. |
+| AddUsersToApplication | [AddUsersToApplicationRequest](#application.management.v1.AddUsersToApplicationRequest) | [AddUsersToApplicationResponse](#application.management.v1.AddUsersToApplicationResponse) | Add users to app. |
+| GetUsersFromApplication | [GetUsersRequest](#application.management.v1.GetUsersRequest) | [GetUsersResponse](#application.management.v1.GetUsersResponse) | Get users from app. |
+| RemoveUsersFromApplication | [RemoveUsersFromApplicationRequest](#application.management.v1.RemoveUsersFromApplicationRequest) | [RemoveUsersFromApplicationResponse](#application.management.v1.RemoveUsersFromApplicationResponse) | Remove users from app. |
+| CreateGroup | [CreateGroupRequest](#application.management.v1.CreateGroupRequest) | [CreateGroupResponse](#application.management.v1.CreateGroupResponse) | Create group in an application. |
+| GetGroup | [GetGroupRequest](#application.management.v1.GetGroupRequest) | [GetGroupResponse](#application.management.v1.GetGroupResponse) | Get group info. |
+| GetAllGroups | [GetAllGroupsRequest](#application.management.v1.GetAllGroupsRequest) | [GetAllGroupsResponse](#application.management.v1.GetAllGroupsResponse) | Get all groups. |
+| UpdateGroup | [UpdateGroupRequest](#application.management.v1.UpdateGroupRequest) | [UpdateGroupResponse](#application.management.v1.UpdateGroupResponse) | Update group info. |
+| DeleteGroup | [DeleteGroupRequest](#application.management.v1.DeleteGroupRequest) | [DeleteGroupResponse](#application.management.v1.DeleteGroupResponse) | Delete group. |
+| AddGroupUsers | [AddGroupUsersRequest](#application.management.v1.AddGroupUsersRequest) | [AddGroupUsersResponse](#application.management.v1.AddGroupUsersResponse) | Add users into group. |
+| GetGroupUsers | [GetGroupUsersRequest](#application.management.v1.GetGroupUsersRequest) | [GetGroupUsersResponse](#application.management.v1.GetGroupUsersResponse) | Get group users. |
+| RemoveGroupUsers | [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest) | [RemoveGroupUsersNoDataResponse](#application.management.v1.RemoveGroupUsersNoDataResponse) | Remove users from group. |
+| CreateResource | [CreateResourceRequest](#application.management.v1.CreateResourceRequest) | [CreateResourceResponse](#application.management.v1.CreateResourceResponse) | Create resource for app. |
+| UpdateResource | [UpdateResourceRequest](#application.management.v1.UpdateResourceRequest) | [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse) | Update resource of app. |
+| GetResource | [GetResourceRequest](#application.management.v1.GetResourceRequest) | [GetResourceResponse](#application.management.v1.GetResourceResponse) | Get resource. |
 | GetResources | [GetResourcesRequest](#application.management.v1.GetResourcesRequest) | [GetResourcesResponse](#application.management.v1.GetResourcesResponse) | Get all resources from app. |
-| DeleteResource | [DeleteResourceRequest](#application.management.v1.DeleteResourceRequest) | [NoDataResponse](#application.management.v1.NoDataResponse) | Delete resource from app. |
+| DeleteResource | [DeleteResourceRequest](#application.management.v1.DeleteResourceRequest) | [DeleteResourceResponse](#application.management.v1.DeleteResourceResponse) | Delete resource from app. |
 
  
 

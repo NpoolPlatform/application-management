@@ -23,82 +23,94 @@ type ApplicationManagementClient interface {
 	Version(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*VersionResponse, error)
 	//
 	//Create an application.
-	CreateApplication(ctx context.Context, in *CreateApplicationRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	CreateApplication(ctx context.Context, in *CreateApplicationRequest, opts ...grpc.CallOption) (*CreateApplicationResponse, error)
 	//
 	//Update an application's basic info.
-	UpdateApplication(ctx context.Context, in *UpdateApplicationRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	UpdateApplication(ctx context.Context, in *UpdateApplicationRequest, opts ...grpc.CallOption) (*UpdateApplicationResponse, error)
 	//
-	//Delete an application. During Deleting, system will use apis to delete app group, delete app resources and app's policies in anubis.
-	//Need apis:
-	DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Get application.
+	GetApplication(ctx context.Context, in *GetApplicationRequest, opts ...grpc.CallOption) (*GetApplicationResponse, error)
 	//
-	//Create a role in app. When create a role, we can authorise policies to it or not.
-	//Need APIs: https://anubis.npool.top/v1/role, https://anubis.npool.top/v1/authorise-role.
-	CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Get all applications.
+	GetApplications(ctx context.Context, in *GetApplicationsRequest, opts ...grpc.CallOption) (*GetApplicationsResponse, error)
 	//
-	//Update role's policies.
-	//Need APIs: https://anubis.npool.top/v1/authorise-role
-	UpdateRolePolicies(ctx context.Context, in *UpdateRolePoliciesRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Delete an application.
+	DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*DeleteApplicationResponse, error)
+	//
+	//Create a role in app.
+	CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*CreateRoleResponse, error)
 	//
 	//Update role's basic info.
-	UpdateRole(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	UpdateRole(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*UpdateRoleResponse, error)
 	//
-	//Delete role from app.
-	//Need APIs: https://anubis.npool.top/v1/cancel-role-policies, https://anubis.npool.top/v1/remove-role.
-	DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Get Role.
+	GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleResponse, error)
 	//
-	//Set role to user. When set role to a user, we will use api to authorise policies to user.
-	//Need APIs: https://anubis.npool.top/v1/user/role.
-	SetUserRole(ctx context.Context, in *SetUserRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
-	//
-	//Unset role of user. When unset role to user, we also need to use api to remove role from user.
-	//Need APIs: https://anubis.npool.top/v1/remove-user.
-	UnSetUserRole(ctx context.Context, in *UnSetUserRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
-	//
-	//Get all roles of an application. When get roles, we need to get all infos of roles which include its policies.
-	//Need APIs:  https://anubis.npool.top/v1/role/{role_id}/policies, https://pyramids.npool.top/v1/role/{RoleId}/users, https://user.npool.top/v1/user/{UserId}.
+	//Get Roles.
 	GetRoles(ctx context.Context, in *GetRolesRequest, opts ...grpc.CallOption) (*GetRolesResponse, error)
 	//
-	//Get users from app.
-	GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
+	//Delete role from app.
+	DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*DeleteRoleResponse, error)
 	//
-	//Get all roles of the user.
+	//Set role to user.
+	SetUserRole(ctx context.Context, in *SetUserRoleRequest, opts ...grpc.CallOption) (*SetUserRoleResponse, error)
+	//
+	//Get user role.
 	GetUserRole(ctx context.Context, in *GetUserRoleRequest, opts ...grpc.CallOption) (*GetUserRoleResponse, error)
 	//
-	//Add users into app. When add users, admin can choose to authorise policies to user and authorise roles to user.
-	//Need APIs: https://pyramids.npool.top/set-user-role, https://pyramids.npool.top/user/policies.
-	CreateUsers(ctx context.Context, in *CreateUsersRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Get role users.
+	GetRoleUsers(ctx context.Context, in *GetRoleUsersRequest, opts ...grpc.CallOption) (*GetRoleUsersResponse, error)
 	//
-	//Create group in an application. When create a group, admin can add users into this group at the same time.
-	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Unset user role.
+	UnSetUserRole(ctx context.Context, in *UnSetUserRoleRequest, opts ...grpc.CallOption) (*UnSetUserRoleResponse, error)
 	//
-	//Add users into group.
-	AddGroupUsers(ctx context.Context, in *AddGroupUsersRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Add users to app.
+	AddUsersToApplication(ctx context.Context, in *AddUsersToApplicationRequest, opts ...grpc.CallOption) (*AddUsersToApplicationResponse, error)
 	//
-	//Remove users from group.
-	DeleteGroupUsers(ctx context.Context, in *DeleteGroupUsersRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Get users from app.
+	GetUsersFromApplication(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
+	//
+	//Remove users from app.
+	RemoveUsersFromApplication(ctx context.Context, in *RemoveUsersFromApplicationRequest, opts ...grpc.CallOption) (*RemoveUsersFromApplicationResponse, error)
+	//
+	//Create group in an application.
+	CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupResponse, error)
+	//
+	//Get group info.
+	GetGroup(ctx context.Context, in *GetGroupRequest, opts ...grpc.CallOption) (*GetGroupResponse, error)
+	//
+	//Get all groups.
+	GetAllGroups(ctx context.Context, in *GetAllGroupsRequest, opts ...grpc.CallOption) (*GetAllGroupsResponse, error)
 	//
 	//Update group info.
-	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error)
 	//
-	//Delete group from app. When Delete group, we also need to remove users out from group.
-	//Need api: https://user.npool.top/v1/remove/group/users.
-	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	//Delete group.
+	DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*DeleteGroupResponse, error)
 	//
-	//Get groups from app.
-	GetGroups(ctx context.Context, in *GetGroupsRequest, opts ...grpc.CallOption) (*GetGroupsResponse, error)
+	//Add users into group.
+	AddGroupUsers(ctx context.Context, in *AddGroupUsersRequest, opts ...grpc.CallOption) (*AddGroupUsersResponse, error)
+	//
+	//Get group users.
+	GetGroupUsers(ctx context.Context, in *GetGroupUsersRequest, opts ...grpc.CallOption) (*GetGroupUsersResponse, error)
+	//
+	//Remove users from group.
+	RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersNoDataResponse, error)
 	//
 	//Create resource for app.
-	CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*CreateResourceResponse, error)
 	//
 	//Update resource of app.
-	UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*UpdateResourceResponse, error)
+	//
+	//Get resource.
+	GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (*GetResourceResponse, error)
 	//
 	//Get all resources from app.
 	GetResources(ctx context.Context, in *GetResourcesRequest, opts ...grpc.CallOption) (*GetResourcesResponse, error)
 	//
 	//Delete resource from app.
-	DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*NoDataResponse, error)
+	DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*DeleteResourceResponse, error)
 }
 
 type applicationManagementClient struct {
@@ -118,8 +130,8 @@ func (c *applicationManagementClient) Version(ctx context.Context, in *emptypb.E
 	return out, nil
 }
 
-func (c *applicationManagementClient) CreateApplication(ctx context.Context, in *CreateApplicationRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) CreateApplication(ctx context.Context, in *CreateApplicationRequest, opts ...grpc.CallOption) (*CreateApplicationResponse, error) {
+	out := new(CreateApplicationResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/CreateApplication", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -127,8 +139,8 @@ func (c *applicationManagementClient) CreateApplication(ctx context.Context, in 
 	return out, nil
 }
 
-func (c *applicationManagementClient) UpdateApplication(ctx context.Context, in *UpdateApplicationRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) UpdateApplication(ctx context.Context, in *UpdateApplicationRequest, opts ...grpc.CallOption) (*UpdateApplicationResponse, error) {
+	out := new(UpdateApplicationResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UpdateApplication", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -136,8 +148,26 @@ func (c *applicationManagementClient) UpdateApplication(ctx context.Context, in 
 	return out, nil
 }
 
-func (c *applicationManagementClient) DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) GetApplication(ctx context.Context, in *GetApplicationRequest, opts ...grpc.CallOption) (*GetApplicationResponse, error) {
+	out := new(GetApplicationResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetApplication", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) GetApplications(ctx context.Context, in *GetApplicationsRequest, opts ...grpc.CallOption) (*GetApplicationsResponse, error) {
+	out := new(GetApplicationsResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetApplications", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) DeleteApplication(ctx context.Context, in *DeleteApplicationRequest, opts ...grpc.CallOption) (*DeleteApplicationResponse, error) {
+	out := new(DeleteApplicationResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/DeleteApplication", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -145,8 +175,8 @@ func (c *applicationManagementClient) DeleteApplication(ctx context.Context, in 
 	return out, nil
 }
 
-func (c *applicationManagementClient) CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) CreateRole(ctx context.Context, in *CreateRoleRequest, opts ...grpc.CallOption) (*CreateRoleResponse, error) {
+	out := new(CreateRoleResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/CreateRole", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -154,17 +184,8 @@ func (c *applicationManagementClient) CreateRole(ctx context.Context, in *Create
 	return out, nil
 }
 
-func (c *applicationManagementClient) UpdateRolePolicies(ctx context.Context, in *UpdateRolePoliciesRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UpdateRolePolicies", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *applicationManagementClient) UpdateRole(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) UpdateRole(ctx context.Context, in *UpdateRoleRequest, opts ...grpc.CallOption) (*UpdateRoleResponse, error) {
+	out := new(UpdateRoleResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UpdateRole", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -172,27 +193,9 @@ func (c *applicationManagementClient) UpdateRole(ctx context.Context, in *Update
 	return out, nil
 }
 
-func (c *applicationManagementClient) DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/DeleteRole", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *applicationManagementClient) SetUserRole(ctx context.Context, in *SetUserRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/SetUserRole", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *applicationManagementClient) UnSetUserRole(ctx context.Context, in *UnSetUserRoleRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UnSetUserRole", in, out, opts...)
+func (c *applicationManagementClient) GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleResponse, error) {
+	out := new(GetRoleResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetRole", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -208,9 +211,18 @@ func (c *applicationManagementClient) GetRoles(ctx context.Context, in *GetRoles
 	return out, nil
 }
 
-func (c *applicationManagementClient) GetUsers(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error) {
-	out := new(GetUsersResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUsers", in, out, opts...)
+func (c *applicationManagementClient) DeleteRole(ctx context.Context, in *DeleteRoleRequest, opts ...grpc.CallOption) (*DeleteRoleResponse, error) {
+	out := new(DeleteRoleResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/DeleteRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) SetUserRole(ctx context.Context, in *SetUserRoleRequest, opts ...grpc.CallOption) (*SetUserRoleResponse, error) {
+	out := new(SetUserRoleResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/SetUserRole", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -226,17 +238,53 @@ func (c *applicationManagementClient) GetUserRole(ctx context.Context, in *GetUs
 	return out, nil
 }
 
-func (c *applicationManagementClient) CreateUsers(ctx context.Context, in *CreateUsersRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/CreateUsers", in, out, opts...)
+func (c *applicationManagementClient) GetRoleUsers(ctx context.Context, in *GetRoleUsersRequest, opts ...grpc.CallOption) (*GetRoleUsersResponse, error) {
+	out := new(GetRoleUsersResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetRoleUsers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicationManagementClient) CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) UnSetUserRole(ctx context.Context, in *UnSetUserRoleRequest, opts ...grpc.CallOption) (*UnSetUserRoleResponse, error) {
+	out := new(UnSetUserRoleResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UnSetUserRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) AddUsersToApplication(ctx context.Context, in *AddUsersToApplicationRequest, opts ...grpc.CallOption) (*AddUsersToApplicationResponse, error) {
+	out := new(AddUsersToApplicationResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/AddUsersToApplication", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) GetUsersFromApplication(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error) {
+	out := new(GetUsersResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUsersFromApplication", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) RemoveUsersFromApplication(ctx context.Context, in *RemoveUsersFromApplicationRequest, opts ...grpc.CallOption) (*RemoveUsersFromApplicationResponse, error) {
+	out := new(RemoveUsersFromApplicationResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/RemoveUsersFromApplication", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) CreateGroup(ctx context.Context, in *CreateGroupRequest, opts ...grpc.CallOption) (*CreateGroupResponse, error) {
+	out := new(CreateGroupResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/CreateGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -244,26 +292,26 @@ func (c *applicationManagementClient) CreateGroup(ctx context.Context, in *Creat
 	return out, nil
 }
 
-func (c *applicationManagementClient) AddGroupUsers(ctx context.Context, in *AddGroupUsersRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/AddGroupUsers", in, out, opts...)
+func (c *applicationManagementClient) GetGroup(ctx context.Context, in *GetGroupRequest, opts ...grpc.CallOption) (*GetGroupResponse, error) {
+	out := new(GetGroupResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicationManagementClient) DeleteGroupUsers(ctx context.Context, in *DeleteGroupUsersRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/DeleteGroupUsers", in, out, opts...)
+func (c *applicationManagementClient) GetAllGroups(ctx context.Context, in *GetAllGroupsRequest, opts ...grpc.CallOption) (*GetAllGroupsResponse, error) {
+	out := new(GetAllGroupsResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetAllGroups", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicationManagementClient) UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) UpdateGroup(ctx context.Context, in *UpdateGroupRequest, opts ...grpc.CallOption) (*UpdateGroupResponse, error) {
+	out := new(UpdateGroupResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UpdateGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -271,8 +319,8 @@ func (c *applicationManagementClient) UpdateGroup(ctx context.Context, in *Updat
 	return out, nil
 }
 
-func (c *applicationManagementClient) DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) DeleteGroup(ctx context.Context, in *DeleteGroupRequest, opts ...grpc.CallOption) (*DeleteGroupResponse, error) {
+	out := new(DeleteGroupResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/DeleteGroup", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -280,17 +328,35 @@ func (c *applicationManagementClient) DeleteGroup(ctx context.Context, in *Delet
 	return out, nil
 }
 
-func (c *applicationManagementClient) GetGroups(ctx context.Context, in *GetGroupsRequest, opts ...grpc.CallOption) (*GetGroupsResponse, error) {
-	out := new(GetGroupsResponse)
-	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetGroups", in, out, opts...)
+func (c *applicationManagementClient) AddGroupUsers(ctx context.Context, in *AddGroupUsersRequest, opts ...grpc.CallOption) (*AddGroupUsersResponse, error) {
+	out := new(AddGroupUsersResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/AddGroupUsers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *applicationManagementClient) CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) GetGroupUsers(ctx context.Context, in *GetGroupUsersRequest, opts ...grpc.CallOption) (*GetGroupUsersResponse, error) {
+	out := new(GetGroupUsersResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetGroupUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersNoDataResponse, error) {
+	out := new(RemoveGroupUsersNoDataResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/RemoveGroupUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*CreateResourceResponse, error) {
+	out := new(CreateResourceResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/CreateResource", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -298,9 +364,18 @@ func (c *applicationManagementClient) CreateResource(ctx context.Context, in *Cr
 	return out, nil
 }
 
-func (c *applicationManagementClient) UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*UpdateResourceResponse, error) {
+	out := new(UpdateResourceResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UpdateResource", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (*GetResourceResponse, error) {
+	out := new(GetResourceResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetResource", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -316,8 +391,8 @@ func (c *applicationManagementClient) GetResources(ctx context.Context, in *GetR
 	return out, nil
 }
 
-func (c *applicationManagementClient) DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*NoDataResponse, error) {
-	out := new(NoDataResponse)
+func (c *applicationManagementClient) DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*DeleteResourceResponse, error) {
+	out := new(DeleteResourceResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/DeleteResource", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -333,82 +408,94 @@ type ApplicationManagementServer interface {
 	Version(context.Context, *emptypb.Empty) (*VersionResponse, error)
 	//
 	//Create an application.
-	CreateApplication(context.Context, *CreateApplicationRequest) (*NoDataResponse, error)
+	CreateApplication(context.Context, *CreateApplicationRequest) (*CreateApplicationResponse, error)
 	//
 	//Update an application's basic info.
-	UpdateApplication(context.Context, *UpdateApplicationRequest) (*NoDataResponse, error)
+	UpdateApplication(context.Context, *UpdateApplicationRequest) (*UpdateApplicationResponse, error)
 	//
-	//Delete an application. During Deleting, system will use apis to delete app group, delete app resources and app's policies in anubis.
-	//Need apis:
-	DeleteApplication(context.Context, *DeleteApplicationRequest) (*NoDataResponse, error)
+	//Get application.
+	GetApplication(context.Context, *GetApplicationRequest) (*GetApplicationResponse, error)
 	//
-	//Create a role in app. When create a role, we can authorise policies to it or not.
-	//Need APIs: https://anubis.npool.top/v1/role, https://anubis.npool.top/v1/authorise-role.
-	CreateRole(context.Context, *CreateRoleRequest) (*NoDataResponse, error)
+	//Get all applications.
+	GetApplications(context.Context, *GetApplicationsRequest) (*GetApplicationsResponse, error)
 	//
-	//Update role's policies.
-	//Need APIs: https://anubis.npool.top/v1/authorise-role
-	UpdateRolePolicies(context.Context, *UpdateRolePoliciesRequest) (*NoDataResponse, error)
+	//Delete an application.
+	DeleteApplication(context.Context, *DeleteApplicationRequest) (*DeleteApplicationResponse, error)
+	//
+	//Create a role in app.
+	CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleResponse, error)
 	//
 	//Update role's basic info.
-	UpdateRole(context.Context, *UpdateRoleRequest) (*NoDataResponse, error)
+	UpdateRole(context.Context, *UpdateRoleRequest) (*UpdateRoleResponse, error)
 	//
-	//Delete role from app.
-	//Need APIs: https://anubis.npool.top/v1/cancel-role-policies, https://anubis.npool.top/v1/remove-role.
-	DeleteRole(context.Context, *DeleteRoleRequest) (*NoDataResponse, error)
+	//Get Role.
+	GetRole(context.Context, *GetRoleRequest) (*GetRoleResponse, error)
 	//
-	//Set role to user. When set role to a user, we will use api to authorise policies to user.
-	//Need APIs: https://anubis.npool.top/v1/user/role.
-	SetUserRole(context.Context, *SetUserRoleRequest) (*NoDataResponse, error)
-	//
-	//Unset role of user. When unset role to user, we also need to use api to remove role from user.
-	//Need APIs: https://anubis.npool.top/v1/remove-user.
-	UnSetUserRole(context.Context, *UnSetUserRoleRequest) (*NoDataResponse, error)
-	//
-	//Get all roles of an application. When get roles, we need to get all infos of roles which include its policies.
-	//Need APIs:  https://anubis.npool.top/v1/role/{role_id}/policies, https://pyramids.npool.top/v1/role/{RoleId}/users, https://user.npool.top/v1/user/{UserId}.
+	//Get Roles.
 	GetRoles(context.Context, *GetRolesRequest) (*GetRolesResponse, error)
 	//
-	//Get users from app.
-	GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
+	//Delete role from app.
+	DeleteRole(context.Context, *DeleteRoleRequest) (*DeleteRoleResponse, error)
 	//
-	//Get all roles of the user.
+	//Set role to user.
+	SetUserRole(context.Context, *SetUserRoleRequest) (*SetUserRoleResponse, error)
+	//
+	//Get user role.
 	GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error)
 	//
-	//Add users into app. When add users, admin can choose to authorise policies to user and authorise roles to user.
-	//Need APIs: https://pyramids.npool.top/set-user-role, https://pyramids.npool.top/user/policies.
-	CreateUsers(context.Context, *CreateUsersRequest) (*NoDataResponse, error)
+	//Get role users.
+	GetRoleUsers(context.Context, *GetRoleUsersRequest) (*GetRoleUsersResponse, error)
 	//
-	//Create group in an application. When create a group, admin can add users into this group at the same time.
-	CreateGroup(context.Context, *CreateGroupRequest) (*NoDataResponse, error)
+	//Unset user role.
+	UnSetUserRole(context.Context, *UnSetUserRoleRequest) (*UnSetUserRoleResponse, error)
 	//
-	//Add users into group.
-	AddGroupUsers(context.Context, *AddGroupUsersRequest) (*NoDataResponse, error)
+	//Add users to app.
+	AddUsersToApplication(context.Context, *AddUsersToApplicationRequest) (*AddUsersToApplicationResponse, error)
 	//
-	//Remove users from group.
-	DeleteGroupUsers(context.Context, *DeleteGroupUsersRequest) (*NoDataResponse, error)
+	//Get users from app.
+	GetUsersFromApplication(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
+	//
+	//Remove users from app.
+	RemoveUsersFromApplication(context.Context, *RemoveUsersFromApplicationRequest) (*RemoveUsersFromApplicationResponse, error)
+	//
+	//Create group in an application.
+	CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error)
+	//
+	//Get group info.
+	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
+	//
+	//Get all groups.
+	GetAllGroups(context.Context, *GetAllGroupsRequest) (*GetAllGroupsResponse, error)
 	//
 	//Update group info.
-	UpdateGroup(context.Context, *UpdateGroupRequest) (*NoDataResponse, error)
+	UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error)
 	//
-	//Delete group from app. When Delete group, we also need to remove users out from group.
-	//Need api: https://user.npool.top/v1/remove/group/users.
-	DeleteGroup(context.Context, *DeleteGroupRequest) (*NoDataResponse, error)
+	//Delete group.
+	DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupResponse, error)
 	//
-	//Get groups from app.
-	GetGroups(context.Context, *GetGroupsRequest) (*GetGroupsResponse, error)
+	//Add users into group.
+	AddGroupUsers(context.Context, *AddGroupUsersRequest) (*AddGroupUsersResponse, error)
+	//
+	//Get group users.
+	GetGroupUsers(context.Context, *GetGroupUsersRequest) (*GetGroupUsersResponse, error)
+	//
+	//Remove users from group.
+	RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersNoDataResponse, error)
 	//
 	//Create resource for app.
-	CreateResource(context.Context, *CreateResourceRequest) (*NoDataResponse, error)
+	CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceResponse, error)
 	//
 	//Update resource of app.
-	UpdateResource(context.Context, *UpdateResourceRequest) (*NoDataResponse, error)
+	UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceResponse, error)
+	//
+	//Get resource.
+	GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error)
 	//
 	//Get all resources from app.
 	GetResources(context.Context, *GetResourcesRequest) (*GetResourcesResponse, error)
 	//
 	//Delete resource from app.
-	DeleteResource(context.Context, *DeleteResourceRequest) (*NoDataResponse, error)
+	DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceResponse, error)
 	mustEmbedUnimplementedApplicationManagementServer()
 }
 
@@ -419,73 +506,94 @@ type UnimplementedApplicationManagementServer struct {
 func (UnimplementedApplicationManagementServer) Version(context.Context, *emptypb.Empty) (*VersionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Version not implemented")
 }
-func (UnimplementedApplicationManagementServer) CreateApplication(context.Context, *CreateApplicationRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) CreateApplication(context.Context, *CreateApplicationRequest) (*CreateApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateApplication not implemented")
 }
-func (UnimplementedApplicationManagementServer) UpdateApplication(context.Context, *UpdateApplicationRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) UpdateApplication(context.Context, *UpdateApplicationRequest) (*UpdateApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateApplication not implemented")
 }
-func (UnimplementedApplicationManagementServer) DeleteApplication(context.Context, *DeleteApplicationRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) GetApplication(context.Context, *GetApplicationRequest) (*GetApplicationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetApplication not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetApplications(context.Context, *GetApplicationsRequest) (*GetApplicationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetApplications not implemented")
+}
+func (UnimplementedApplicationManagementServer) DeleteApplication(context.Context, *DeleteApplicationRequest) (*DeleteApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteApplication not implemented")
 }
-func (UnimplementedApplicationManagementServer) CreateRole(context.Context, *CreateRoleRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) CreateRole(context.Context, *CreateRoleRequest) (*CreateRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateRole not implemented")
 }
-func (UnimplementedApplicationManagementServer) UpdateRolePolicies(context.Context, *UpdateRolePoliciesRequest) (*NoDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateRolePolicies not implemented")
-}
-func (UnimplementedApplicationManagementServer) UpdateRole(context.Context, *UpdateRoleRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) UpdateRole(context.Context, *UpdateRoleRequest) (*UpdateRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateRole not implemented")
 }
-func (UnimplementedApplicationManagementServer) DeleteRole(context.Context, *DeleteRoleRequest) (*NoDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteRole not implemented")
-}
-func (UnimplementedApplicationManagementServer) SetUserRole(context.Context, *SetUserRoleRequest) (*NoDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetUserRole not implemented")
-}
-func (UnimplementedApplicationManagementServer) UnSetUserRole(context.Context, *UnSetUserRoleRequest) (*NoDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UnSetUserRole not implemented")
+func (UnimplementedApplicationManagementServer) GetRole(context.Context, *GetRoleRequest) (*GetRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRole not implemented")
 }
 func (UnimplementedApplicationManagementServer) GetRoles(context.Context, *GetRolesRequest) (*GetRolesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRoles not implemented")
 }
-func (UnimplementedApplicationManagementServer) GetUsers(context.Context, *GetUsersRequest) (*GetUsersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetUsers not implemented")
+func (UnimplementedApplicationManagementServer) DeleteRole(context.Context, *DeleteRoleRequest) (*DeleteRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteRole not implemented")
+}
+func (UnimplementedApplicationManagementServer) SetUserRole(context.Context, *SetUserRoleRequest) (*SetUserRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetUserRole not implemented")
 }
 func (UnimplementedApplicationManagementServer) GetUserRole(context.Context, *GetUserRoleRequest) (*GetUserRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserRole not implemented")
 }
-func (UnimplementedApplicationManagementServer) CreateUsers(context.Context, *CreateUsersRequest) (*NoDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateUsers not implemented")
+func (UnimplementedApplicationManagementServer) GetRoleUsers(context.Context, *GetRoleUsersRequest) (*GetRoleUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoleUsers not implemented")
 }
-func (UnimplementedApplicationManagementServer) CreateGroup(context.Context, *CreateGroupRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) UnSetUserRole(context.Context, *UnSetUserRoleRequest) (*UnSetUserRoleResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnSetUserRole not implemented")
+}
+func (UnimplementedApplicationManagementServer) AddUsersToApplication(context.Context, *AddUsersToApplicationRequest) (*AddUsersToApplicationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUsersToApplication not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetUsersFromApplication(context.Context, *GetUsersRequest) (*GetUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsersFromApplication not implemented")
+}
+func (UnimplementedApplicationManagementServer) RemoveUsersFromApplication(context.Context, *RemoveUsersFromApplicationRequest) (*RemoveUsersFromApplicationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveUsersFromApplication not implemented")
+}
+func (UnimplementedApplicationManagementServer) CreateGroup(context.Context, *CreateGroupRequest) (*CreateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
 }
-func (UnimplementedApplicationManagementServer) AddGroupUsers(context.Context, *AddGroupUsersRequest) (*NoDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddGroupUsers not implemented")
+func (UnimplementedApplicationManagementServer) GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroup not implemented")
 }
-func (UnimplementedApplicationManagementServer) DeleteGroupUsers(context.Context, *DeleteGroupUsersRequest) (*NoDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroupUsers not implemented")
+func (UnimplementedApplicationManagementServer) GetAllGroups(context.Context, *GetAllGroupsRequest) (*GetAllGroupsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllGroups not implemented")
 }
-func (UnimplementedApplicationManagementServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) UpdateGroup(context.Context, *UpdateGroupRequest) (*UpdateGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroup not implemented")
 }
-func (UnimplementedApplicationManagementServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) DeleteGroup(context.Context, *DeleteGroupRequest) (*DeleteGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroup not implemented")
 }
-func (UnimplementedApplicationManagementServer) GetGroups(context.Context, *GetGroupsRequest) (*GetGroupsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetGroups not implemented")
+func (UnimplementedApplicationManagementServer) AddGroupUsers(context.Context, *AddGroupUsersRequest) (*AddGroupUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddGroupUsers not implemented")
 }
-func (UnimplementedApplicationManagementServer) CreateResource(context.Context, *CreateResourceRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) GetGroupUsers(context.Context, *GetGroupUsersRequest) (*GetGroupUsersResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroupUsers not implemented")
+}
+func (UnimplementedApplicationManagementServer) RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersNoDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveGroupUsers not implemented")
+}
+func (UnimplementedApplicationManagementServer) CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateResource not implemented")
 }
-func (UnimplementedApplicationManagementServer) UpdateResource(context.Context, *UpdateResourceRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateResource not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetResource not implemented")
 }
 func (UnimplementedApplicationManagementServer) GetResources(context.Context, *GetResourcesRequest) (*GetResourcesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetResources not implemented")
 }
-func (UnimplementedApplicationManagementServer) DeleteResource(context.Context, *DeleteResourceRequest) (*NoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteResource not implemented")
 }
 func (UnimplementedApplicationManagementServer) mustEmbedUnimplementedApplicationManagementServer() {}
@@ -555,6 +663,42 @@ func _ApplicationManagement_UpdateApplication_Handler(srv interface{}, ctx conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetApplicationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetApplication",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetApplication(ctx, req.(*GetApplicationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetApplications_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetApplicationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetApplications(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetApplications",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetApplications(ctx, req.(*GetApplicationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationManagement_DeleteApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteApplicationRequest)
 	if err := dec(in); err != nil {
@@ -591,24 +735,6 @@ func _ApplicationManagement_CreateRole_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ApplicationManagement_UpdateRolePolicies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateRolePoliciesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ApplicationManagementServer).UpdateRolePolicies(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/UpdateRolePolicies",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).UpdateRolePolicies(ctx, req.(*UpdateRolePoliciesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ApplicationManagement_UpdateRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UpdateRoleRequest)
 	if err := dec(in); err != nil {
@@ -623,6 +749,42 @@ func _ApplicationManagement_UpdateRole_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ApplicationManagementServer).UpdateRole(ctx, req.(*UpdateRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetRole(ctx, req.(*GetRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRolesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetRoles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetRoles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetRoles(ctx, req.(*GetRolesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -663,60 +825,6 @@ func _ApplicationManagement_SetUserRole_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ApplicationManagement_UnSetUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UnSetUserRoleRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ApplicationManagementServer).UnSetUserRole(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/UnSetUserRole",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).UnSetUserRole(ctx, req.(*UnSetUserRoleRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ApplicationManagement_GetRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetRolesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ApplicationManagementServer).GetRoles(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/GetRoles",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).GetRoles(ctx, req.(*GetRolesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _ApplicationManagement_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUsersRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ApplicationManagementServer).GetUsers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/GetUsers",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).GetUsers(ctx, req.(*GetUsersRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _ApplicationManagement_GetUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUserRoleRequest)
 	if err := dec(in); err != nil {
@@ -735,20 +843,92 @@ func _ApplicationManagement_GetUserRole_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ApplicationManagement_CreateUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateUsersRequest)
+func _ApplicationManagement_GetRoleUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoleUsersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicationManagementServer).CreateUsers(ctx, in)
+		return srv.(ApplicationManagementServer).GetRoleUsers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/CreateUsers",
+		FullMethod: "/application.management.v1.ApplicationManagement/GetRoleUsers",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).CreateUsers(ctx, req.(*CreateUsersRequest))
+		return srv.(ApplicationManagementServer).GetRoleUsers(ctx, req.(*GetRoleUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_UnSetUserRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnSetUserRoleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).UnSetUserRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/UnSetUserRole",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).UnSetUserRole(ctx, req.(*UnSetUserRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_AddUsersToApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUsersToApplicationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).AddUsersToApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/AddUsersToApplication",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).AddUsersToApplication(ctx, req.(*AddUsersToApplicationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetUsersFromApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetUsersFromApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetUsersFromApplication",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetUsersFromApplication(ctx, req.(*GetUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_RemoveUsersFromApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveUsersFromApplicationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).RemoveUsersFromApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/RemoveUsersFromApplication",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).RemoveUsersFromApplication(ctx, req.(*RemoveUsersFromApplicationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -771,38 +951,38 @@ func _ApplicationManagement_CreateGroup_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ApplicationManagement_AddGroupUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddGroupUsersRequest)
+func _ApplicationManagement_GetGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicationManagementServer).AddGroupUsers(ctx, in)
+		return srv.(ApplicationManagementServer).GetGroup(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/AddGroupUsers",
+		FullMethod: "/application.management.v1.ApplicationManagement/GetGroup",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).AddGroupUsers(ctx, req.(*AddGroupUsersRequest))
+		return srv.(ApplicationManagementServer).GetGroup(ctx, req.(*GetGroupRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ApplicationManagement_DeleteGroupUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteGroupUsersRequest)
+func _ApplicationManagement_GetAllGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllGroupsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicationManagementServer).DeleteGroupUsers(ctx, in)
+		return srv.(ApplicationManagementServer).GetAllGroups(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/DeleteGroupUsers",
+		FullMethod: "/application.management.v1.ApplicationManagement/GetAllGroups",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).DeleteGroupUsers(ctx, req.(*DeleteGroupUsersRequest))
+		return srv.(ApplicationManagementServer).GetAllGroups(ctx, req.(*GetAllGroupsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -843,20 +1023,56 @@ func _ApplicationManagement_DeleteGroup_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ApplicationManagement_GetGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetGroupsRequest)
+func _ApplicationManagement_AddGroupUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddGroupUsersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ApplicationManagementServer).GetGroups(ctx, in)
+		return srv.(ApplicationManagementServer).AddGroupUsers(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/application.management.v1.ApplicationManagement/GetGroups",
+		FullMethod: "/application.management.v1.ApplicationManagement/AddGroupUsers",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).GetGroups(ctx, req.(*GetGroupsRequest))
+		return srv.(ApplicationManagementServer).AddGroupUsers(ctx, req.(*AddGroupUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetGroupUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetGroupUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetGroupUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetGroupUsers(ctx, req.(*GetGroupUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_RemoveGroupUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveGroupUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).RemoveGroupUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/RemoveGroupUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).RemoveGroupUsers(ctx, req.(*RemoveGroupUsersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -893,6 +1109,24 @@ func _ApplicationManagement_UpdateResource_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ApplicationManagementServer).UpdateResource(ctx, req.(*UpdateResourceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetResource_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetResourceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetResource(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetResource",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetResource(ctx, req.(*GetResourceRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -953,6 +1187,14 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_UpdateApplication_Handler,
 		},
 		{
+			MethodName: "GetApplication",
+			Handler:    _ApplicationManagement_GetApplication_Handler,
+		},
+		{
+			MethodName: "GetApplications",
+			Handler:    _ApplicationManagement_GetApplications_Handler,
+		},
+		{
 			MethodName: "DeleteApplication",
 			Handler:    _ApplicationManagement_DeleteApplication_Handler,
 		},
@@ -961,12 +1203,16 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_CreateRole_Handler,
 		},
 		{
-			MethodName: "UpdateRolePolicies",
-			Handler:    _ApplicationManagement_UpdateRolePolicies_Handler,
-		},
-		{
 			MethodName: "UpdateRole",
 			Handler:    _ApplicationManagement_UpdateRole_Handler,
+		},
+		{
+			MethodName: "GetRole",
+			Handler:    _ApplicationManagement_GetRole_Handler,
+		},
+		{
+			MethodName: "GetRoles",
+			Handler:    _ApplicationManagement_GetRoles_Handler,
 		},
 		{
 			MethodName: "DeleteRole",
@@ -977,36 +1223,40 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_SetUserRole_Handler,
 		},
 		{
-			MethodName: "UnSetUserRole",
-			Handler:    _ApplicationManagement_UnSetUserRole_Handler,
-		},
-		{
-			MethodName: "GetRoles",
-			Handler:    _ApplicationManagement_GetRoles_Handler,
-		},
-		{
-			MethodName: "GetUsers",
-			Handler:    _ApplicationManagement_GetUsers_Handler,
-		},
-		{
 			MethodName: "GetUserRole",
 			Handler:    _ApplicationManagement_GetUserRole_Handler,
 		},
 		{
-			MethodName: "CreateUsers",
-			Handler:    _ApplicationManagement_CreateUsers_Handler,
+			MethodName: "GetRoleUsers",
+			Handler:    _ApplicationManagement_GetRoleUsers_Handler,
+		},
+		{
+			MethodName: "UnSetUserRole",
+			Handler:    _ApplicationManagement_UnSetUserRole_Handler,
+		},
+		{
+			MethodName: "AddUsersToApplication",
+			Handler:    _ApplicationManagement_AddUsersToApplication_Handler,
+		},
+		{
+			MethodName: "GetUsersFromApplication",
+			Handler:    _ApplicationManagement_GetUsersFromApplication_Handler,
+		},
+		{
+			MethodName: "RemoveUsersFromApplication",
+			Handler:    _ApplicationManagement_RemoveUsersFromApplication_Handler,
 		},
 		{
 			MethodName: "CreateGroup",
 			Handler:    _ApplicationManagement_CreateGroup_Handler,
 		},
 		{
-			MethodName: "AddGroupUsers",
-			Handler:    _ApplicationManagement_AddGroupUsers_Handler,
+			MethodName: "GetGroup",
+			Handler:    _ApplicationManagement_GetGroup_Handler,
 		},
 		{
-			MethodName: "DeleteGroupUsers",
-			Handler:    _ApplicationManagement_DeleteGroupUsers_Handler,
+			MethodName: "GetAllGroups",
+			Handler:    _ApplicationManagement_GetAllGroups_Handler,
 		},
 		{
 			MethodName: "UpdateGroup",
@@ -1017,8 +1267,16 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_DeleteGroup_Handler,
 		},
 		{
-			MethodName: "GetGroups",
-			Handler:    _ApplicationManagement_GetGroups_Handler,
+			MethodName: "AddGroupUsers",
+			Handler:    _ApplicationManagement_AddGroupUsers_Handler,
+		},
+		{
+			MethodName: "GetGroupUsers",
+			Handler:    _ApplicationManagement_GetGroupUsers_Handler,
+		},
+		{
+			MethodName: "RemoveGroupUsers",
+			Handler:    _ApplicationManagement_RemoveGroupUsers_Handler,
 		},
 		{
 			MethodName: "CreateResource",
@@ -1027,6 +1285,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateResource",
 			Handler:    _ApplicationManagement_UpdateResource_Handler,
+		},
+		{
+			MethodName: "GetResource",
+			Handler:    _ApplicationManagement_GetResource_Handler,
 		},
 		{
 			MethodName: "GetResources",

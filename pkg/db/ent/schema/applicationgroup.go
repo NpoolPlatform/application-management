@@ -22,7 +22,7 @@ func (ApplicationGroup) Fields() []ent.Field {
 			Unique(),
 		field.String("app_id"),
 		field.String("group_name"),
-		field.String("group_logo"),
+		field.String("group_logo").Optional(),
 		field.UUID("group_owner", uuid.UUID{}),
 		field.String("annotation").Optional(),
 		field.Int64("create_at").

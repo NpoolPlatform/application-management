@@ -45,9 +45,37 @@ func (au *ApplicationUpdate) SetHomepageURL(s string) *ApplicationUpdate {
 	return au
 }
 
+// SetNillableHomepageURL sets the "homepage_url" field if the given value is not nil.
+func (au *ApplicationUpdate) SetNillableHomepageURL(s *string) *ApplicationUpdate {
+	if s != nil {
+		au.SetHomepageURL(*s)
+	}
+	return au
+}
+
+// ClearHomepageURL clears the value of the "homepage_url" field.
+func (au *ApplicationUpdate) ClearHomepageURL() *ApplicationUpdate {
+	au.mutation.ClearHomepageURL()
+	return au
+}
+
 // SetRedirectURL sets the "redirect_url" field.
 func (au *ApplicationUpdate) SetRedirectURL(s string) *ApplicationUpdate {
 	au.mutation.SetRedirectURL(s)
+	return au
+}
+
+// SetNillableRedirectURL sets the "redirect_url" field if the given value is not nil.
+func (au *ApplicationUpdate) SetNillableRedirectURL(s *string) *ApplicationUpdate {
+	if s != nil {
+		au.SetRedirectURL(*s)
+	}
+	return au
+}
+
+// ClearRedirectURL clears the value of the "redirect_url" field.
+func (au *ApplicationUpdate) ClearRedirectURL() *ApplicationUpdate {
+	au.mutation.ClearRedirectURL()
 	return au
 }
 
@@ -68,6 +96,20 @@ func (au *ApplicationUpdate) SetNillableClientSecret(s *string) *ApplicationUpda
 // SetApplicationLogo sets the "application_logo" field.
 func (au *ApplicationUpdate) SetApplicationLogo(s string) *ApplicationUpdate {
 	au.mutation.SetApplicationLogo(s)
+	return au
+}
+
+// SetNillableApplicationLogo sets the "application_logo" field if the given value is not nil.
+func (au *ApplicationUpdate) SetNillableApplicationLogo(s *string) *ApplicationUpdate {
+	if s != nil {
+		au.SetApplicationLogo(*s)
+	}
+	return au
+}
+
+// ClearApplicationLogo clears the value of the "application_logo" field.
+func (au *ApplicationUpdate) ClearApplicationLogo() *ApplicationUpdate {
+	au.mutation.ClearApplicationLogo()
 	return au
 }
 
@@ -233,10 +275,22 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: application.FieldHomepageURL,
 		})
 	}
+	if au.mutation.HomepageURLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: application.FieldHomepageURL,
+		})
+	}
 	if value, ok := au.mutation.RedirectURL(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: application.FieldRedirectURL,
+		})
+	}
+	if au.mutation.RedirectURLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: application.FieldRedirectURL,
 		})
 	}
@@ -251,6 +305,12 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: application.FieldApplicationLogo,
+		})
+	}
+	if au.mutation.ApplicationLogoCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: application.FieldApplicationLogo,
 		})
 	}
@@ -333,9 +393,37 @@ func (auo *ApplicationUpdateOne) SetHomepageURL(s string) *ApplicationUpdateOne 
 	return auo
 }
 
+// SetNillableHomepageURL sets the "homepage_url" field if the given value is not nil.
+func (auo *ApplicationUpdateOne) SetNillableHomepageURL(s *string) *ApplicationUpdateOne {
+	if s != nil {
+		auo.SetHomepageURL(*s)
+	}
+	return auo
+}
+
+// ClearHomepageURL clears the value of the "homepage_url" field.
+func (auo *ApplicationUpdateOne) ClearHomepageURL() *ApplicationUpdateOne {
+	auo.mutation.ClearHomepageURL()
+	return auo
+}
+
 // SetRedirectURL sets the "redirect_url" field.
 func (auo *ApplicationUpdateOne) SetRedirectURL(s string) *ApplicationUpdateOne {
 	auo.mutation.SetRedirectURL(s)
+	return auo
+}
+
+// SetNillableRedirectURL sets the "redirect_url" field if the given value is not nil.
+func (auo *ApplicationUpdateOne) SetNillableRedirectURL(s *string) *ApplicationUpdateOne {
+	if s != nil {
+		auo.SetRedirectURL(*s)
+	}
+	return auo
+}
+
+// ClearRedirectURL clears the value of the "redirect_url" field.
+func (auo *ApplicationUpdateOne) ClearRedirectURL() *ApplicationUpdateOne {
+	auo.mutation.ClearRedirectURL()
 	return auo
 }
 
@@ -356,6 +444,20 @@ func (auo *ApplicationUpdateOne) SetNillableClientSecret(s *string) *Application
 // SetApplicationLogo sets the "application_logo" field.
 func (auo *ApplicationUpdateOne) SetApplicationLogo(s string) *ApplicationUpdateOne {
 	auo.mutation.SetApplicationLogo(s)
+	return auo
+}
+
+// SetNillableApplicationLogo sets the "application_logo" field if the given value is not nil.
+func (auo *ApplicationUpdateOne) SetNillableApplicationLogo(s *string) *ApplicationUpdateOne {
+	if s != nil {
+		auo.SetApplicationLogo(*s)
+	}
+	return auo
+}
+
+// ClearApplicationLogo clears the value of the "application_logo" field.
+func (auo *ApplicationUpdateOne) ClearApplicationLogo() *ApplicationUpdateOne {
+	auo.mutation.ClearApplicationLogo()
 	return auo
 }
 
@@ -545,10 +647,22 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 			Column: application.FieldHomepageURL,
 		})
 	}
+	if auo.mutation.HomepageURLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Column: application.FieldHomepageURL,
+		})
+	}
 	if value, ok := auo.mutation.RedirectURL(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: application.FieldRedirectURL,
+		})
+	}
+	if auo.mutation.RedirectURLCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: application.FieldRedirectURL,
 		})
 	}
@@ -563,6 +677,12 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Value:  value,
+			Column: application.FieldApplicationLogo,
+		})
+	}
+	if auo.mutation.ApplicationLogoCleared() {
+		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
 			Column: application.FieldApplicationLogo,
 		})
 	}

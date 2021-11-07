@@ -250,9 +250,22 @@ func (m *ApplicationMutation) OldHomepageURL(ctx context.Context) (v string, err
 	return oldValue.HomepageURL, nil
 }
 
+// ClearHomepageURL clears the value of the "homepage_url" field.
+func (m *ApplicationMutation) ClearHomepageURL() {
+	m.homepage_url = nil
+	m.clearedFields[application.FieldHomepageURL] = struct{}{}
+}
+
+// HomepageURLCleared returns if the "homepage_url" field was cleared in this mutation.
+func (m *ApplicationMutation) HomepageURLCleared() bool {
+	_, ok := m.clearedFields[application.FieldHomepageURL]
+	return ok
+}
+
 // ResetHomepageURL resets all changes to the "homepage_url" field.
 func (m *ApplicationMutation) ResetHomepageURL() {
 	m.homepage_url = nil
+	delete(m.clearedFields, application.FieldHomepageURL)
 }
 
 // SetRedirectURL sets the "redirect_url" field.
@@ -286,9 +299,22 @@ func (m *ApplicationMutation) OldRedirectURL(ctx context.Context) (v string, err
 	return oldValue.RedirectURL, nil
 }
 
+// ClearRedirectURL clears the value of the "redirect_url" field.
+func (m *ApplicationMutation) ClearRedirectURL() {
+	m.redirect_url = nil
+	m.clearedFields[application.FieldRedirectURL] = struct{}{}
+}
+
+// RedirectURLCleared returns if the "redirect_url" field was cleared in this mutation.
+func (m *ApplicationMutation) RedirectURLCleared() bool {
+	_, ok := m.clearedFields[application.FieldRedirectURL]
+	return ok
+}
+
 // ResetRedirectURL resets all changes to the "redirect_url" field.
 func (m *ApplicationMutation) ResetRedirectURL() {
 	m.redirect_url = nil
+	delete(m.clearedFields, application.FieldRedirectURL)
 }
 
 // SetClientSecret sets the "client_secret" field.
@@ -358,9 +384,22 @@ func (m *ApplicationMutation) OldApplicationLogo(ctx context.Context) (v string,
 	return oldValue.ApplicationLogo, nil
 }
 
+// ClearApplicationLogo clears the value of the "application_logo" field.
+func (m *ApplicationMutation) ClearApplicationLogo() {
+	m.application_logo = nil
+	m.clearedFields[application.FieldApplicationLogo] = struct{}{}
+}
+
+// ApplicationLogoCleared returns if the "application_logo" field was cleared in this mutation.
+func (m *ApplicationMutation) ApplicationLogoCleared() bool {
+	_, ok := m.clearedFields[application.FieldApplicationLogo]
+	return ok
+}
+
 // ResetApplicationLogo resets all changes to the "application_logo" field.
 func (m *ApplicationMutation) ResetApplicationLogo() {
 	m.application_logo = nil
+	delete(m.clearedFields, application.FieldApplicationLogo)
 }
 
 // SetCreateAt sets the "create_at" field.
@@ -771,7 +810,17 @@ func (m *ApplicationMutation) AddField(name string, value ent.Value) error {
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ApplicationMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(application.FieldHomepageURL) {
+		fields = append(fields, application.FieldHomepageURL)
+	}
+	if m.FieldCleared(application.FieldRedirectURL) {
+		fields = append(fields, application.FieldRedirectURL)
+	}
+	if m.FieldCleared(application.FieldApplicationLogo) {
+		fields = append(fields, application.FieldApplicationLogo)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -784,6 +833,17 @@ func (m *ApplicationMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ApplicationMutation) ClearField(name string) error {
+	switch name {
+	case application.FieldHomepageURL:
+		m.ClearHomepageURL()
+		return nil
+	case application.FieldRedirectURL:
+		m.ClearRedirectURL()
+		return nil
+	case application.FieldApplicationLogo:
+		m.ClearApplicationLogo()
+		return nil
+	}
 	return fmt.Errorf("unknown Application nullable field %s", name)
 }
 
@@ -1081,9 +1141,22 @@ func (m *ApplicationGroupMutation) OldGroupLogo(ctx context.Context) (v string, 
 	return oldValue.GroupLogo, nil
 }
 
+// ClearGroupLogo clears the value of the "group_logo" field.
+func (m *ApplicationGroupMutation) ClearGroupLogo() {
+	m.group_logo = nil
+	m.clearedFields[applicationgroup.FieldGroupLogo] = struct{}{}
+}
+
+// GroupLogoCleared returns if the "group_logo" field was cleared in this mutation.
+func (m *ApplicationGroupMutation) GroupLogoCleared() bool {
+	_, ok := m.clearedFields[applicationgroup.FieldGroupLogo]
+	return ok
+}
+
 // ResetGroupLogo resets all changes to the "group_logo" field.
 func (m *ApplicationGroupMutation) ResetGroupLogo() {
 	m.group_logo = nil
+	delete(m.clearedFields, applicationgroup.FieldGroupLogo)
 }
 
 // SetGroupOwner sets the "group_owner" field.
@@ -1566,6 +1639,9 @@ func (m *ApplicationGroupMutation) AddField(name string, value ent.Value) error 
 // mutation.
 func (m *ApplicationGroupMutation) ClearedFields() []string {
 	var fields []string
+	if m.FieldCleared(applicationgroup.FieldGroupLogo) {
+		fields = append(fields, applicationgroup.FieldGroupLogo)
+	}
 	if m.FieldCleared(applicationgroup.FieldAnnotation) {
 		fields = append(fields, applicationgroup.FieldAnnotation)
 	}
@@ -1583,6 +1659,9 @@ func (m *ApplicationGroupMutation) FieldCleared(name string) bool {
 // error if the field is not defined in the schema.
 func (m *ApplicationGroupMutation) ClearField(name string) error {
 	switch name {
+	case applicationgroup.FieldGroupLogo:
+		m.ClearGroupLogo()
+		return nil
 	case applicationgroup.FieldAnnotation:
 		m.ClearAnnotation()
 		return nil
@@ -2338,7 +2417,7 @@ type ApplicationResourceMutation struct {
 	app_id               *string
 	resource_name        *string
 	resource_description *string
-	_type                *applicationresource.Type
+	_type                *string
 	creator              *uuid.UUID
 	create_at            *int64
 	addcreate_at         *int64
@@ -2540,18 +2619,31 @@ func (m *ApplicationResourceMutation) OldResourceDescription(ctx context.Context
 	return oldValue.ResourceDescription, nil
 }
 
+// ClearResourceDescription clears the value of the "resource_description" field.
+func (m *ApplicationResourceMutation) ClearResourceDescription() {
+	m.resource_description = nil
+	m.clearedFields[applicationresource.FieldResourceDescription] = struct{}{}
+}
+
+// ResourceDescriptionCleared returns if the "resource_description" field was cleared in this mutation.
+func (m *ApplicationResourceMutation) ResourceDescriptionCleared() bool {
+	_, ok := m.clearedFields[applicationresource.FieldResourceDescription]
+	return ok
+}
+
 // ResetResourceDescription resets all changes to the "resource_description" field.
 func (m *ApplicationResourceMutation) ResetResourceDescription() {
 	m.resource_description = nil
+	delete(m.clearedFields, applicationresource.FieldResourceDescription)
 }
 
 // SetType sets the "type" field.
-func (m *ApplicationResourceMutation) SetType(a applicationresource.Type) {
-	m._type = &a
+func (m *ApplicationResourceMutation) SetType(s string) {
+	m._type = &s
 }
 
 // GetType returns the value of the "type" field in the mutation.
-func (m *ApplicationResourceMutation) GetType() (r applicationresource.Type, exists bool) {
+func (m *ApplicationResourceMutation) GetType() (r string, exists bool) {
 	v := m._type
 	if v == nil {
 		return
@@ -2562,7 +2654,7 @@ func (m *ApplicationResourceMutation) GetType() (r applicationresource.Type, exi
 // OldType returns the old "type" field's value of the ApplicationResource entity.
 // If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationResourceMutation) OldType(ctx context.Context) (v applicationresource.Type, err error) {
+func (m *ApplicationResourceMutation) OldType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldType is only allowed on UpdateOne operations")
 	}
@@ -2909,7 +3001,7 @@ func (m *ApplicationResourceMutation) SetField(name string, value ent.Value) err
 		m.SetResourceDescription(v)
 		return nil
 	case applicationresource.FieldType:
-		v, ok := value.(applicationresource.Type)
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3011,7 +3103,11 @@ func (m *ApplicationResourceMutation) AddField(name string, value ent.Value) err
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *ApplicationResourceMutation) ClearedFields() []string {
-	return nil
+	var fields []string
+	if m.FieldCleared(applicationresource.FieldResourceDescription) {
+		fields = append(fields, applicationresource.FieldResourceDescription)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -3024,6 +3120,11 @@ func (m *ApplicationResourceMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *ApplicationResourceMutation) ClearField(name string) error {
+	switch name {
+	case applicationresource.FieldResourceDescription:
+		m.ClearResourceDescription()
+		return nil
+	}
 	return fmt.Errorf("unknown ApplicationResource nullable field %s", name)
 }
 
@@ -4444,7 +4545,7 @@ type ApplicationUserMutation struct {
 	id            *uuid.UUID
 	app_id        *string
 	user_id       *uuid.UUID
-	create_method *applicationuser.CreateMethod
+	original      *bool
 	create_at     *int64
 	addcreate_at  *int64
 	delete_at     *int64
@@ -4612,40 +4713,40 @@ func (m *ApplicationUserMutation) ResetUserID() {
 	m.user_id = nil
 }
 
-// SetCreateMethod sets the "create_method" field.
-func (m *ApplicationUserMutation) SetCreateMethod(am applicationuser.CreateMethod) {
-	m.create_method = &am
+// SetOriginal sets the "original" field.
+func (m *ApplicationUserMutation) SetOriginal(b bool) {
+	m.original = &b
 }
 
-// CreateMethod returns the value of the "create_method" field in the mutation.
-func (m *ApplicationUserMutation) CreateMethod() (r applicationuser.CreateMethod, exists bool) {
-	v := m.create_method
+// Original returns the value of the "original" field in the mutation.
+func (m *ApplicationUserMutation) Original() (r bool, exists bool) {
+	v := m.original
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldCreateMethod returns the old "create_method" field's value of the ApplicationUser entity.
+// OldOriginal returns the old "original" field's value of the ApplicationUser entity.
 // If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationUserMutation) OldCreateMethod(ctx context.Context) (v applicationuser.CreateMethod, err error) {
+func (m *ApplicationUserMutation) OldOriginal(ctx context.Context) (v bool, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, fmt.Errorf("OldCreateMethod is only allowed on UpdateOne operations")
+		return v, fmt.Errorf("OldOriginal is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, fmt.Errorf("OldCreateMethod requires an ID field in the mutation")
+		return v, fmt.Errorf("OldOriginal requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldCreateMethod: %w", err)
+		return v, fmt.Errorf("querying old value for OldOriginal: %w", err)
 	}
-	return oldValue.CreateMethod, nil
+	return oldValue.Original, nil
 }
 
-// ResetCreateMethod resets all changes to the "create_method" field.
-func (m *ApplicationUserMutation) ResetCreateMethod() {
-	m.create_method = nil
+// ResetOriginal resets all changes to the "original" field.
+func (m *ApplicationUserMutation) ResetOriginal() {
+	m.original = nil
 }
 
 // SetCreateAt sets the "create_at" field.
@@ -4786,8 +4887,8 @@ func (m *ApplicationUserMutation) Fields() []string {
 	if m.user_id != nil {
 		fields = append(fields, applicationuser.FieldUserID)
 	}
-	if m.create_method != nil {
-		fields = append(fields, applicationuser.FieldCreateMethod)
+	if m.original != nil {
+		fields = append(fields, applicationuser.FieldOriginal)
 	}
 	if m.create_at != nil {
 		fields = append(fields, applicationuser.FieldCreateAt)
@@ -4807,8 +4908,8 @@ func (m *ApplicationUserMutation) Field(name string) (ent.Value, bool) {
 		return m.AppID()
 	case applicationuser.FieldUserID:
 		return m.UserID()
-	case applicationuser.FieldCreateMethod:
-		return m.CreateMethod()
+	case applicationuser.FieldOriginal:
+		return m.Original()
 	case applicationuser.FieldCreateAt:
 		return m.CreateAt()
 	case applicationuser.FieldDeleteAt:
@@ -4826,8 +4927,8 @@ func (m *ApplicationUserMutation) OldField(ctx context.Context, name string) (en
 		return m.OldAppID(ctx)
 	case applicationuser.FieldUserID:
 		return m.OldUserID(ctx)
-	case applicationuser.FieldCreateMethod:
-		return m.OldCreateMethod(ctx)
+	case applicationuser.FieldOriginal:
+		return m.OldOriginal(ctx)
 	case applicationuser.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case applicationuser.FieldDeleteAt:
@@ -4855,12 +4956,12 @@ func (m *ApplicationUserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetUserID(v)
 		return nil
-	case applicationuser.FieldCreateMethod:
-		v, ok := value.(applicationuser.CreateMethod)
+	case applicationuser.FieldOriginal:
+		v, ok := value.(bool)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetCreateMethod(v)
+		m.SetOriginal(v)
 		return nil
 	case applicationuser.FieldCreateAt:
 		v, ok := value.(int64)
@@ -4958,8 +5059,8 @@ func (m *ApplicationUserMutation) ResetField(name string) error {
 	case applicationuser.FieldUserID:
 		m.ResetUserID()
 		return nil
-	case applicationuser.FieldCreateMethod:
-		m.ResetCreateMethod()
+	case applicationuser.FieldOriginal:
+		m.ResetOriginal()
 		return nil
 	case applicationuser.FieldCreateAt:
 		m.ResetCreateAt()

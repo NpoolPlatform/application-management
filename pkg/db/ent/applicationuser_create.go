@@ -32,16 +32,16 @@ func (auc *ApplicationUserCreate) SetUserID(u uuid.UUID) *ApplicationUserCreate 
 	return auc
 }
 
-// SetCreateMethod sets the "create_method" field.
-func (auc *ApplicationUserCreate) SetCreateMethod(am applicationuser.CreateMethod) *ApplicationUserCreate {
-	auc.mutation.SetCreateMethod(am)
+// SetOriginal sets the "original" field.
+func (auc *ApplicationUserCreate) SetOriginal(b bool) *ApplicationUserCreate {
+	auc.mutation.SetOriginal(b)
 	return auc
 }
 
-// SetNillableCreateMethod sets the "create_method" field if the given value is not nil.
-func (auc *ApplicationUserCreate) SetNillableCreateMethod(am *applicationuser.CreateMethod) *ApplicationUserCreate {
-	if am != nil {
-		auc.SetCreateMethod(*am)
+// SetNillableOriginal sets the "original" field if the given value is not nil.
+func (auc *ApplicationUserCreate) SetNillableOriginal(b *bool) *ApplicationUserCreate {
+	if b != nil {
+		auc.SetOriginal(*b)
 	}
 	return auc
 }
@@ -151,9 +151,9 @@ func (auc *ApplicationUserCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (auc *ApplicationUserCreate) defaults() {
-	if _, ok := auc.mutation.CreateMethod(); !ok {
-		v := applicationuser.DefaultCreateMethod
-		auc.mutation.SetCreateMethod(v)
+	if _, ok := auc.mutation.Original(); !ok {
+		v := applicationuser.DefaultOriginal
+		auc.mutation.SetOriginal(v)
 	}
 	if _, ok := auc.mutation.CreateAt(); !ok {
 		v := applicationuser.DefaultCreateAt()
@@ -177,13 +177,8 @@ func (auc *ApplicationUserCreate) check() error {
 	if _, ok := auc.mutation.UserID(); !ok {
 		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "user_id"`)}
 	}
-	if _, ok := auc.mutation.CreateMethod(); !ok {
-		return &ValidationError{Name: "create_method", err: errors.New(`ent: missing required field "create_method"`)}
-	}
-	if v, ok := auc.mutation.CreateMethod(); ok {
-		if err := applicationuser.CreateMethodValidator(v); err != nil {
-			return &ValidationError{Name: "create_method", err: fmt.Errorf(`ent: validator failed for field "create_method": %w`, err)}
-		}
+	if _, ok := auc.mutation.Original(); !ok {
+		return &ValidationError{Name: "original", err: errors.New(`ent: missing required field "original"`)}
 	}
 	if _, ok := auc.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
@@ -239,13 +234,13 @@ func (auc *ApplicationUserCreate) createSpec() (*ApplicationUser, *sqlgraph.Crea
 		})
 		_node.UserID = value
 	}
-	if value, ok := auc.mutation.CreateMethod(); ok {
+	if value, ok := auc.mutation.Original(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeEnum,
+			Type:   field.TypeBool,
 			Value:  value,
-			Column: applicationuser.FieldCreateMethod,
+			Column: applicationuser.FieldOriginal,
 		})
-		_node.CreateMethod = value
+		_node.Original = value
 	}
 	if value, ok := auc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

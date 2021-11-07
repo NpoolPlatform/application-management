@@ -23,7 +23,7 @@ type ApplicationResource struct {
 	// ResourceDescription holds the value of the "resource_description" field.
 	ResourceDescription string `json:"resource_description,omitempty"`
 	// Type holds the value of the "type" field.
-	Type applicationresource.Type `json:"type,omitempty"`
+	Type string `json:"type,omitempty"`
 	// Creator holds the value of the "creator" field.
 	Creator uuid.UUID `json:"creator,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
@@ -88,7 +88,7 @@ func (ar *ApplicationResource) assignValues(columns []string, values []interface
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				ar.Type = applicationresource.Type(value.String)
+				ar.Type = value.String
 			}
 		case applicationresource.FieldCreator:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -149,7 +149,7 @@ func (ar *ApplicationResource) String() string {
 	builder.WriteString(", resource_description=")
 	builder.WriteString(ar.ResourceDescription)
 	builder.WriteString(", type=")
-	builder.WriteString(fmt.Sprintf("%v", ar.Type))
+	builder.WriteString(ar.Type)
 	builder.WriteString(", creator=")
 	builder.WriteString(fmt.Sprintf("%v", ar.Creator))
 	builder.WriteString(", create_at=")

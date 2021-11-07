@@ -20,8 +20,8 @@ type ApplicationUser struct {
 	AppID string `json:"app_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID uuid.UUID `json:"user_id,omitempty"`
-	// CreateMethod holds the value of the "create_method" field.
-	CreateMethod applicationuser.CreateMethod `json:"create_method,omitempty"`
+	// Original holds the value of the "original" field.
+	Original bool `json:"original,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt int64 `json:"create_at,omitempty"`
 	// DeleteAt holds the value of the "delete_at" field.
@@ -33,9 +33,11 @@ func (*ApplicationUser) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case applicationuser.FieldOriginal:
+			values[i] = new(sql.NullBool)
 		case applicationuser.FieldCreateAt, applicationuser.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case applicationuser.FieldAppID, applicationuser.FieldCreateMethod:
+		case applicationuser.FieldAppID:
 			values[i] = new(sql.NullString)
 		case applicationuser.FieldID, applicationuser.FieldUserID:
 			values[i] = new(uuid.UUID)
@@ -72,11 +74,11 @@ func (au *ApplicationUser) assignValues(columns []string, values []interface{}) 
 			} else if value != nil {
 				au.UserID = *value
 			}
-		case applicationuser.FieldCreateMethod:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field create_method", values[i])
+		case applicationuser.FieldOriginal:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field original", values[i])
 			} else if value.Valid {
-				au.CreateMethod = applicationuser.CreateMethod(value.String)
+				au.Original = value.Bool
 			}
 		case applicationuser.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -122,8 +124,8 @@ func (au *ApplicationUser) String() string {
 	builder.WriteString(au.AppID)
 	builder.WriteString(", user_id=")
 	builder.WriteString(fmt.Sprintf("%v", au.UserID))
-	builder.WriteString(", create_method=")
-	builder.WriteString(fmt.Sprintf("%v", au.CreateMethod))
+	builder.WriteString(", original=")
+	builder.WriteString(fmt.Sprintf("%v", au.Original))
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", au.CreateAt))
 	builder.WriteString(", delete_at=")

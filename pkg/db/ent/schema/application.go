@@ -23,13 +23,13 @@ func (Application) Fields() []ent.Field {
 			}),
 		field.String("application_name"),
 		field.UUID("application_owner", uuid.UUID{}),
-		field.String("homepage_url"),
-		field.String("redirect_url"),
+		field.String("homepage_url").Optional(),
+		field.String("redirect_url").Optional(),
 		field.String("client_secret").Unique().
 			DefaultFunc(func() string {
 				return randstr.Hex(20)
-			}),
-		field.String("application_logo"),
+			}).Sensitive(),
+		field.String("application_logo").Optional(),
 		field.Int64("create_at").
 			DefaultFunc(func() int64 {
 				return time.Now().Unix()

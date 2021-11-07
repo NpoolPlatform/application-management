@@ -25,7 +25,7 @@ type Application struct {
 	// RedirectURL holds the value of the "redirect_url" field.
 	RedirectURL string `json:"redirect_url,omitempty"`
 	// ClientSecret holds the value of the "client_secret" field.
-	ClientSecret string `json:"client_secret,omitempty"`
+	ClientSecret string `json:"-"`
 	// ApplicationLogo holds the value of the "application_logo" field.
 	ApplicationLogo string `json:"application_logo,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
@@ -158,8 +158,7 @@ func (a *Application) String() string {
 	builder.WriteString(a.HomepageURL)
 	builder.WriteString(", redirect_url=")
 	builder.WriteString(a.RedirectURL)
-	builder.WriteString(", client_secret=")
-	builder.WriteString(a.ClientSecret)
+	builder.WriteString(", client_secret=<sensitive>")
 	builder.WriteString(", application_logo=")
 	builder.WriteString(a.ApplicationLogo)
 	builder.WriteString(", create_at=")
