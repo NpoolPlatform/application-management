@@ -249,7 +249,7 @@ service ApplicationManagement {
     /*
     Remove users from group.
     */
-    rpc RemoveGroupUsers (RemoveGroupUsersRequest) returns (RemoveGroupUsersNoDataResponse) {
+    rpc RemoveGroupUsers (RemoveGroupUsersRequest) returns (RemoveGroupUsersResponse) {
         option (google.api.http) = {
             post: "/v1/remove/group/users"
             body: "*"
@@ -565,7 +565,7 @@ message GroupUserInfo {
     string AppID = 3;
     string UserID = 4;
     string Annotation = 5;
-    string CreateAT = 6;
+    int32 CreateAT = 6;
 }
 
 message AddGroupUsersRequest {
@@ -593,7 +593,7 @@ message RemoveGroupUsersRequest {
     string AppID = 3;
 }
 
-message RemoveGroupUsersNoDataResponse {
+message RemoveGroupUsersResponse {
     string Info = 1;
 }
 

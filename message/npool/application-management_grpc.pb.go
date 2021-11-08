@@ -98,7 +98,7 @@ type ApplicationManagementClient interface {
 	GetGroupUsers(ctx context.Context, in *GetGroupUsersRequest, opts ...grpc.CallOption) (*GetGroupUsersResponse, error)
 	//
 	//Remove users from group.
-	RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersNoDataResponse, error)
+	RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersResponse, error)
 	//
 	//Create resource for app.
 	CreateResource(ctx context.Context, in *CreateResourceRequest, opts ...grpc.CallOption) (*CreateResourceResponse, error)
@@ -358,8 +358,8 @@ func (c *applicationManagementClient) GetGroupUsers(ctx context.Context, in *Get
 	return out, nil
 }
 
-func (c *applicationManagementClient) RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersNoDataResponse, error) {
-	out := new(RemoveGroupUsersNoDataResponse)
+func (c *applicationManagementClient) RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersResponse, error) {
+	out := new(RemoveGroupUsersResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/RemoveGroupUsers", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -495,7 +495,7 @@ type ApplicationManagementServer interface {
 	GetGroupUsers(context.Context, *GetGroupUsersRequest) (*GetGroupUsersResponse, error)
 	//
 	//Remove users from group.
-	RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersNoDataResponse, error)
+	RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersResponse, error)
 	//
 	//Create resource for app.
 	CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceResponse, error)
@@ -596,7 +596,7 @@ func (UnimplementedApplicationManagementServer) AddGroupUsers(context.Context, *
 func (UnimplementedApplicationManagementServer) GetGroupUsers(context.Context, *GetGroupUsersRequest) (*GetGroupUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroupUsers not implemented")
 }
-func (UnimplementedApplicationManagementServer) RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersNoDataResponse, error) {
+func (UnimplementedApplicationManagementServer) RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveGroupUsers not implemented")
 }
 func (UnimplementedApplicationManagementServer) CreateResource(context.Context, *CreateResourceRequest) (*CreateResourceResponse, error) {

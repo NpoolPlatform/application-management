@@ -55,8 +55,8 @@
     - [GroupInfo](#application.management.v1.GroupInfo)
     - [GroupUserInfo](#application.management.v1.GroupUserInfo)
     - [PageInfo](#application.management.v1.PageInfo)
-    - [RemoveGroupUsersNoDataResponse](#application.management.v1.RemoveGroupUsersNoDataResponse)
     - [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest)
+    - [RemoveGroupUsersResponse](#application.management.v1.RemoveGroupUsersResponse)
     - [RemoveUsersFromApplicationRequest](#application.management.v1.RemoveUsersFromApplicationRequest)
     - [RemoveUsersFromApplicationResponse](#application.management.v1.RemoveUsersFromApplicationResponse)
     - [ResourceInfo](#application.management.v1.ResourceInfo)
@@ -870,7 +870,7 @@
 | AppID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
 | Annotation | [string](#string) |  |  |
-| CreateAT | [string](#string) |  |  |
+| CreateAT | [int32](#int32) |  |  |
 
 
 
@@ -893,21 +893,6 @@
 
 
 
-<a name="application.management.v1.RemoveGroupUsersNoDataResponse"></a>
-
-### RemoveGroupUsersNoDataResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| Info | [string](#string) |  |  |
-
-
-
-
-
-
 <a name="application.management.v1.RemoveGroupUsersRequest"></a>
 
 ### RemoveGroupUsersRequest
@@ -919,6 +904,21 @@
 | UserIDs | [string](#string) | repeated |  |
 | GroupID | [string](#string) |  |  |
 | AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.RemoveGroupUsersResponse"></a>
+
+### RemoveGroupUsersResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
 
 
 
@@ -1261,7 +1261,7 @@ rpc Echo (StringMessage) returns (StringMessage){
 | DeleteGroup | [DeleteGroupRequest](#application.management.v1.DeleteGroupRequest) | [DeleteGroupResponse](#application.management.v1.DeleteGroupResponse) | Delete group. |
 | AddGroupUsers | [AddGroupUsersRequest](#application.management.v1.AddGroupUsersRequest) | [AddGroupUsersResponse](#application.management.v1.AddGroupUsersResponse) | Add users into group. |
 | GetGroupUsers | [GetGroupUsersRequest](#application.management.v1.GetGroupUsersRequest) | [GetGroupUsersResponse](#application.management.v1.GetGroupUsersResponse) | Get group users. |
-| RemoveGroupUsers | [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest) | [RemoveGroupUsersNoDataResponse](#application.management.v1.RemoveGroupUsersNoDataResponse) | Remove users from group. |
+| RemoveGroupUsers | [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest) | [RemoveGroupUsersResponse](#application.management.v1.RemoveGroupUsersResponse) | Remove users from group. |
 | CreateResource | [CreateResourceRequest](#application.management.v1.CreateResourceRequest) | [CreateResourceResponse](#application.management.v1.CreateResourceResponse) | Create resource for app. |
 | UpdateResource | [UpdateResourceRequest](#application.management.v1.UpdateResourceRequest) | [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse) | Update resource of app. |
 | GetResource | [GetResourceRequest](#application.management.v1.GetResourceRequest) | [GetResourceResponse](#application.management.v1.GetResourceResponse) | Get resource. |

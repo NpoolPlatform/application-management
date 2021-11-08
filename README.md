@@ -1,4 +1,4 @@
-	# Application Management
+# Application Management
 ## 目录
   - [功能](#功能)
   - [命令](#命令)
