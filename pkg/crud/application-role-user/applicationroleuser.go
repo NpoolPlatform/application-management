@@ -109,6 +109,48 @@ func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.Ge
 	}, nil
 }
 
+func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetUserRoleResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	existUser, err := exist.ApplicationUser(ctx, in.AppID, userID)
+	if err != nil || !existUser {
+		return nil, xerrors.Errorf("user does not exist: %v", err)
+	}
+
+	infos, err := db.Client().
+		ApplicationRoleUser.
+		Query().
+		Where(
+			applicationroleuser.And(
+				applicationroleuser.DeleteAt(0),
+				applicationroleuser.AppID(in.AppID),
+				applicationroleuser.UserID(userID),
+			),
+		).All(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to get user's roles: %v", err)
+	}
+
+	response := []*npool.RoleInfo{}
+	for _, info := range infos {
+		res := &npool.RoleInfo{}
+		res.ID = dbRowToApplication(info).RoleID
+		response = append(response, res)
+	}
+
+	return &npool.GetUserRoleResponse{
+		Infos: response,
+	}, nil
+}
+
 func Delete(ctx context.Context, in *npool.UnSetUserRoleRequest) (*npool.UnSetUserRoleResponse, error) {
 	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
 	if err != nil {

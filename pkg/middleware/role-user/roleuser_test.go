@@ -1,4 +1,4 @@
-package applicationroleuser
+package roleuser
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"github.com/NpoolPlatform/application-management/message/npool"
 	"github.com/NpoolPlatform/application-management/pkg/crud/application"
 	applicationrole "github.com/NpoolPlatform/application-management/pkg/crud/application-role"
+	applicationroleuser "github.com/NpoolPlatform/application-management/pkg/crud/application-role-user"
 	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
 	testinit "github.com/NpoolPlatform/application-management/pkg/test-init"
 	"github.com/google/uuid"
@@ -25,7 +26,7 @@ func init() {
 	}
 }
 
-func TestApplicationRoleUserCRUD(t *testing.T) { // nolint
+func TestRoleUserMiddleware(t *testing.T) {
 	if runByGithubAction, err := strconv.ParseBool(os.Getenv("RUN_BY_GITHUB_ACTION")); err == nil && runByGithubAction {
 		return
 	}
@@ -69,18 +70,11 @@ func TestApplicationRoleUserCRUD(t *testing.T) { // nolint
 		Original: true,
 	}
 
-	respUser, err := applicationuser.Create(context.Background(), &npool.AddUsersToApplicationRequest{
-		AppID:    applicationUser.AppID,
-		UserIDs:  []string{applicationUser.UserID},
-		Original: applicationUser.Original,
+	_, err = applicationuser.Create(context.Background(), &npool.AddUsersToApplicationRequest{
+		UserIDs: []string{applicationUser.UserID},
+		AppID:   applicationUser.AppID,
 	})
-	if assert.Nil(t, err) {
-		assert.NotEqual(t, respUser.Infos[0].ID, uuid.UUID{})
-		assert.Equal(t, respUser.Infos[0].AppID, applicationUser.AppID)
-		assert.Equal(t, respUser.Infos[0].UserID, applicationUser.UserID)
-		assert.Equal(t, respUser.Infos[0].Original, applicationUser.Original)
-		applicationUser.ID = respUser.Infos[0].ID
-	}
+	assert.Nil(t, err)
 
 	applicationRoleUser := &npool.RoleUserInfo{
 		AppID:  applicationInfo.ID,
@@ -88,7 +82,7 @@ func TestApplicationRoleUserCRUD(t *testing.T) { // nolint
 		UserID: applicationUser.UserID,
 	}
 
-	resp, err := Create(context.Background(), &npool.SetUserRoleRequest{
+	resp, err := applicationroleuser.Create(context.Background(), &npool.SetUserRoleRequest{
 		UserIDs: []string{applicationRoleUser.UserID},
 		AppID:   applicationRoleUser.AppID,
 		RoleID:  applicationRoleUser.RoleID,
@@ -101,24 +95,10 @@ func TestApplicationRoleUserCRUD(t *testing.T) { // nolint
 		applicationRoleUser.ID = resp.Infos[0].ID
 	}
 
-	resp1, err := GetRoleUsers(context.Background(), &npool.GetRoleUsersRequest{
-		RoleID: applicationRoleUser.RoleID,
+	resp1, err := GetUserRole(context.Background(), &npool.GetUserRoleRequest{
 		AppID:  applicationRoleUser.AppID,
-	})
-	assert.Nil(t, err)
-	fmt.Printf("resp1 is %v", resp1)
-
-	resp2, err := GetUserRole(context.Background(), &npool.GetUserRoleRequest{
 		UserID: applicationRoleUser.UserID,
-		AppID:  applicationRoleUser.AppID,
 	})
 	assert.Nil(t, err)
-	fmt.Printf("resp2 is %v", resp2)
-
-	_, err = Delete(context.Background(), &npool.UnSetUserRoleRequest{
-		AppID:   applicationRoleUser.AppID,
-		RoleID:  applicationRoleUser.RoleID,
-		UserIDs: []string{applicationRoleUser.UserID},
-	})
-	assert.Nil(t, err)
+	fmt.Printf("get user role resp1 is: %v", resp1)
 }
