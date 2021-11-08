@@ -8,6 +8,7 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/db"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroup"
+	"github.com/NpoolPlatform/application-management/pkg/exist"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -25,33 +26,14 @@ func dbRowToApplicationGroup(row *ent.ApplicationGroup) *npool.GroupInfo {
 	}
 }
 
-func GroupNameExist(ctx context.Context, groupName, appID string) (int, error) {
-	info, err := db.Client().
-		ApplicationGroup.
-		Query().
-		Where(
-			applicationgroup.And(
-				applicationgroup.DeleteAt(0),
-				applicationgroup.GroupName(groupName),
-				applicationgroup.AppID(appID),
-			),
-		).All(ctx)
-	if err != nil {
-		return -1, xerrors.Errorf("fail to get resource by name: %v", err)
-	}
-
-	if len(info) == 0 {
-		return 0, nil
-	} else if len(info) == 1 {
-		return 1, nil
-	}
-
-	return -1, nil
-}
-
 func Create(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGroupResponse, error) {
-	exist, err := GroupNameExist(ctx, in.Request.GroupName, in.Request.AppID)
-	if err != nil || exist != 0 {
+	existApp, err := exist.Application(ctx, in.Request.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	existGroupName, err := exist.GroupName(ctx, in.Request.GroupName, in.Request.AppID)
+	if err != nil || existGroupName != 0 {
 		return nil, xerrors.Errorf("group already exist in this app: %v", err)
 	}
 
@@ -79,8 +61,13 @@ func Create(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGro
 }
 
 func Update(ctx context.Context, in *npool.UpdateGroupRequest) (*npool.UpdateGroupResponse, error) {
-	exist, err := GroupNameExist(ctx, in.Request.GroupName, in.Request.AppID)
-	if err != nil || exist == -1 {
+	existApp, err := exist.Application(ctx, in.Request.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	existGroupName, err := exist.GroupName(ctx, in.Request.GroupName, in.Request.AppID)
+	if err != nil || existGroupName == -1 {
 		return nil, xerrors.Errorf("group name has already exist")
 	}
 
@@ -123,6 +110,11 @@ func Update(ctx context.Context, in *npool.UpdateGroupRequest) (*npool.UpdateGro
 }
 
 func Get(ctx context.Context, in *npool.GetGroupRequest) (*npool.GetGroupResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	groupID, err := uuid.Parse(in.GroupID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid group id: %v", err)
@@ -148,6 +140,11 @@ func Get(ctx context.Context, in *npool.GetGroupRequest) (*npool.GetGroupRespons
 }
 
 func GetAll(ctx context.Context, in *npool.GetAllGroupsRequest) (*npool.GetAllGroupsResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationGroup.
 		Query().
@@ -172,6 +169,11 @@ func GetAll(ctx context.Context, in *npool.GetAllGroupsRequest) (*npool.GetAllGr
 }
 
 func Delete(ctx context.Context, in *npool.DeleteGroupRequest) (*npool.DeleteGroupResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	groupID, err := uuid.Parse(in.GroupID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid group id: %v", err)

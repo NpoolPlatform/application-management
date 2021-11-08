@@ -28,7 +28,7 @@ func TestApplicationCRUD(t *testing.T) { // nolint
 	}
 
 	application := &npool.ApplicationInfo{
-		ApplicationName:  "test",
+		ApplicationName:  "test" + uuid.New().String(),
 		ApplicationOwner: uuid.New().String(),
 	}
 

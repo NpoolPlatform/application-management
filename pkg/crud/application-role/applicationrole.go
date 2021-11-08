@@ -8,6 +8,7 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/db"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationrole"
+	"github.com/NpoolPlatform/application-management/pkg/exist"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -25,13 +26,18 @@ func dbRowToApplicationRole(row *ent.ApplicationRole) *npool.RoleInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRoleResponse, error) {
+	existApp, err := exist.Application(ctx, in.Request.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	creator, err := uuid.Parse(in.Request.Creator)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
 	}
 
-	exist, err := RoleNameExist(ctx, in.Request)
-	if err != nil || exist != 0 {
+	existRoleName, err := exist.RoleName(ctx, in.Request.RoleName, in.Request.AppID)
+	if err != nil || existRoleName != 0 {
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
 
@@ -53,6 +59,11 @@ func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRole
 }
 
 func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	roleID, err := uuid.Parse(in.RoleID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid role id: %v", err)
@@ -78,6 +89,11 @@ func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse,
 }
 
 func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationRole.
 		Query().
@@ -101,13 +117,18 @@ func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResp
 }
 
 func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRoleResponse, error) {
+	existApp, err := exist.Application(ctx, in.Request.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	roleID, err := uuid.Parse(in.Request.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid role id: %v", err)
 	}
 
-	exist, err := RoleNameExist(ctx, in.Request)
-	if err != nil || exist == -1 {
+	existRoleName, err := exist.RoleName(ctx, in.Request.RoleName, in.Request.AppID)
+	if err != nil || existRoleName == -1 {
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
 
@@ -144,6 +165,11 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 }
 
 func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRoleResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
 	roleID, err := uuid.Parse(in.RoleID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid role id: %v", err)
@@ -161,28 +187,4 @@ func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRole
 	return &npool.DeleteRoleResponse{
 		Info: "delete role successfully",
 	}, nil
-}
-
-func RoleNameExist(ctx context.Context, in *npool.RoleInfo) (int, error) {
-	info, err := db.Client().
-		ApplicationRole.
-		Query().
-		Where(
-			applicationrole.And(
-				applicationrole.DeleteAt(0),
-				applicationrole.RoleName(in.RoleName),
-				applicationrole.AppID(in.AppID),
-			),
-		).All(ctx)
-	if err != nil {
-		return -1, xerrors.Errorf("fail to query role: %v", err)
-	}
-
-	if len(info) == 0 {
-		return 0, nil
-	} else if len(info) == 1 {
-		return 1, nil
-	}
-
-	return -1, nil
 }

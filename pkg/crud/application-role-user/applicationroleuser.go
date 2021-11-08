@@ -8,6 +8,7 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/db"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationroleuser"
+	"github.com/NpoolPlatform/application-management/pkg/exist"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -22,33 +23,30 @@ func dbRowToApplication(row *ent.ApplicationRoleUser) *npool.RoleUserInfo {
 	}
 }
 
-func userHasRole(ctx context.Context, userID, roleID uuid.UUID, appID string) (bool, error) {
-	info, err := db.Client().
-		ApplicationRoleUser.
-		Query().
-		Where(
-			applicationroleuser.And(
-				applicationroleuser.DeleteAt(0),
-				applicationroleuser.RoleID(roleID),
-				applicationroleuser.UserID(userID),
-				applicationroleuser.AppID(appID),
-			),
-		).All(ctx)
-	if err != nil {
-		return false, xerrors.Errorf("fail to query user has role: %v", err)
-	}
-	if len(info) != 0 {
-		return true, nil
+func preConditionJudge(ctx context.Context, roleIDString, appID string) (uuid.UUID, error) {
+	existApp, err := exist.Application(ctx, appID)
+	if err != nil || !existApp {
+		return uuid.UUID{}, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	return false, nil
+	roleID, err := uuid.Parse(roleIDString)
+	if err != nil {
+		return uuid.UUID{}, xerrors.Errorf("invalid role id: %v", err)
+	}
+
+	existRole, err := exist.ApplicationRole(ctx, roleID, appID)
+	if err != nil || !existRole {
+		return uuid.UUID{}, xerrors.Errorf("role doesn't exist")
+	}
+	return roleID, nil
 }
 
 func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRoleResponse, error) {
-	roleID, err := uuid.Parse(in.RoleID)
+	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
 	if err != nil {
-		return nil, xerrors.Errorf("invalid role id: %v", err)
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
+
 	resposne := []*npool.RoleUserInfo{}
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
@@ -56,7 +54,12 @@ func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRo
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		has, err := userHasRole(ctx, userID, roleID, in.AppID)
+		existUser, err := exist.ApplicationUser(ctx, in.AppID, userID)
+		if err != nil || !existUser {
+			return nil, xerrors.Errorf("user doesn't exist")
+		}
+
+		has, err := exist.UserRole(ctx, userID, roleID, in.AppID)
 		if err != nil || has {
 			return nil, xerrors.Errorf("user already has the role: %v", err)
 		}
@@ -79,9 +82,9 @@ func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRo
 }
 
 func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.GetRoleUsersResponse, error) {
-	roleID, err := uuid.Parse(in.RoleID)
+	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
 	if err != nil {
-		return nil, xerrors.Errorf("invalid role id: %v", err)
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
 	infos, err := db.Client().
@@ -107,10 +110,11 @@ func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.Ge
 }
 
 func Delete(ctx context.Context, in *npool.UnSetUserRoleRequest) (*npool.UnSetUserRoleResponse, error) {
-	roleID, err := uuid.Parse(in.RoleID)
+	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
 	if err != nil {
-		return nil, xerrors.Errorf("invalid role id: %v", err)
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
+
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {

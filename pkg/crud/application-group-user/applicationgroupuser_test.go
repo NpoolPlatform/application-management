@@ -8,10 +8,12 @@ import (
 	"testing"
 
 	"github.com/NpoolPlatform/application-management/message/npool"
+	"github.com/NpoolPlatform/application-management/pkg/crud/application"
+	applicationgroup "github.com/NpoolPlatform/application-management/pkg/crud/application-group"
+	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
 	testinit "github.com/NpoolPlatform/application-management/pkg/test-init"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/thanhpk/randstr"
 )
 
 func init() {
@@ -28,10 +30,62 @@ func TestApplicationGroupUserCRUD(t *testing.T) {
 		return
 	}
 
+	applicationInfo := &npool.ApplicationInfo{
+		ApplicationName:  "test-group-user" + uuid.New().String(),
+		ApplicationOwner: uuid.New().String(),
+	}
+
+	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
+		Request: applicationInfo,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respApp.Info.ID, "")
+		assert.NotEqual(t, respApp.Info.ClientSecret, "")
+		assert.Equal(t, respApp.Info.ApplicationName, applicationInfo.ApplicationName)
+		assert.Equal(t, respApp.Info.ApplicationOwner, applicationInfo.ApplicationOwner)
+		applicationInfo.ID = respApp.Info.ID
+	}
+
+	applicationGroup := &npool.GroupInfo{
+		AppID:      applicationInfo.ID,
+		GroupName:  "test" + uuid.New().String(),
+		GroupOwner: uuid.New().String(),
+	}
+
+	respGroup, err := applicationgroup.Create(context.Background(), &npool.CreateGroupRequest{
+		Request: applicationGroup,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respGroup.Info.ID, uuid.UUID{})
+		assert.Equal(t, respGroup.Info.AppID, applicationGroup.AppID)
+		assert.Equal(t, respGroup.Info.GroupName, applicationGroup.GroupName)
+		assert.Equal(t, respGroup.Info.GroupOwner, applicationGroup.GroupOwner)
+		applicationGroup.ID = respGroup.Info.ID
+	}
+
+	applicationUser := &npool.ApplicationUserInfo{
+		AppID:    applicationInfo.ID,
+		UserID:   uuid.New().String(),
+		Original: true,
+	}
+
+	respUser, err := applicationuser.Create(context.Background(), &npool.AddUsersToApplicationRequest{
+		AppID:    applicationUser.AppID,
+		UserIDs:  []string{applicationUser.UserID},
+		Original: applicationUser.Original,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respUser.Infos[0].ID, uuid.UUID{})
+		assert.Equal(t, respUser.Infos[0].AppID, applicationUser.AppID)
+		assert.Equal(t, respUser.Infos[0].UserID, applicationUser.UserID)
+		assert.Equal(t, respUser.Infos[0].Original, applicationUser.Original)
+		applicationUser.ID = respUser.Infos[0].ID
+	}
+
 	groupUser := &npool.GroupUserInfo{
-		AppID:   randstr.Hex(10),
-		GroupID: uuid.New().String(),
-		UserID:  uuid.New().String(),
+		AppID:   applicationInfo.ID,
+		GroupID: applicationGroup.ID,
+		UserID:  applicationUser.UserID,
 	}
 
 	resp, err := Create(context.Background(), &npool.AddGroupUsersRequest{

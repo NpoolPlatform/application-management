@@ -8,10 +8,12 @@ import (
 	"testing"
 
 	"github.com/NpoolPlatform/application-management/message/npool"
+	"github.com/NpoolPlatform/application-management/pkg/crud/application"
+	applicationrole "github.com/NpoolPlatform/application-management/pkg/crud/application-role"
+	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
 	testinit "github.com/NpoolPlatform/application-management/pkg/test-init"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/thanhpk/randstr"
 )
 
 func init() {
@@ -28,10 +30,62 @@ func TestApplicationRoleUserCRUD(t *testing.T) { // nolint
 		return
 	}
 
+	applicationInfo := &npool.ApplicationInfo{
+		ApplicationName:  "test-role-user" + uuid.New().String(),
+		ApplicationOwner: uuid.New().String(),
+	}
+
+	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
+		Request: applicationInfo,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respApp.Info.ID, "")
+		assert.NotEqual(t, respApp.Info.ClientSecret, "")
+		assert.Equal(t, respApp.Info.ApplicationName, applicationInfo.ApplicationName)
+		assert.Equal(t, respApp.Info.ApplicationOwner, applicationInfo.ApplicationOwner)
+		applicationInfo.ID = respApp.Info.ID
+	}
+
+	applicationRole := &npool.RoleInfo{
+		RoleName: "test" + uuid.New().String(),
+		AppID:    applicationInfo.ID,
+		Creator:  uuid.New().String(),
+	}
+
+	respRole, err := applicationrole.Create(context.Background(), &npool.CreateRoleRequest{
+		Request: applicationRole,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respRole.Info.ID, uuid.UUID{})
+		assert.Equal(t, respRole.Info.AppID, applicationRole.AppID)
+		assert.Equal(t, respRole.Info.RoleName, applicationRole.RoleName)
+		assert.Equal(t, respRole.Info.Creator, applicationRole.Creator)
+		applicationRole.ID = respRole.Info.ID
+	}
+
+	applicationUser := &npool.ApplicationUserInfo{
+		AppID:    applicationInfo.ID,
+		UserID:   uuid.New().String(),
+		Original: true,
+	}
+
+	respUser, err := applicationuser.Create(context.Background(), &npool.AddUsersToApplicationRequest{
+		AppID:    applicationUser.AppID,
+		UserIDs:  []string{applicationUser.UserID},
+		Original: applicationUser.Original,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respUser.Infos[0].ID, uuid.UUID{})
+		assert.Equal(t, respUser.Infos[0].AppID, applicationUser.AppID)
+		assert.Equal(t, respUser.Infos[0].UserID, applicationUser.UserID)
+		assert.Equal(t, respUser.Infos[0].Original, applicationUser.Original)
+		applicationUser.ID = respUser.Infos[0].ID
+	}
+
 	applicationRoleUser := &npool.RoleUserInfo{
-		AppID:  randstr.Hex(10),
-		RoleID: uuid.New().String(),
-		UserID: uuid.New().String(),
+		AppID:  applicationInfo.ID,
+		RoleID: applicationRole.ID,
+		UserID: applicationUser.UserID,
 	}
 
 	resp, err := Create(context.Background(), &npool.SetUserRoleRequest{

@@ -8,10 +8,10 @@ import (
 	"testing"
 
 	"github.com/NpoolPlatform/application-management/message/npool"
+	"github.com/NpoolPlatform/application-management/pkg/crud/application"
 	testinit "github.com/NpoolPlatform/application-management/pkg/test-init"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/thanhpk/randstr"
 )
 
 func init() {
@@ -28,9 +28,25 @@ func TestApplicationRoleCRUD(t *testing.T) { // nolint
 		return
 	}
 
+	applicationInfo := &npool.ApplicationInfo{
+		ApplicationName:  "test-role" + uuid.New().String(),
+		ApplicationOwner: uuid.New().String(),
+	}
+
+	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
+		Request: applicationInfo,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respApp.Info.ID, "")
+		assert.NotEqual(t, respApp.Info.ClientSecret, "")
+		assert.Equal(t, respApp.Info.ApplicationName, applicationInfo.ApplicationName)
+		assert.Equal(t, respApp.Info.ApplicationOwner, applicationInfo.ApplicationOwner)
+		applicationInfo.ID = respApp.Info.ID
+	}
+
 	applicationRole := &npool.RoleInfo{
 		RoleName: "test" + uuid.New().String(),
-		AppID:    randstr.Hex(10),
+		AppID:    applicationInfo.ID,
 		Creator:  uuid.New().String(),
 	}
 
@@ -70,11 +86,6 @@ func TestApplicationRoleCRUD(t *testing.T) { // nolint
 		assert.Equal(t, resp2.Info.AppID, applicationRole.AppID)
 		assert.Equal(t, resp2.Info.RoleName, applicationRole.RoleName)
 		assert.Equal(t, resp2.Info.Creator, applicationRole.Creator)
-	}
-
-	resp3, err := RoleNameExist(context.Background(), applicationRole)
-	if assert.Nil(t, err) {
-		assert.Equal(t, resp3, true)
 	}
 
 	_, err = Delete(context.Background(), &npool.DeleteRoleRequest{

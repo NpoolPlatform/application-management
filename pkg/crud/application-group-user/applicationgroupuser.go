@@ -7,6 +7,7 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/db"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroupuser"
+	"github.com/NpoolPlatform/application-management/pkg/exist"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -21,35 +22,28 @@ func dbRawToApplicationGroupUser(row *ent.ApplicationGroupUser) *npool.GroupUser
 	}
 }
 
-func groupUserExist(ctx context.Context, userID, groupID uuid.UUID, appID string) (int, error) {
-	info, err := db.Client().
-		ApplicationGroupUser.
-		Query().
-		Where(
-			applicationgroupuser.And(
-				applicationgroupuser.DeleteAt(0),
-				applicationgroupuser.UserID(userID),
-				applicationgroupuser.GroupID(groupID),
-				applicationgroupuser.AppID(appID),
-			),
-		).All(ctx)
+func preConditionJudge(ctx context.Context, groupIDString, appID string) (uuid.UUID, error) {
+	existApp, err := exist.Application(ctx, appID)
+	if err != nil || !existApp {
+		return uuid.UUID{}, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	groupID, err := uuid.Parse(groupIDString)
 	if err != nil {
-		return -1, xerrors.Errorf("fail to get group user by name: %v", err)
+		return uuid.UUID{}, xerrors.Errorf("invalid group id: %v", err)
 	}
 
-	if len(info) == 0 {
-		return 0, nil
-	} else if len(info) == 1 {
-		return 1, nil
+	existGroup, err := exist.ApplicationGroup(ctx, groupID, appID)
+	if err != nil || !existGroup {
+		return uuid.UUID{}, xerrors.Errorf("group doesn't exist: %v", err)
 	}
-
-	return -1, nil
+	return groupID, nil
 }
 
 func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGroupUsersResponse, error) {
-	groupID, err := uuid.Parse(in.GroupID)
+	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
 	if err != nil {
-		return nil, xerrors.Errorf("invalid group id: %v", err)
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
 	response := []*npool.GroupUserInfo{}
@@ -60,8 +54,8 @@ func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGrou
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		exist, err := groupUserExist(ctx, userID, groupID, in.AppID)
-		if err != nil || exist != 0 {
+		existGroupUser, err := exist.GroupUser(ctx, userID, groupID, in.AppID)
+		if err != nil || existGroupUser {
 			return nil, xerrors.Errorf("user has already existed in this app group")
 		}
 
@@ -84,9 +78,9 @@ func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGrou
 }
 
 func Get(ctx context.Context, in *npool.GetGroupUsersRequest) (*npool.GetGroupUsersResponse, error) {
-	groupID, err := uuid.Parse(in.GroupID)
+	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
 	if err != nil {
-		return nil, xerrors.Errorf("invalid group id: %v", err)
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
 	infos, err := db.Client().
@@ -114,9 +108,9 @@ func Get(ctx context.Context, in *npool.GetGroupUsersRequest) (*npool.GetGroupUs
 }
 
 func Delete(ctx context.Context, in *npool.RemoveGroupUsersRequest) (*npool.RemoveGroupUsersResponse, error) {
-	groupID, err := uuid.Parse(in.GroupID)
+	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
 	if err != nil {
-		return nil, xerrors.Errorf("invalid group id: %v", err)
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
 	for _, userIDString := range in.UserIDs {

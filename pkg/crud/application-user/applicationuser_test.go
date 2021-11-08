@@ -8,10 +8,10 @@ import (
 	"testing"
 
 	"github.com/NpoolPlatform/application-management/message/npool"
+	"github.com/NpoolPlatform/application-management/pkg/crud/application"
 	testinit "github.com/NpoolPlatform/application-management/pkg/test-init"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
-	"github.com/thanhpk/randstr"
 )
 
 func init() {
@@ -28,8 +28,24 @@ func TestApplicationUserCRUD(t *testing.T) {
 		return
 	}
 
+	applicationInfo := &npool.ApplicationInfo{
+		ApplicationName:  "test-user" + uuid.New().String(),
+		ApplicationOwner: uuid.New().String(),
+	}
+
+	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
+		Request: applicationInfo,
+	})
+	if assert.Nil(t, err) {
+		assert.NotEqual(t, respApp.Info.ID, "")
+		assert.NotEqual(t, respApp.Info.ClientSecret, "")
+		assert.Equal(t, respApp.Info.ApplicationName, applicationInfo.ApplicationName)
+		assert.Equal(t, respApp.Info.ApplicationOwner, applicationInfo.ApplicationOwner)
+		applicationInfo.ID = respApp.Info.ID
+	}
+
 	applicationUser := &npool.ApplicationUserInfo{
-		AppID:    randstr.Hex(10),
+		AppID:    applicationInfo.ID,
 		UserID:   uuid.New().String(),
 		Original: true,
 	}

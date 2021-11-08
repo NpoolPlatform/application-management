@@ -21,7 +21,7 @@ func (Application) Fields() []ent.Field {
 			DefaultFunc(func() string {
 				return randstr.Hex(10)
 			}),
-		field.String("application_name"),
+		field.String("application_name").Unique(),
 		field.UUID("application_owner", uuid.UUID{}),
 		field.String("homepage_url").Optional(),
 		field.String("redirect_url").Optional(),
