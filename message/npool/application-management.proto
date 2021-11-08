@@ -357,7 +357,7 @@ message GetApplicationsResponse {
 }
 
 message DeleteApplicationRequest {
-    string AppId = 1;
+    string AppID = 1;
 }
 
 message DeleteApplicationResponse {

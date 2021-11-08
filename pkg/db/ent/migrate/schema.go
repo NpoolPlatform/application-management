@@ -11,7 +11,7 @@ var (
 	// ApplicationsColumns holds the columns for the "applications" table.
 	ApplicationsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString, Unique: true},
-		{Name: "application_name", Type: field.TypeString},
+		{Name: "application_name", Type: field.TypeString, Unique: true},
 		{Name: "application_owner", Type: field.TypeUUID},
 		{Name: "homepage_url", Type: field.TypeString, Nullable: true},
 		{Name: "redirect_url", Type: field.TypeString, Nullable: true},

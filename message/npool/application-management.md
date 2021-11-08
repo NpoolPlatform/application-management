@@ -323,7 +323,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| AppId | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 

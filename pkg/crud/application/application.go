@@ -104,7 +104,7 @@ func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.Upd
 	info, err := db.Client().
 		Application.
 		UpdateOneID(in.Request.ID).
-		SetApplicationName(in.Request.ApplicationOwner).
+		SetApplicationName(in.Request.ApplicationName).
 		SetApplicationLogo(in.Request.ApplicationLogo).
 		SetHomepageURL(in.Request.HomepageUrl).
 		SetRedirectURL(in.Request.RedirectUrl).
@@ -121,7 +121,7 @@ func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.Upd
 func Delete(ctx context.Context, in *npool.DeleteApplicationRequest) (*npool.DeleteApplicationResponse, error) {
 	_, err := db.Client().
 		Application.
-		UpdateOneID(in.AppId).
+		UpdateOneID(in.AppID).
 		SetDeleteAt(time.Now().UnixNano()).
 		Save(ctx)
 	if err != nil {

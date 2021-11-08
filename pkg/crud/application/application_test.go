@@ -61,7 +61,7 @@ func TestApplicationCRUD(t *testing.T) { // nolint
 	assert.Nil(t, err)
 
 	_, err = Delete(context.Background(), &npool.DeleteApplicationRequest{
-		AppId: application.ID,
+		AppID: application.ID,
 	})
 	assert.Nil(t, err)
 }
