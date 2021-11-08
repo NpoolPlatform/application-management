@@ -109,6 +109,7 @@ service ApplicationManagement {
     rpc DeleteRole (DeleteRoleRequest) returns (DeleteRoleResponse) {
         option (google.api.http) = {
             post: "/v1/delete/role"
+            body: "*"
         };
     };
     /*
