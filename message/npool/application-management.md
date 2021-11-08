@@ -1026,9 +1026,9 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| UserId | [string](#string) | repeated |  |
-| RoleId | [string](#string) |  |  |
-| AppId | [string](#string) |  |  |
+| UserIDs | [string](#string) | repeated |  |
+| RoleID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 

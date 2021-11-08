@@ -425,9 +425,9 @@ message RoleUserInfo {
 }
 
 message SetUserRoleRequest {
-    repeated string UserId = 1;
-    string RoleId = 2;
-    string AppId = 3;
+    repeated string UserIDs = 1;
+    string RoleID = 2;
+    string AppID = 3;
 }
 
 message SetUserRoleResponse {
