@@ -67,6 +67,9 @@ type ApplicationManagementClient interface {
 	//Add users to app.
 	AddUsersToApplication(ctx context.Context, in *AddUsersToApplicationRequest, opts ...grpc.CallOption) (*AddUsersToApplicationResponse, error)
 	//
+	//Get user from app.
+	GetUserFromApplication(ctx context.Context, in *GetUserFromApplicationRequest, opts ...grpc.CallOption) (*GetUserFromApplicationResponse, error)
+	//
 	//Get users from app.
 	GetUsersFromApplication(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
 	//
@@ -265,6 +268,15 @@ func (c *applicationManagementClient) AddUsersToApplication(ctx context.Context,
 	return out, nil
 }
 
+func (c *applicationManagementClient) GetUserFromApplication(ctx context.Context, in *GetUserFromApplicationRequest, opts ...grpc.CallOption) (*GetUserFromApplicationResponse, error) {
+	out := new(GetUserFromApplicationResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUserFromApplication", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationManagementClient) GetUsersFromApplication(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error) {
 	out := new(GetUsersResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUsersFromApplication", in, out, opts...)
@@ -452,6 +464,9 @@ type ApplicationManagementServer interface {
 	//Add users to app.
 	AddUsersToApplication(context.Context, *AddUsersToApplicationRequest) (*AddUsersToApplicationResponse, error)
 	//
+	//Get user from app.
+	GetUserFromApplication(context.Context, *GetUserFromApplicationRequest) (*GetUserFromApplicationResponse, error)
+	//
 	//Get users from app.
 	GetUsersFromApplication(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
 	//
@@ -550,6 +565,9 @@ func (UnimplementedApplicationManagementServer) UnSetUserRole(context.Context, *
 }
 func (UnimplementedApplicationManagementServer) AddUsersToApplication(context.Context, *AddUsersToApplicationRequest) (*AddUsersToApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddUsersToApplication not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetUserFromApplication(context.Context, *GetUserFromApplicationRequest) (*GetUserFromApplicationResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserFromApplication not implemented")
 }
 func (UnimplementedApplicationManagementServer) GetUsersFromApplication(context.Context, *GetUsersRequest) (*GetUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersFromApplication not implemented")
@@ -897,6 +915,24 @@ func _ApplicationManagement_AddUsersToApplication_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetUserFromApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserFromApplicationRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetUserFromApplication(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetUserFromApplication",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetUserFromApplication(ctx, req.(*GetUserFromApplicationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationManagement_GetUsersFromApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetUsersRequest)
 	if err := dec(in); err != nil {
@@ -1237,6 +1273,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddUsersToApplication",
 			Handler:    _ApplicationManagement_AddUsersToApplication_Handler,
+		},
+		{
+			MethodName: "GetUserFromApplication",
+			Handler:    _ApplicationManagement_GetUserFromApplication_Handler,
 		},
 		{
 			MethodName: "GetUsersFromApplication",

@@ -157,6 +157,15 @@ service ApplicationManagement {
         };
     };
     /*
+    Get user from app.
+    */
+    rpc GetUserFromApplication (GetUserFromApplicationRequest) returns (GetUserFromApplicationResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/user/from/app"
+            body: "*"
+        };
+    };
+    /*
     Get users from app.
     */
     rpc GetUsersFromApplication (GetUsersRequest) returns (GetUsersResponse) {
@@ -464,10 +473,20 @@ message ApplicationUserInfo {
 message AddUsersToApplicationRequest {
     repeated string UserIDs = 1;
     string AppID = 2;
+    bool Original = 3;
 }
 
 message AddUsersToApplicationResponse {
     repeated ApplicationUserInfo Infos = 1;
+}
+
+message GetUserFromApplicationRequest {
+    string AppID = 1;
+    string UserID = 2;
+}
+
+message GetUserFromApplicationResponse {
+    ApplicationUserInfo Info = 1;
 }
 
 message GetUsersRequest {
