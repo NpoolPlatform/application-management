@@ -25,7 +25,7 @@ func dbRowToApplicationResource(row *ent.ApplicationResource) *npool.ResourceInf
 	}
 }
 
-func ResourceNameExist(ctx context.Context, resourceName, appID string) (bool, error) {
+func ResourceNameExist(ctx context.Context, resourceName, appID string) (int, error) {
 	info, err := db.Client().
 		ApplicationResource.
 		Query().
@@ -37,17 +37,20 @@ func ResourceNameExist(ctx context.Context, resourceName, appID string) (bool, e
 			),
 		).All(ctx)
 	if err != nil {
-		return false, xerrors.Errorf("fail to query resource name: %v", err)
+		return -1, xerrors.Errorf("fail to query resource name: %v", err)
 	}
-	if len(info) != 0 {
-		return true, nil
+	if len(info) == 0 {
+		return 0, nil
+	} else if len(info) == 1 {
+		return 1, nil
 	}
-	return false, nil
+
+	return -1, nil
 }
 
 func Create(ctx context.Context, in *npool.CreateResourceRequest) (*npool.CreateResourceResponse, error) {
 	exist, err := ResourceNameExist(ctx, in.Request.ResourceName, in.Request.AppID)
-	if err != nil || exist {
+	if err != nil || exist != 0 {
 		return nil, xerrors.Errorf("resource has been exist: %v", err)
 	}
 
@@ -121,10 +124,33 @@ func GetAll(ctx context.Context, in *npool.GetResourcesRequest) (*npool.GetResou
 }
 
 func Update(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.UpdateResourceResponse, error) {
+	exist, err := ResourceNameExist(ctx, in.Request.ResourceName, in.Request.AppID)
+	if err != nil || exist == -1 {
+		return nil, xerrors.Errorf("resource name has already exist")
+	}
+
 	resourceID, err := uuid.Parse(in.Request.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid resource id: %v", err)
 	}
+
+	query, err := db.Client().
+		ApplicationResource.
+		Query().
+		Where(
+			applicationresource.And(
+				applicationresource.ID(resourceID),
+				applicationresource.AppID(in.Request.AppID),
+			),
+		).Only(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to query resource: %v", err)
+	}
+
+	if query.DeleteAt != 0 {
+		return nil, xerrors.Errorf("resource has already been delete")
+	}
+
 	info, err := db.Client().
 		ApplicationResource.
 		UpdateOneID(resourceID).

@@ -22,6 +22,30 @@ func dbRowToApplicationUser(row *ent.ApplicationUser) *npool.ApplicationUserInfo
 	}
 }
 
+func UserExist(ctx context.Context, userID uuid.UUID, appID string) (int, error) {
+	info, err := db.Client().
+		ApplicationUser.
+		Query().
+		Where(
+			applicationuser.And(
+				applicationuser.DeleteAt(0),
+				applicationuser.UserID(userID),
+				applicationuser.AppID(appID),
+			),
+		).All(ctx)
+	if err != nil {
+		return -1, xerrors.Errorf("fail to get user: %v", err)
+	}
+
+	if len(info) == 0 {
+		return 0, nil
+	} else if len(info) == 1 {
+		return 1, nil
+	}
+
+	return -1, nil
+}
+
 func Create(ctx context.Context, in *npool.AddUsersToApplicationRequest) (*npool.AddUsersToApplicationResponse, error) {
 	var addError []error
 	createResponse := []*npool.ApplicationUserInfo{}
@@ -30,6 +54,12 @@ func Create(ctx context.Context, in *npool.AddUsersToApplicationRequest) (*npool
 		if err != nil {
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
+
+		exist, err := UserExist(ctx, userID, in.AppID)
+		if err != nil || exist != 0 {
+			return nil, xerrors.Errorf("user has already exist in this app: %v", err)
+		}
+
 		info, err := db.Client().
 			ApplicationUser.
 			Create().

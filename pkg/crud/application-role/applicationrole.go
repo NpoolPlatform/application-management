@@ -31,7 +31,7 @@ func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRole
 	}
 
 	exist, err := RoleNameExist(ctx, in.Request)
-	if err != nil || exist {
+	if err != nil || exist != 0 {
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
 
@@ -107,7 +107,7 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 	}
 
 	exist, err := RoleNameExist(ctx, in.Request)
-	if err != nil || exist {
+	if err != nil || exist == -1 {
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
 
@@ -116,17 +116,16 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 		Query().
 		Where(
 			applicationrole.And(
-				applicationrole.DeleteAt(0),
 				applicationrole.ID(roleID),
 				applicationrole.AppID(in.Request.AppID),
 			),
-		).All(ctx)
+		).Only(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to get role: %v", err)
 	}
 
-	if len(query) == 0 {
-		return nil, xerrors.Errorf("role is not exist.")
+	if query.DeleteAt != 0 {
+		return nil, xerrors.Errorf("role has been already deleted.")
 	}
 
 	info, err := db.Client().
@@ -164,7 +163,7 @@ func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRole
 	}, nil
 }
 
-func RoleNameExist(ctx context.Context, in *npool.RoleInfo) (bool, error) {
+func RoleNameExist(ctx context.Context, in *npool.RoleInfo) (int, error) {
 	info, err := db.Client().
 		ApplicationRole.
 		Query().
@@ -176,12 +175,14 @@ func RoleNameExist(ctx context.Context, in *npool.RoleInfo) (bool, error) {
 			),
 		).All(ctx)
 	if err != nil {
-		return true, xerrors.Errorf("fail to query role: %v", err)
+		return -1, xerrors.Errorf("fail to query role: %v", err)
 	}
 
-	if len(info) != 0 {
-		return true, nil
+	if len(info) == 0 {
+		return 0, nil
+	} else if len(info) == 1 {
+		return 1, nil
 	}
 
-	return false, nil
+	return -1, nil
 }
