@@ -26,17 +26,17 @@ func dbRowToApplicationRole(row *ent.ApplicationRole) *npool.RoleInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRoleResponse, error) {
-	existApp, err := exist.Application(ctx, in.Request.AppID)
+	existApp, err := exist.Application(ctx, in.Info.AppID)
 	if err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	creator, err := uuid.Parse(in.Request.Creator)
+	creator, err := uuid.Parse(in.Info.Creator)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
 	}
 
-	existRoleName, err := exist.RoleName(ctx, in.Request.RoleName, in.Request.AppID)
+	existRoleName, err := exist.RoleName(ctx, in.Info.RoleName, in.Info.AppID)
 	if err != nil || existRoleName != 0 {
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
@@ -44,10 +44,10 @@ func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRole
 	info, err := db.Client().
 		ApplicationRole.
 		Create().
-		SetAppID(in.Request.AppID).
-		SetRoleName(in.Request.RoleName).
+		SetAppID(in.Info.AppID).
+		SetRoleName(in.Info.RoleName).
 		SetCreator(creator).
-		SetAnnotation(in.Request.Annotation).
+		SetAnnotation(in.Info.Annotation).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create role: %v", err)
@@ -117,17 +117,17 @@ func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResp
 }
 
 func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRoleResponse, error) {
-	existApp, err := exist.Application(ctx, in.Request.AppID)
+	existApp, err := exist.Application(ctx, in.Info.AppID)
 	if err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	roleID, err := uuid.Parse(in.Request.ID)
+	roleID, err := uuid.Parse(in.Info.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid role id: %v", err)
 	}
 
-	existRoleName, err := exist.RoleName(ctx, in.Request.RoleName, in.Request.AppID)
+	existRoleName, err := exist.RoleName(ctx, in.Info.RoleName, in.Info.AppID)
 	if err != nil || existRoleName == -1 {
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
@@ -138,7 +138,7 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 		Where(
 			applicationrole.And(
 				applicationrole.ID(roleID),
-				applicationrole.AppID(in.Request.AppID),
+				applicationrole.AppID(in.Info.AppID),
 			),
 		).Only(ctx)
 	if err != nil {
@@ -152,8 +152,8 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 	info, err := db.Client().
 		ApplicationRole.
 		UpdateOneID(roleID).
-		SetRoleName(in.Request.RoleName).
-		SetAnnotation(in.Request.Annotation).
+		SetRoleName(in.Info.RoleName).
+		SetAnnotation(in.Info.Annotation).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update role: %v", err)

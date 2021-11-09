@@ -28,7 +28,7 @@ func TestApplicationUserAPI(t *testing.T) {
 	resp, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
-			Request: &application,
+			Info: &application,
 		}).Post("http://localhost:32759/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
@@ -82,10 +82,10 @@ func TestApplicationUserAPI(t *testing.T) {
 		}
 	}
 
-	response2 := npool.GetUsersResponse{}
+	response2 := npool.GetUsersFromApplicationResponse{}
 	resp2, err := cli.R().
 		SetHeader("Content-Type", "application/json").
-		SetBody(npool.GetUsersRequest{
+		SetBody(npool.GetUsersFromApplicationRequest{
 			AppID: appUser.AppID,
 		}).Post("http://localhost:32759/v1/get/users/from/app")
 	if assert.Nil(t, err) {

@@ -34,7 +34,7 @@ func TestApplicationResourceCRUD(t *testing.T) { // nolint
 	}
 
 	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
-		Request: applicationInfo,
+		Info: applicationInfo,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respApp.Info.ID, "")
@@ -51,7 +51,7 @@ func TestApplicationResourceCRUD(t *testing.T) { // nolint
 	}
 
 	resp, err := Create(context.Background(), &npool.CreateResourceRequest{
-		Request: resource,
+		Info: resource,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, resp.Info.ID, uuid.UUID{})
@@ -80,7 +80,7 @@ func TestApplicationResourceCRUD(t *testing.T) { // nolint
 
 	resource.ResourceName = "test-update" + uuid.New().String()
 	resp3, err := Update(context.Background(), &npool.UpdateResourceRequest{
-		Request: resource,
+		Info: resource,
 	})
 	if assert.Nil(t, err) {
 		assert.Equal(t, resp3.Info.ID, resource.ID)

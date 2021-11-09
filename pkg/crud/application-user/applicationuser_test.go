@@ -34,7 +34,7 @@ func TestApplicationUserCRUD(t *testing.T) {
 	}
 
 	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
-		Request: applicationInfo,
+		Info: applicationInfo,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respApp.Info.ID, "")
@@ -74,7 +74,7 @@ func TestApplicationUserCRUD(t *testing.T) {
 		assert.Equal(t, resp1.Info.Original, applicationUser.Original)
 	}
 
-	_, err = GetAll(context.Background(), &npool.GetUsersRequest{
+	_, err = GetAll(context.Background(), &npool.GetUsersFromApplicationRequest{
 		AppID: applicationUser.AppID,
 	})
 	assert.Nil(t, err)

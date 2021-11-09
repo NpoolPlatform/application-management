@@ -28,7 +28,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 	resp, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
-			Request: &application,
+			Info: &application,
 		}).Post("http://localhost:32759/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
@@ -52,7 +52,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 	resp1, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateRoleRequest{
-			Request: &roleInfo,
+			Info: &roleInfo,
 		}).Post("http://localhost:32759/v1/create/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
@@ -71,7 +71,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 	resp2, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.UpdateRoleRequest{
-			Request: &roleInfo,
+			Info: &roleInfo,
 		}).Post("http://localhost:32759/v1/update/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())

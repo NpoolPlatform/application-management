@@ -169,7 +169,7 @@ service ApplicationManagement {
     /*
     Get users from app.
     */
-    rpc GetUsersFromApplication (GetUsersRequest) returns (GetUsersResponse) {
+    rpc GetUsersFromApplication (GetUsersFromApplicationRequest) returns (GetUsersFromApplicationResponse) {
         option (google.api.http) = {
             post: "/v1/get/users/from/app"
             body: "*"
@@ -326,7 +326,7 @@ message ApplicationInfo {
 }
 
 message CreateApplicationRequest {
-    ApplicationInfo Request = 1;
+    ApplicationInfo Info = 1;
 }
 
 message CreateApplicationResponse {
@@ -334,7 +334,7 @@ message CreateApplicationResponse {
 }
 
 message UpdateApplicationRequest {
-    ApplicationInfo Request = 1;
+    ApplicationInfo Info = 1;
 }
 
 message UpdateApplicationResponse {
@@ -350,7 +350,7 @@ message GetApplicationResponse {
 }
 
 message GetApplicationsRequest {
-    PageInfo Request = 1;
+    PageInfo Info = 1;
 }
 
 message GetApplicationsResponse {
@@ -376,7 +376,7 @@ message RoleInfo {
 }
 
 message CreateRoleRequest {
-    RoleInfo Request = 1;
+    RoleInfo Info = 1;
 }
 
 message CreateRoleResponse {
@@ -384,7 +384,7 @@ message CreateRoleResponse {
 }
 
 message UpdateRoleRequest {
-    RoleInfo Request = 1;
+    RoleInfo Info = 1;
 }
 
 message UpdateRoleResponse {
@@ -490,11 +490,11 @@ message GetUserFromApplicationResponse {
     ApplicationUserInfo Info = 1;
 }
 
-message GetUsersRequest {
+message GetUsersFromApplicationRequest {
     string AppID = 1;
 }
 
-message GetUsersResponse {
+message GetUsersFromApplicationResponse {
     repeated ApplicationUserInfo Infos = 1;
 }
 
@@ -519,7 +519,7 @@ message GroupInfo {
 }
 
 message CreateGroupRequest {
-    GroupInfo Request = 1;
+    GroupInfo Info = 1;
 }
 
 message CreateGroupResponse {
@@ -544,7 +544,7 @@ message GetAllGroupsResponse {
 }
 
 message UpdateGroupRequest {
-    GroupInfo Request = 1;
+    GroupInfo Info = 1;
 }
 
 message UpdateGroupResponse {
@@ -610,7 +610,7 @@ message ResourceInfo {
 }
 
 message CreateResourceRequest {
-    ResourceInfo Request = 1;
+    ResourceInfo Info = 1;
 }
 
 message CreateResourceResponse {
@@ -618,7 +618,7 @@ message CreateResourceResponse {
 }
 
 message UpdateResourceRequest {
-    ResourceInfo Request = 1;
+    ResourceInfo Info = 1;
 }
 
 message UpdateResourceResponse {

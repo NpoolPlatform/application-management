@@ -92,7 +92,7 @@ func Get(ctx context.Context, in *npool.GetUserFromApplicationRequest) (*npool.G
 	}, nil
 }
 
-func GetAll(ctx context.Context, in *npool.GetUsersRequest) (*npool.GetUsersResponse, error) {
+func GetAll(ctx context.Context, in *npool.GetUsersFromApplicationRequest) (*npool.GetUsersFromApplicationResponse, error) {
 	existApp, err := exist.Application(ctx, in.AppID)
 	if err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
@@ -115,7 +115,7 @@ func GetAll(ctx context.Context, in *npool.GetUsersRequest) (*npool.GetUsersResp
 	for _, info := range infos {
 		getUsersResponse = append(getUsersResponse, dbRowToApplicationUser(info))
 	}
-	return &npool.GetUsersResponse{
+	return &npool.GetUsersFromApplicationResponse{
 		Infos: getUsersResponse,
 	}, nil
 }

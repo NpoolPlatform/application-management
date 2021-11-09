@@ -28,7 +28,7 @@ func (s *Server) GetUserFromApplication(ctx context.Context, in *npool.GetUserFr
 	return resp, nil
 }
 
-func (s *Server) GetUsersFromApplication(ctx context.Context, in *npool.GetUsersRequest) (*npool.GetUsersResponse, error) {
+func (s *Server) GetUsersFromApplication(ctx context.Context, in *npool.GetUsersFromApplicationRequest) (*npool.GetUsersFromApplicationResponse, error) {
 	resp, err := applicationuser.GetAll(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get users from app error: %v", err)

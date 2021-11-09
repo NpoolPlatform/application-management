@@ -27,18 +27,18 @@ func dbRowToApplication(row *ent.Application) *npool.ApplicationInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.CreateApplicationResponse, error) {
-	owner, err := uuid.Parse(in.Request.ApplicationOwner)
+	owner, err := uuid.Parse(in.Info.ApplicationOwner)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid owner id: %v", err)
 	}
 	info, err := db.Client().
 		Application.
 		Create().
-		SetApplicationName(in.Request.ApplicationName).
+		SetApplicationName(in.Info.ApplicationName).
 		SetApplicationOwner(owner).
-		SetApplicationLogo(in.Request.ApplicationLogo).
-		SetHomepageURL(in.Request.HomepageUrl).
-		SetRedirectURL(in.Request.RedirectUrl).
+		SetApplicationLogo(in.Info.ApplicationLogo).
+		SetHomepageURL(in.Info.HomepageUrl).
+		SetRedirectURL(in.Info.RedirectUrl).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create application: %v", err)
@@ -103,11 +103,11 @@ func GetAll(ctx context.Context, in *npool.GetApplicationsRequest) (*npool.GetAp
 func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.UpdateApplicationResponse, error) {
 	info, err := db.Client().
 		Application.
-		UpdateOneID(in.Request.ID).
-		SetApplicationName(in.Request.ApplicationName).
-		SetApplicationLogo(in.Request.ApplicationLogo).
-		SetHomepageURL(in.Request.HomepageUrl).
-		SetRedirectURL(in.Request.RedirectUrl).
+		UpdateOneID(in.Info.ID).
+		SetApplicationName(in.Info.ApplicationName).
+		SetApplicationLogo(in.Info.ApplicationLogo).
+		SetHomepageURL(in.Info.HomepageUrl).
+		SetRedirectURL(in.Info.RedirectUrl).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update application: %v", err)

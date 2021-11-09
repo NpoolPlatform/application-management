@@ -34,7 +34,7 @@ func TestApplicationGroupCRUD(t *testing.T) { // nolint
 	}
 
 	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
-		Request: applicationInfo,
+		Info: applicationInfo,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respApp.Info.ID, "")
@@ -51,7 +51,7 @@ func TestApplicationGroupCRUD(t *testing.T) { // nolint
 	}
 
 	resp, err := Create(context.Background(), &npool.CreateGroupRequest{
-		Request: applicationGroup,
+		Info: applicationGroup,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, resp.Info.ID, uuid.UUID{})
@@ -63,7 +63,7 @@ func TestApplicationGroupCRUD(t *testing.T) { // nolint
 
 	applicationGroup.GroupName = "test-update" + uuid.New().String()
 	resp1, err := Update(context.Background(), &npool.UpdateGroupRequest{
-		Request: applicationGroup,
+		Info: applicationGroup,
 	})
 	if assert.Nil(t, err) {
 		assert.Equal(t, resp1.Info.ID, applicationGroup.ID)

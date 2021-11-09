@@ -611,7 +611,7 @@ func local_request_ApplicationManagement_GetUserFromApplication_0(ctx context.Co
 }
 
 func request_ApplicationManagement_GetUsersFromApplication_0(ctx context.Context, marshaler runtime.Marshaler, client ApplicationManagementClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetUsersRequest
+	var protoReq GetUsersFromApplicationRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -628,7 +628,7 @@ func request_ApplicationManagement_GetUsersFromApplication_0(ctx context.Context
 }
 
 func local_request_ApplicationManagement_GetUsersFromApplication_0(ctx context.Context, marshaler runtime.Marshaler, server ApplicationManagementServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetUsersRequest
+	var protoReq GetUsersFromApplicationRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

@@ -34,7 +34,7 @@ func TestApplicationRoleCRUD(t *testing.T) { // nolint
 	}
 
 	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
-		Request: applicationInfo,
+		Info: applicationInfo,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respApp.Info.ID, "")
@@ -51,7 +51,7 @@ func TestApplicationRoleCRUD(t *testing.T) { // nolint
 	}
 
 	resp, err := Create(context.Background(), &npool.CreateRoleRequest{
-		Request: applicationRole,
+		Info: applicationRole,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, resp.Info.ID, uuid.UUID{})
@@ -79,7 +79,7 @@ func TestApplicationRoleCRUD(t *testing.T) { // nolint
 
 	applicationRole.RoleName = "test" + uuid.New().String()
 	resp2, err := Update(context.Background(), &npool.UpdateRoleRequest{
-		Request: applicationRole,
+		Info: applicationRole,
 	})
 	if assert.Nil(t, err) {
 		assert.Equal(t, resp2.Info.ID, applicationRole.ID)

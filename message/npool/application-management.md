@@ -50,8 +50,8 @@
     - [GetUserFromApplicationResponse](#application.management.v1.GetUserFromApplicationResponse)
     - [GetUserRoleRequest](#application.management.v1.GetUserRoleRequest)
     - [GetUserRoleResponse](#application.management.v1.GetUserRoleResponse)
-    - [GetUsersRequest](#application.management.v1.GetUsersRequest)
-    - [GetUsersResponse](#application.management.v1.GetUsersResponse)
+    - [GetUsersFromApplicationRequest](#application.management.v1.GetUsersFromApplicationRequest)
+    - [GetUsersFromApplicationResponse](#application.management.v1.GetUsersFromApplicationResponse)
     - [GroupInfo](#application.management.v1.GroupInfo)
     - [GroupUserInfo](#application.management.v1.GroupUserInfo)
     - [PageInfo](#application.management.v1.PageInfo)
@@ -203,7 +203,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
+| Info | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
 
 
 
@@ -233,7 +233,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
+| Info | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
 
 
 
@@ -263,7 +263,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
+| Info | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
 
 
 
@@ -293,7 +293,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
+| Info | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
 
 
 
@@ -506,7 +506,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [PageInfo](#application.management.v1.PageInfo) |  |  |
+| Info | [PageInfo](#application.management.v1.PageInfo) |  |  |
 
 
 
@@ -805,9 +805,9 @@
 
 
 
-<a name="application.management.v1.GetUsersRequest"></a>
+<a name="application.management.v1.GetUsersFromApplicationRequest"></a>
 
-### GetUsersRequest
+### GetUsersFromApplicationRequest
 
 
 
@@ -820,9 +820,9 @@
 
 
 
-<a name="application.management.v1.GetUsersResponse"></a>
+<a name="application.management.v1.GetUsersFromApplicationResponse"></a>
 
-### GetUsersResponse
+### GetUsersFromApplicationResponse
 
 
 
@@ -1090,7 +1090,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
+| Info | [ApplicationInfo](#application.management.v1.ApplicationInfo) |  |  |
 
 
 
@@ -1120,7 +1120,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
+| Info | [GroupInfo](#application.management.v1.GroupInfo) |  |  |
 
 
 
@@ -1150,7 +1150,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
+| Info | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
 
 
 
@@ -1180,7 +1180,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Request | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
+| Info | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
 
 
 
@@ -1252,7 +1252,7 @@ rpc Echo (StringMessage) returns (StringMessage){
 | UnSetUserRole | [UnSetUserRoleRequest](#application.management.v1.UnSetUserRoleRequest) | [UnSetUserRoleResponse](#application.management.v1.UnSetUserRoleResponse) | Unset user role. |
 | AddUsersToApplication | [AddUsersToApplicationRequest](#application.management.v1.AddUsersToApplicationRequest) | [AddUsersToApplicationResponse](#application.management.v1.AddUsersToApplicationResponse) | Add users to app. |
 | GetUserFromApplication | [GetUserFromApplicationRequest](#application.management.v1.GetUserFromApplicationRequest) | [GetUserFromApplicationResponse](#application.management.v1.GetUserFromApplicationResponse) | Get user from app. |
-| GetUsersFromApplication | [GetUsersRequest](#application.management.v1.GetUsersRequest) | [GetUsersResponse](#application.management.v1.GetUsersResponse) | Get users from app. |
+| GetUsersFromApplication | [GetUsersFromApplicationRequest](#application.management.v1.GetUsersFromApplicationRequest) | [GetUsersFromApplicationResponse](#application.management.v1.GetUsersFromApplicationResponse) | Get users from app. |
 | RemoveUsersFromApplication | [RemoveUsersFromApplicationRequest](#application.management.v1.RemoveUsersFromApplicationRequest) | [RemoveUsersFromApplicationResponse](#application.management.v1.RemoveUsersFromApplicationResponse) | Remove users from app. |
 | CreateGroup | [CreateGroupRequest](#application.management.v1.CreateGroupRequest) | [CreateGroupResponse](#application.management.v1.CreateGroupResponse) | Create group in an application. |
 | GetGroup | [GetGroupRequest](#application.management.v1.GetGroupRequest) | [GetGroupResponse](#application.management.v1.GetGroupResponse) | Get group info. |

@@ -27,17 +27,17 @@ func dbRowToApplicationResource(row *ent.ApplicationResource) *npool.ResourceInf
 }
 
 func Create(ctx context.Context, in *npool.CreateResourceRequest) (*npool.CreateResourceResponse, error) {
-	existApp, err := exist.Application(ctx, in.Request.AppID)
+	existApp, err := exist.Application(ctx, in.Info.AppID)
 	if err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	existName, err := exist.ResourceName(ctx, in.Request.ResourceName, in.Request.AppID)
+	existName, err := exist.ResourceName(ctx, in.Info.ResourceName, in.Info.AppID)
 	if err != nil || existName != 0 {
 		return nil, xerrors.Errorf("resource has been exist: %v", err)
 	}
 
-	creator, err := uuid.Parse(in.Request.Creator)
+	creator, err := uuid.Parse(in.Info.Creator)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
 	}
@@ -45,10 +45,10 @@ func Create(ctx context.Context, in *npool.CreateResourceRequest) (*npool.Create
 	info, err := db.Client().
 		ApplicationResource.
 		Create().
-		SetAppID(in.Request.AppID).
-		SetResourceName(in.Request.ResourceName).
-		SetType(in.Request.Type).
-		SetResourceDescription(in.Request.ResourceDescription).
+		SetAppID(in.Info.AppID).
+		SetResourceName(in.Info.ResourceName).
+		SetType(in.Info.Type).
+		SetResourceDescription(in.Info.ResourceDescription).
 		SetCreator(creator).
 		Save(ctx)
 	if err != nil {
@@ -117,17 +117,17 @@ func GetAll(ctx context.Context, in *npool.GetResourcesRequest) (*npool.GetResou
 }
 
 func Update(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.UpdateResourceResponse, error) {
-	existApp, err := exist.Application(ctx, in.Request.AppID)
+	existApp, err := exist.Application(ctx, in.Info.AppID)
 	if err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	existName, err := exist.ResourceName(ctx, in.Request.ResourceName, in.Request.AppID)
+	existName, err := exist.ResourceName(ctx, in.Info.ResourceName, in.Info.AppID)
 	if err != nil || existName == -1 {
 		return nil, xerrors.Errorf("resource name has already exist")
 	}
 
-	resourceID, err := uuid.Parse(in.Request.ID)
+	resourceID, err := uuid.Parse(in.Info.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid resource id: %v", err)
 	}
@@ -138,7 +138,7 @@ func Update(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.Update
 		Where(
 			applicationresource.And(
 				applicationresource.ID(resourceID),
-				applicationresource.AppID(in.Request.AppID),
+				applicationresource.AppID(in.Info.AppID),
 			),
 		).Only(ctx)
 	if err != nil {
@@ -152,9 +152,9 @@ func Update(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.Update
 	info, err := db.Client().
 		ApplicationResource.
 		UpdateOneID(resourceID).
-		SetResourceName(in.Request.ResourceName).
-		SetType(in.Request.Type).
-		SetResourceDescription(in.Request.ResourceDescription).
+		SetResourceName(in.Info.ResourceName).
+		SetType(in.Info.Type).
+		SetResourceDescription(in.Info.ResourceDescription).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update resource: %v", err)

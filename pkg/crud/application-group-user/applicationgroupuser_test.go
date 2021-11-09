@@ -36,7 +36,7 @@ func TestApplicationGroupUserCRUD(t *testing.T) {
 	}
 
 	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
-		Request: applicationInfo,
+		Info: applicationInfo,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respApp.Info.ID, "")
@@ -53,7 +53,7 @@ func TestApplicationGroupUserCRUD(t *testing.T) {
 	}
 
 	respGroup, err := applicationgroup.Create(context.Background(), &npool.CreateGroupRequest{
-		Request: applicationGroup,
+		Info: applicationGroup,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respGroup.Info.ID, uuid.UUID{})

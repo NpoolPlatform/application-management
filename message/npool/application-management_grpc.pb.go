@@ -71,7 +71,7 @@ type ApplicationManagementClient interface {
 	GetUserFromApplication(ctx context.Context, in *GetUserFromApplicationRequest, opts ...grpc.CallOption) (*GetUserFromApplicationResponse, error)
 	//
 	//Get users from app.
-	GetUsersFromApplication(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error)
+	GetUsersFromApplication(ctx context.Context, in *GetUsersFromApplicationRequest, opts ...grpc.CallOption) (*GetUsersFromApplicationResponse, error)
 	//
 	//Remove users from app.
 	RemoveUsersFromApplication(ctx context.Context, in *RemoveUsersFromApplicationRequest, opts ...grpc.CallOption) (*RemoveUsersFromApplicationResponse, error)
@@ -277,8 +277,8 @@ func (c *applicationManagementClient) GetUserFromApplication(ctx context.Context
 	return out, nil
 }
 
-func (c *applicationManagementClient) GetUsersFromApplication(ctx context.Context, in *GetUsersRequest, opts ...grpc.CallOption) (*GetUsersResponse, error) {
-	out := new(GetUsersResponse)
+func (c *applicationManagementClient) GetUsersFromApplication(ctx context.Context, in *GetUsersFromApplicationRequest, opts ...grpc.CallOption) (*GetUsersFromApplicationResponse, error) {
+	out := new(GetUsersFromApplicationResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUsersFromApplication", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -468,7 +468,7 @@ type ApplicationManagementServer interface {
 	GetUserFromApplication(context.Context, *GetUserFromApplicationRequest) (*GetUserFromApplicationResponse, error)
 	//
 	//Get users from app.
-	GetUsersFromApplication(context.Context, *GetUsersRequest) (*GetUsersResponse, error)
+	GetUsersFromApplication(context.Context, *GetUsersFromApplicationRequest) (*GetUsersFromApplicationResponse, error)
 	//
 	//Remove users from app.
 	RemoveUsersFromApplication(context.Context, *RemoveUsersFromApplicationRequest) (*RemoveUsersFromApplicationResponse, error)
@@ -569,7 +569,7 @@ func (UnimplementedApplicationManagementServer) AddUsersToApplication(context.Co
 func (UnimplementedApplicationManagementServer) GetUserFromApplication(context.Context, *GetUserFromApplicationRequest) (*GetUserFromApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserFromApplication not implemented")
 }
-func (UnimplementedApplicationManagementServer) GetUsersFromApplication(context.Context, *GetUsersRequest) (*GetUsersResponse, error) {
+func (UnimplementedApplicationManagementServer) GetUsersFromApplication(context.Context, *GetUsersFromApplicationRequest) (*GetUsersFromApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersFromApplication not implemented")
 }
 func (UnimplementedApplicationManagementServer) RemoveUsersFromApplication(context.Context, *RemoveUsersFromApplicationRequest) (*RemoveUsersFromApplicationResponse, error) {
@@ -934,7 +934,7 @@ func _ApplicationManagement_GetUserFromApplication_Handler(srv interface{}, ctx 
 }
 
 func _ApplicationManagement_GetUsersFromApplication_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetUsersRequest)
+	in := new(GetUsersFromApplicationRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -946,7 +946,7 @@ func _ApplicationManagement_GetUsersFromApplication_Handler(srv interface{}, ctx
 		FullMethod: "/application.management.v1.ApplicationManagement/GetUsersFromApplication",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ApplicationManagementServer).GetUsersFromApplication(ctx, req.(*GetUsersRequest))
+		return srv.(ApplicationManagementServer).GetUsersFromApplication(ctx, req.(*GetUsersFromApplicationRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

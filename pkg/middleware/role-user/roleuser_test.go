@@ -37,7 +37,7 @@ func TestRoleUserMiddleware(t *testing.T) {
 	}
 
 	respApp, err := application.Create(context.Background(), &npool.CreateApplicationRequest{
-		Request: applicationInfo,
+		Info: applicationInfo,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respApp.Info.ID, "")
@@ -54,7 +54,7 @@ func TestRoleUserMiddleware(t *testing.T) {
 	}
 
 	respRole, err := applicationrole.Create(context.Background(), &npool.CreateRoleRequest{
-		Request: applicationRole,
+		Info: applicationRole,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, respRole.Info.ID, uuid.UUID{})

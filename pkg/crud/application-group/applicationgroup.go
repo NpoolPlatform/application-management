@@ -27,17 +27,17 @@ func dbRowToApplicationGroup(row *ent.ApplicationGroup) *npool.GroupInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGroupResponse, error) {
-	existApp, err := exist.Application(ctx, in.Request.AppID)
+	existApp, err := exist.Application(ctx, in.Info.AppID)
 	if err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	existGroupName, err := exist.GroupName(ctx, in.Request.GroupName, in.Request.AppID)
+	existGroupName, err := exist.GroupName(ctx, in.Info.GroupName, in.Info.AppID)
 	if err != nil || existGroupName != 0 {
 		return nil, xerrors.Errorf("group already exist in this app: %v", err)
 	}
 
-	groupOwner, err := uuid.Parse(in.Request.GroupOwner)
+	groupOwner, err := uuid.Parse(in.Info.GroupOwner)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid group owner id: %v", err)
 	}
@@ -45,11 +45,11 @@ func Create(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGro
 	info, err := db.Client().
 		ApplicationGroup.
 		Create().
-		SetAppID(in.Request.AppID).
-		SetGroupName(in.Request.GroupName).
+		SetAppID(in.Info.AppID).
+		SetGroupName(in.Info.GroupName).
 		SetGroupOwner(groupOwner).
-		SetGroupLogo(in.Request.GroupLogo).
-		SetAnnotation(in.Request.Annotation).
+		SetGroupLogo(in.Info.GroupLogo).
+		SetAnnotation(in.Info.Annotation).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create group: %v", err)
@@ -61,17 +61,17 @@ func Create(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGro
 }
 
 func Update(ctx context.Context, in *npool.UpdateGroupRequest) (*npool.UpdateGroupResponse, error) {
-	existApp, err := exist.Application(ctx, in.Request.AppID)
+	existApp, err := exist.Application(ctx, in.Info.AppID)
 	if err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	existGroupName, err := exist.GroupName(ctx, in.Request.GroupName, in.Request.AppID)
+	existGroupName, err := exist.GroupName(ctx, in.Info.GroupName, in.Info.AppID)
 	if err != nil || existGroupName == -1 {
 		return nil, xerrors.Errorf("group name has already exist")
 	}
 
-	groupID, err := uuid.Parse(in.Request.ID)
+	groupID, err := uuid.Parse(in.Info.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid group id: %v", err)
 	}
@@ -82,7 +82,7 @@ func Update(ctx context.Context, in *npool.UpdateGroupRequest) (*npool.UpdateGro
 		Where(
 			applicationgroup.And(
 				applicationgroup.ID(groupID),
-				applicationgroup.AppID(in.Request.AppID),
+				applicationgroup.AppID(in.Info.AppID),
 			),
 		).Only(ctx)
 	if err != nil {
@@ -96,9 +96,9 @@ func Update(ctx context.Context, in *npool.UpdateGroupRequest) (*npool.UpdateGro
 	info, err := db.Client().
 		ApplicationGroup.
 		UpdateOneID(groupID).
-		SetGroupName(in.Request.GroupName).
-		SetGroupLogo(in.Request.GroupLogo).
-		SetAnnotation(in.Request.Annotation).
+		SetGroupName(in.Info.GroupName).
+		SetGroupLogo(in.Info.GroupLogo).
+		SetAnnotation(in.Info.Annotation).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update group: %v", err)

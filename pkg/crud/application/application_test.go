@@ -33,7 +33,7 @@ func TestApplicationCRUD(t *testing.T) { // nolint
 	}
 
 	resp, err := Create(context.Background(), &npool.CreateApplicationRequest{
-		Request: application,
+		Info: application,
 	})
 	if assert.Nil(t, err) {
 		assert.NotEqual(t, resp.Info.ID, "")
