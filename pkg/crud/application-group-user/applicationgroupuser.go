@@ -2,12 +2,14 @@ package applicationgroupuser
 
 import (
 	"context"
+	"time"
 
 	"github.com/NpoolPlatform/application-management/message/npool"
 	"github.com/NpoolPlatform/application-management/pkg/db"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationgroupuser"
 	"github.com/NpoolPlatform/application-management/pkg/exist"
+	"github.com/NpoolPlatform/application-management/pkg/rollback"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -40,18 +42,17 @@ func preConditionJudge(ctx context.Context, groupIDString, appID string) (uuid.U
 	return groupID, nil
 }
 
-func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGroupUsersResponse, error) {
-	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("pre condition not pass: %v", err)
-	}
-
+func genCreate(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *npool.AddGroupUsersRequest) ([]*npool.GroupUserInfo, error) {
 	response := []*npool.GroupUserInfo{}
-
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
 			return nil, xerrors.Errorf("invalid user id: %v", err)
+		}
+
+		existUser, err := exist.ApplicationUser(ctx, in.AppID, userID)
+		if err != nil || !existUser {
+			return nil, xerrors.Errorf("user doesn't exist in this app.")
 		}
 
 		existGroupUser, err := exist.GroupUser(ctx, userID, groupID, in.AppID)
@@ -59,7 +60,7 @@ func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGrou
 			return nil, xerrors.Errorf("user has already existed in this app group")
 		}
 
-		info, err := db.Client().
+		info, err := client.
 			ApplicationGroupUser.
 			Create().
 			SetAppID(in.AppID).
@@ -69,11 +70,26 @@ func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGrou
 		if err != nil {
 			return nil, xerrors.Errorf(" fail to add user to app group: %v", err)
 		}
-
 		response = append(response, dbRawToApplicationGroupUser(info))
 	}
+	return response, nil
+}
+
+func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGroupUsersResponse, error) {
+	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
+	}
+
+	response, err := rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+		return genCreate(ctx, tx.Client(), groupID, in)
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &npool.AddGroupUsersResponse{
-		Infos: response,
+		Infos: response.([]*npool.GroupUserInfo),
 	}, nil
 }
 
@@ -107,19 +123,14 @@ func Get(ctx context.Context, in *npool.GetGroupUsersRequest) (*npool.GetGroupUs
 	}, nil
 }
 
-func Delete(ctx context.Context, in *npool.RemoveGroupUsersRequest) (*npool.RemoveGroupUsersResponse, error) {
-	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("pre condition not pass: %v", err)
-	}
-
+func genDelete(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *npool.RemoveGroupUsersRequest) (interface{}, error) {
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		_, err = db.Client().
+		_, err = client.
 			ApplicationGroupUser.
 			Update().
 			Where(
@@ -129,12 +140,28 @@ func Delete(ctx context.Context, in *npool.RemoveGroupUsersRequest) (*npool.Remo
 					applicationgroupuser.AppID(in.AppID),
 					applicationgroupuser.DeleteAt(0),
 				),
-			).Save(ctx)
-
+			).
+			SetDeleteAt(time.Now().Unix()).
+			Save(ctx)
 		if err != nil {
 			return nil, xerrors.Errorf("fail to remove group user: %v", err)
 		}
 	}
+	return nil, nil
+}
+
+func Delete(ctx context.Context, in *npool.RemoveGroupUsersRequest) (*npool.RemoveGroupUsersResponse, error) {
+	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
+	}
+
+	if _, err = rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+		return genDelete(ctx, tx.Client(), groupID, in)
+	}); err != nil {
+		return nil, err
+	}
+
 	return &npool.RemoveGroupUsersResponse{
 		Info: "remove users from group successfully",
 	}, nil

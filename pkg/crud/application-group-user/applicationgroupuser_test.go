@@ -101,6 +101,13 @@ func TestApplicationGroupUserCRUD(t *testing.T) {
 		groupUser.ID = resp.Infos[0].ID
 	}
 
+	_, err = Create(context.Background(), &npool.AddGroupUsersRequest{
+		UserIDs: []string{groupUser.UserID},
+		AppID:   groupUser.AppID,
+		GroupID: groupUser.GroupID,
+	})
+	assert.NotNil(t, err)
+
 	resp1, err := Get(context.Background(), &npool.GetGroupUsersRequest{
 		GroupID: groupUser.GroupID,
 		AppID:   groupUser.AppID,

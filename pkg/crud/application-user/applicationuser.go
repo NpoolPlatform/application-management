@@ -9,6 +9,7 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationuser"
 	"github.com/NpoolPlatform/application-management/pkg/exist"
+	"github.com/NpoolPlatform/application-management/pkg/rollback"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -23,12 +24,7 @@ func dbRowToApplicationUser(row *ent.ApplicationUser) *npool.ApplicationUserInfo
 	}
 }
 
-func Create(ctx context.Context, in *npool.AddUsersToApplicationRequest) (*npool.AddUsersToApplicationResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
-		return nil, xerrors.Errorf("application does not exist: %v", err)
-	}
-
+func genCreate(ctx context.Context, client *ent.Client, in *npool.AddUsersToApplicationRequest) ([]*npool.ApplicationUserInfo, error) {
 	createResponse := []*npool.ApplicationUserInfo{}
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
@@ -41,7 +37,7 @@ func Create(ctx context.Context, in *npool.AddUsersToApplicationRequest) (*npool
 			return nil, xerrors.Errorf("user has already exist in this app: %v", err)
 		}
 
-		info, err := db.Client().
+		info, err := client.
 			ApplicationUser.
 			Create().
 			SetAppID(in.AppID).
@@ -53,8 +49,24 @@ func Create(ctx context.Context, in *npool.AddUsersToApplicationRequest) (*npool
 		}
 		createResponse = append(createResponse, dbRowToApplicationUser(info))
 	}
+	return createResponse, nil
+}
+
+func Create(ctx context.Context, in *npool.AddUsersToApplicationRequest) (*npool.AddUsersToApplicationResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	response, err := rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+		return genCreate(ctx, tx.Client(), in)
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &npool.AddUsersToApplicationResponse{
-		Infos: createResponse,
+		Infos: response.([]*npool.ApplicationUserInfo),
 	}, nil
 }
 
@@ -120,19 +132,14 @@ func GetAll(ctx context.Context, in *npool.GetUsersFromApplicationRequest) (*npo
 	}, nil
 }
 
-func Delete(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*npool.RemoveUsersFromApplicationResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
-		return nil, xerrors.Errorf("application does not exist: %v", err)
-	}
-
+func genDelete(ctx context.Context, client *ent.Client, in *npool.RemoveUsersFromApplicationRequest) (interface{}, error) {
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		_, err = db.Client().
+		_, err = client.
 			ApplicationUser.
 			Update().
 			Where(
@@ -141,12 +148,28 @@ func Delete(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*
 					applicationuser.UserID(userID),
 					applicationuser.DeleteAt(0),
 				),
-			).SetDeleteAt(time.Now().Unix()).
+			).
+			SetDeleteAt(time.Now().Unix()).
 			Save(ctx)
 		if err != nil {
 			return nil, xerrors.Errorf("fail to remove user from applciation: %v", err)
 		}
 	}
+	return nil, nil
+}
+
+func Delete(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*npool.RemoveUsersFromApplicationResponse, error) {
+	existApp, err := exist.Application(ctx, in.AppID)
+	if err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	if _, err = rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+		return genDelete(ctx, tx.Client(), in)
+	}); err != nil {
+		return nil, err
+	}
+
 	return &npool.RemoveUsersFromApplicationResponse{
 		Info: "remove users from application successfully",
 	}, nil

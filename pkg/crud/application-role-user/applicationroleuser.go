@@ -9,6 +9,7 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationroleuser"
 	"github.com/NpoolPlatform/application-management/pkg/exist"
+	"github.com/NpoolPlatform/application-management/pkg/rollback"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )
@@ -41,13 +42,8 @@ func preConditionJudge(ctx context.Context, roleIDString, appID string) (uuid.UU
 	return roleID, nil
 }
 
-func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRoleResponse, error) {
-	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("pre condition not pass: %v", err)
-	}
-
-	resposne := []*npool.RoleUserInfo{}
+func genCreate(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *npool.SetUserRoleRequest) ([]*npool.RoleUserInfo, error) {
+	response := []*npool.RoleUserInfo{}
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
@@ -56,7 +52,7 @@ func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRo
 
 		existUser, err := exist.ApplicationUser(ctx, in.AppID, userID)
 		if err != nil || !existUser {
-			return nil, xerrors.Errorf("user doesn't exist")
+			return nil, xerrors.Errorf("user doesn't exist in this app")
 		}
 
 		has, err := exist.UserRole(ctx, userID, roleID, in.AppID)
@@ -64,7 +60,7 @@ func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRo
 			return nil, xerrors.Errorf("user already has the role: %v", err)
 		}
 
-		info, err := db.Client().
+		info, err := client.
 			ApplicationRoleUser.
 			Create().
 			SetRoleID(roleID).
@@ -74,10 +70,26 @@ func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRo
 		if err != nil {
 			return nil, xerrors.Errorf("fail to set role to user")
 		}
-		resposne = append(resposne, dbRowToApplication(info))
+		response = append(response, dbRowToApplication(info))
 	}
+	return response, nil
+}
+
+func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRoleResponse, error) {
+	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
+	}
+
+	response, err := rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+		return genCreate(ctx, tx.Client(), roleID, in)
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &npool.SetUserRoleResponse{
-		Infos: resposne,
+		Infos: response.([]*npool.RoleUserInfo),
 	}, nil
 }
 
@@ -151,19 +163,14 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 	}, nil
 }
 
-func Delete(ctx context.Context, in *npool.UnSetUserRoleRequest) (*npool.UnSetUserRoleResponse, error) {
-	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
-	if err != nil {
-		return nil, xerrors.Errorf("pre condition not pass: %v", err)
-	}
-
+func genDelete(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *npool.UnSetUserRoleRequest) (interface{}, error) {
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		_, err = db.Client().
+		_, err = client.
 			ApplicationRoleUser.
 			Update().
 			Where(
@@ -173,12 +180,28 @@ func Delete(ctx context.Context, in *npool.UnSetUserRoleRequest) (*npool.UnSetUs
 					applicationroleuser.UserID(userID),
 					applicationroleuser.RoleID(roleID),
 				),
-			).SetDeleteAt(time.Now().Unix()).
+			).
+			SetDeleteAt(time.Now().Unix()).
 			Save(ctx)
 		if err != nil {
 			return nil, xerrors.Errorf("fail to unset user role: %v", err)
 		}
 	}
+	return nil, nil
+}
+
+func Delete(ctx context.Context, in *npool.UnSetUserRoleRequest) (*npool.UnSetUserRoleResponse, error) {
+	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("pre condition not pass: %v", err)
+	}
+
+	if _, err = rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+		return genDelete(ctx, tx.Client(), roleID, in)
+	}); err != nil {
+		return nil, err
+	}
+
 	return &npool.UnSetUserRoleResponse{
 		Info: "unset user role successfully",
 	}, nil

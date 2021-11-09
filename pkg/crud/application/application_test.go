@@ -44,6 +44,17 @@ func TestApplicationCRUD(t *testing.T) { // nolint
 		application.ClientSecret = resp.Info.ClientSecret
 	}
 
+	application.RedirectUrl = "test"
+	resp3, err := Update(context.Background(), &npool.UpdateApplicationRequest{
+		Info: application,
+	})
+	if assert.Nil(t, err) {
+		assert.Equal(t, resp3.Info.ID, application.ID)
+		assert.Equal(t, resp3.Info.ClientSecret, application.ClientSecret)
+		assert.Equal(t, resp3.Info.ApplicationName, application.ApplicationName)
+		assert.Equal(t, resp3.Info.ApplicationOwner, application.ApplicationOwner)
+	}
+
 	resp1, err := Get(context.Background(), &npool.GetApplicationRequest{
 		AppID: application.ID,
 	})
