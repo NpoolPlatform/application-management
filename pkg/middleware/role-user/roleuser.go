@@ -17,7 +17,7 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 
 	response := []*npool.RoleInfo{}
 
-	for _, info := range resp.Infos {
+	for _, info := range resp.Info.Infos {
 		resp, err := applicationrole.Get(ctx, &npool.GetRoleRequest{
 			AppID:  in.AppID,
 			RoleID: info.ID,
@@ -28,6 +28,10 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 		response = append(response, resp.Info)
 	}
 	return &npool.GetUserRoleResponse{
-		Infos: response,
+		Info: &npool.UserRole{
+			Infos:  response,
+			UserID: in.UserID,
+			AppID:  in.AppID,
+		},
 	}, nil
 }

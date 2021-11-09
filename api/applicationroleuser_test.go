@@ -119,8 +119,8 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 		assert.Equal(t, 200, resp3.StatusCode())
 		err := json.Unmarshal(resp3.Body(), &response3)
 		if assert.Nil(t, err) {
-			assert.Equal(t, response3.Infos[0].AppID, appUserInfo.AppID)
-			assert.Equal(t, response3.Infos[0].ID, roleInfo.ID)
+			assert.Equal(t, response3.Info.Infos[0].AppID, appUserInfo.AppID)
+			assert.Equal(t, response3.Info.Infos[0].ID, roleInfo.ID)
 		}
 	}
 

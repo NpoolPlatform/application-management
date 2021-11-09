@@ -440,8 +440,14 @@ message GetUserRoleRequest {
     string AppID = 2;
 }
 
-message GetUserRoleResponse {
+message UserRole {
     repeated RoleInfo Infos = 1;
+    string UserID = 2;
+    string AppID = 3;
+}
+
+message GetUserRoleResponse {
+    UserRole Info = 1;
 }
 
 message GetRoleUsersRequest {

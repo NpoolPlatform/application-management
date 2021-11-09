@@ -74,6 +74,7 @@
     - [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse)
     - [UpdateRoleRequest](#application.management.v1.UpdateRoleRequest)
     - [UpdateRoleResponse](#application.management.v1.UpdateRoleResponse)
+    - [UserRole](#application.management.v1.UserRole)
     - [VersionResponse](#application.management.v1.VersionResponse)
   
     - [ApplicationManagement](#application.management.v1.ApplicationManagement)
@@ -798,7 +799,7 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| Infos | [RoleInfo](#application.management.v1.RoleInfo) | repeated |  |
+| Info | [UserRole](#application.management.v1.UserRole) |  |  |
 
 
 
@@ -1196,6 +1197,23 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Info | [RoleInfo](#application.management.v1.RoleInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.UserRole"></a>
+
+### UserRole
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [RoleInfo](#application.management.v1.RoleInfo) | repeated |  |
+| UserID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
 
 
 

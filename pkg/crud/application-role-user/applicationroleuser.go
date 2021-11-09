@@ -159,7 +159,11 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 	}
 
 	return &npool.GetUserRoleResponse{
-		Infos: response,
+		Info: &npool.UserRole{
+			Infos:  response,
+			UserID: in.UserID,
+			AppID:  in.AppID,
+		},
 	}, nil
 }
 
