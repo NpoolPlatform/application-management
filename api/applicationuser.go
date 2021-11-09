@@ -18,3 +18,30 @@ func (s *Server) AddUsersToApplication(ctx context.Context, in *npool.AddUsersTo
 	}
 	return resp, nil
 }
+
+func (s *Server) GetUserFromApplication(ctx context.Context, in *npool.GetUserFromApplicationRequest) (*npool.GetUserFromApplicationResponse, error) {
+	resp, err := applicationuser.Get(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get user from app error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}
+
+func (s *Server) GetUsersFromApplication(ctx context.Context, in *npool.GetUsersRequest) (*npool.GetUsersResponse, error) {
+	resp, err := applicationuser.GetAll(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get users from app error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}
+
+func (s *Server) RemoveUsersFromApplication(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*npool.RemoveUsersFromApplicationResponse, error) {
+	resp, err := applicationuser.Delete(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("remove users from app error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}

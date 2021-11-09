@@ -61,6 +61,46 @@ func TestApplicationUserAPI(t *testing.T) {
 			assert.NotEqual(t, responseUser.Infos[0].ID, uuid.UUID{})
 			assert.Equal(t, responseUser.Infos[0].UserID, appUser.UserID)
 			assert.Equal(t, responseUser.Infos[0].AppID, appUser.AppID)
+			appUser.ID = responseUser.Infos[0].ID
 		}
+	}
+
+	response1 := npool.GetUserFromApplicationResponse{}
+	resp1, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetUserFromApplicationRequest{
+			AppID:  appUser.AppID,
+			UserID: appUser.UserID,
+		}).Post("http://localhost:32759/v1/get/user/from/app")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp1.StatusCode())
+		err := json.Unmarshal(resp1.Body(), &response1)
+		if assert.Nil(t, err) {
+			assert.Equal(t, response1.Info.ID, appUser.ID)
+			assert.Equal(t, response1.Info.UserID, appUser.UserID)
+			assert.Equal(t, response1.Info.AppID, appUser.AppID)
+		}
+	}
+
+	response2 := npool.GetUsersResponse{}
+	resp2, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetUsersRequest{
+			AppID: appUser.AppID,
+		}).Post("http://localhost:32759/v1/get/users/from/app")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp2.StatusCode())
+		err := json.Unmarshal(resp2.Body(), &response2)
+		assert.Nil(t, err)
+	}
+
+	resp3, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.RemoveUsersFromApplicationRequest{
+			AppID:   appUser.AppID,
+			UserIDs: []string{appUser.UserID},
+		}).Post("http://localhost:32759/v1/remove/users/from/app")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp3.StatusCode())
 	}
 }
