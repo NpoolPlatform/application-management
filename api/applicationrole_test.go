@@ -113,11 +113,21 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 
 	resp5, err := cli.R().
 		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetRoleByCreatorRequest{
+			AppID:   roleInfo.AppID,
+			Creator: roleInfo.Creator,
+		}).Post("http://localhost:32759/v1/get/role/by/creator")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp5.StatusCode())
+	}
+
+	resp6, err := cli.R().
+		SetHeader("Content-Type", "application/json").
 		SetBody(npool.DeleteRoleRequest{
 			AppID:  roleInfo.AppID,
 			RoleID: roleInfo.ID,
 		}).Post("http://localhost:32759/v1/delete/role")
 	if assert.Nil(t, err) {
-		assert.Equal(t, 200, resp5.StatusCode())
+		assert.Equal(t, 200, resp6.StatusCode())
 	}
 }

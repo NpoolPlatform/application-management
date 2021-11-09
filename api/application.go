@@ -1,3 +1,5 @@
+// +build !codeanalysis
+
 package api
 
 import (
@@ -51,6 +53,15 @@ func (s *Server) DeleteApplication(ctx context.Context, in *npool.DeleteApplicat
 	if err != nil {
 		logger.Sugar().Errorf("update application error: %v", err)
 		return &npool.DeleteApplicationResponse{}, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}
+
+func (s *Server) GetApplicationByOwner(ctx context.Context, in *npool.GetApplicationByOwnerRequest) (*npool.GetApplicationByOwnerResponse, error) {
+	resp, err := application.GetApplicationByOwner(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get application by owner error: %v", err)
+		return &npool.GetApplicationByOwnerResponse{}, status.Error(codes.Internal, "internal server error")
 	}
 	return resp, nil
 }

@@ -122,11 +122,21 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 
 	resp5, err := cli.R().
 		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetGroupByOwnerRequest{
+			AppID: groupInfo.AppID,
+			Owner: groupInfo.GroupOwner,
+		}).Post("http://localhost:32759/v1/get/group/by/owner")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp5.StatusCode())
+	}
+
+	resp6, err := cli.R().
+		SetHeader("Content-Type", "application/json").
 		SetBody(npool.DeleteGroupRequest{
 			AppID:   groupInfo.AppID,
 			GroupID: groupInfo.ID,
 		}).Post("http://localhost:32759/v1/delete/group")
 	if assert.Nil(t, err) {
-		assert.Equal(t, 200, resp5.StatusCode())
+		assert.Equal(t, 200, resp6.StatusCode())
 	}
 }

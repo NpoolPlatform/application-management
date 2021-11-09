@@ -87,10 +87,20 @@ func TestApplicationAPI(t *testing.T) { // nolint
 
 	resp4, err := cli.R().
 		SetHeader("Content-Type", "application/json").
-		SetBody(npool.DeleteApplicationRequest{
-			AppID: application.ID,
-		}).Post("http://localhost:32759/v1/get/app")
+		SetBody(npool.GetApplicationByOwnerRequest{
+			Owner: application.ApplicationOwner,
+		}).
+		Post("http://localhost:32759/v1/get/app/by/owner")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
+	}
+
+	resp5, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.DeleteApplicationRequest{
+			AppID: application.ID,
+		}).Post("http://localhost:32759/v1/delete/app")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp5.StatusCode())
 	}
 }

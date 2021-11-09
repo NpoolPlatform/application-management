@@ -88,6 +88,19 @@ func TestApplicationRoleCRUD(t *testing.T) { // nolint
 		assert.Equal(t, resp2.Info.Creator, applicationRole.Creator)
 	}
 
+	resp3, err := GetRoleByCreator(context.Background(), &npool.GetRoleByCreatorRequest{
+		AppID:   applicationRole.AppID,
+		Creator: applicationRole.Creator,
+	})
+	assert.Nil(t, err)
+	fmt.Printf("get role by creator: %v", resp3)
+
+	_, err = GetRoleByCreator(context.Background(), &npool.GetRoleByCreatorRequest{
+		AppID:   uuid.New().String(),
+		Creator: uuid.New().String(),
+	})
+	assert.NotNil(t, err)
+
 	_, err = Delete(context.Background(), &npool.DeleteRoleRequest{
 		RoleID: applicationRole.ID,
 		AppID:  applicationRole.AppID,

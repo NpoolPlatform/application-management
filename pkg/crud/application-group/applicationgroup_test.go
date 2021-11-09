@@ -89,6 +89,19 @@ func TestApplicationGroupCRUD(t *testing.T) { // nolint
 	assert.Nil(t, err)
 	fmt.Printf("get all group is resp3: %v", resp3)
 
+	resp4, err := GetGroupByOwner(context.Background(), &npool.GetGroupByOwnerRequest{
+		Owner: applicationGroup.GroupOwner,
+		AppID: applicationGroup.AppID,
+	})
+	assert.Nil(t, err)
+	fmt.Printf("get owner's application is resp4: %v", resp4)
+
+	_, err = GetGroupByOwner(context.Background(), &npool.GetGroupByOwnerRequest{
+		Owner: uuid.New().String(),
+		AppID: uuid.New().String(),
+	})
+	assert.NotNil(t, err)
+
 	_, err = Delete(context.Background(), &npool.DeleteGroupRequest{
 		GroupID: applicationGroup.ID,
 		AppID:   applicationGroup.AppID,

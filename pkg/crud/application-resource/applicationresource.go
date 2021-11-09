@@ -27,13 +27,11 @@ func dbRowToApplicationResource(row *ent.ApplicationResource) *npool.ResourceInf
 }
 
 func Create(ctx context.Context, in *npool.CreateResourceRequest) (*npool.CreateResourceResponse, error) {
-	existApp, err := exist.Application(ctx, in.Info.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.Info.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	existName, err := exist.ResourceName(ctx, in.Info.ResourceName, in.Info.AppID)
-	if err != nil || existName != 0 {
+	if existName, err := exist.ResourceName(ctx, in.Info.ResourceName, in.Info.AppID); err != nil || existName != 0 {
 		return nil, xerrors.Errorf("resource has been exist: %v", err)
 	}
 
@@ -60,8 +58,7 @@ func Create(ctx context.Context, in *npool.CreateResourceRequest) (*npool.Create
 }
 
 func Get(ctx context.Context, in *npool.GetResourceRequest) (*npool.GetResourceResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -88,9 +85,46 @@ func Get(ctx context.Context, in *npool.GetResourceRequest) (*npool.GetResourceR
 	}, nil
 }
 
+func GetResourceByCreator(ctx context.Context, in *npool.GetResourceByCreatorRequest) (*npool.GetResourceByCreatorResponse, error) {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	creatorID, err := uuid.Parse(in.Creator)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid creator id: %v", err)
+	}
+
+	infos, err := db.Client().
+		ApplicationResource.
+		Query().
+		Where(
+			applicationresource.And(
+				applicationresource.Creator(creatorID),
+				applicationresource.AppID(in.AppID),
+				applicationresource.DeleteAt(0),
+			),
+		).All(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to query resource by creator: %v", err)
+	}
+
+	response := []*npool.ResourceInfo{}
+	for _, info := range infos {
+		response = append(response, dbRowToApplicationResource(info))
+	}
+
+	return &npool.GetResourceByCreatorResponse{
+		Info: &npool.CreatorResource{
+			Infos:   response,
+			AppID:   in.AppID,
+			Creator: in.Creator,
+		},
+	}, nil
+}
+
 func GetAll(ctx context.Context, in *npool.GetResourcesRequest) (*npool.GetResourcesResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -117,13 +151,11 @@ func GetAll(ctx context.Context, in *npool.GetResourcesRequest) (*npool.GetResou
 }
 
 func Update(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.UpdateResourceResponse, error) {
-	existApp, err := exist.Application(ctx, in.Info.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.Info.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	existName, err := exist.ResourceName(ctx, in.Info.ResourceName, in.Info.AppID)
-	if err != nil || existName == -1 {
+	if existName, err := exist.ResourceName(ctx, in.Info.ResourceName, in.Info.AppID); err != nil || existName == -1 {
 		return nil, xerrors.Errorf("resource name has already exist")
 	}
 
@@ -165,8 +197,7 @@ func Update(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.Update
 }
 
 func Delete(ctx context.Context, in *npool.DeleteResourceRequest) (*npool.DeleteResourceResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 

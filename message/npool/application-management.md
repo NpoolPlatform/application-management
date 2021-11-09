@@ -18,6 +18,8 @@
     - [CreateResourceResponse](#application.management.v1.CreateResourceResponse)
     - [CreateRoleRequest](#application.management.v1.CreateRoleRequest)
     - [CreateRoleResponse](#application.management.v1.CreateRoleResponse)
+    - [CreatorResource](#application.management.v1.CreatorResource)
+    - [CreatorRole](#application.management.v1.CreatorRole)
     - [DeleteApplicationRequest](#application.management.v1.DeleteApplicationRequest)
     - [DeleteApplicationResponse](#application.management.v1.DeleteApplicationResponse)
     - [DeleteGroupRequest](#application.management.v1.DeleteGroupRequest)
@@ -28,18 +30,26 @@
     - [DeleteRoleResponse](#application.management.v1.DeleteRoleResponse)
     - [GetAllGroupsRequest](#application.management.v1.GetAllGroupsRequest)
     - [GetAllGroupsResponse](#application.management.v1.GetAllGroupsResponse)
+    - [GetApplicationByOwnerRequest](#application.management.v1.GetApplicationByOwnerRequest)
+    - [GetApplicationByOwnerResponse](#application.management.v1.GetApplicationByOwnerResponse)
     - [GetApplicationRequest](#application.management.v1.GetApplicationRequest)
     - [GetApplicationResponse](#application.management.v1.GetApplicationResponse)
     - [GetApplicationsRequest](#application.management.v1.GetApplicationsRequest)
     - [GetApplicationsResponse](#application.management.v1.GetApplicationsResponse)
+    - [GetGroupByOwnerRequest](#application.management.v1.GetGroupByOwnerRequest)
+    - [GetGroupByOwnerResponse](#application.management.v1.GetGroupByOwnerResponse)
     - [GetGroupRequest](#application.management.v1.GetGroupRequest)
     - [GetGroupResponse](#application.management.v1.GetGroupResponse)
     - [GetGroupUsersRequest](#application.management.v1.GetGroupUsersRequest)
     - [GetGroupUsersResponse](#application.management.v1.GetGroupUsersResponse)
+    - [GetResourceByCreatorRequest](#application.management.v1.GetResourceByCreatorRequest)
+    - [GetResourceByCreatorResponse](#application.management.v1.GetResourceByCreatorResponse)
     - [GetResourceRequest](#application.management.v1.GetResourceRequest)
     - [GetResourceResponse](#application.management.v1.GetResourceResponse)
     - [GetResourcesRequest](#application.management.v1.GetResourcesRequest)
     - [GetResourcesResponse](#application.management.v1.GetResourcesResponse)
+    - [GetRoleByCreatorRequest](#application.management.v1.GetRoleByCreatorRequest)
+    - [GetRoleByCreatorResponse](#application.management.v1.GetRoleByCreatorResponse)
     - [GetRoleRequest](#application.management.v1.GetRoleRequest)
     - [GetRoleResponse](#application.management.v1.GetRoleResponse)
     - [GetRoleUsersRequest](#application.management.v1.GetRoleUsersRequest)
@@ -54,6 +64,8 @@
     - [GetUsersFromApplicationResponse](#application.management.v1.GetUsersFromApplicationResponse)
     - [GroupInfo](#application.management.v1.GroupInfo)
     - [GroupUserInfo](#application.management.v1.GroupUserInfo)
+    - [OwnerApplication](#application.management.v1.OwnerApplication)
+    - [OwnerGroup](#application.management.v1.OwnerGroup)
     - [PageInfo](#application.management.v1.PageInfo)
     - [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest)
     - [RemoveGroupUsersResponse](#application.management.v1.RemoveGroupUsersResponse)
@@ -316,6 +328,40 @@
 
 
 
+<a name="application.management.v1.CreatorResource"></a>
+
+### CreatorResource
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| Creator | [string](#string) |  |  |
+| Infos | [ResourceInfo](#application.management.v1.ResourceInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.CreatorRole"></a>
+
+### CreatorRole
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| Creator | [string](#string) |  |  |
+| Infos | [RoleInfo](#application.management.v1.RoleInfo) | repeated |  |
+
+
+
+
+
+
 <a name="application.management.v1.DeleteApplicationRequest"></a>
 
 ### DeleteApplicationRequest
@@ -469,6 +515,36 @@
 
 
 
+<a name="application.management.v1.GetApplicationByOwnerRequest"></a>
+
+### GetApplicationByOwnerRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Owner | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetApplicationByOwnerResponse"></a>
+
+### GetApplicationByOwnerResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [OwnerApplication](#application.management.v1.OwnerApplication) |  |  |
+
+
+
+
+
+
 <a name="application.management.v1.GetApplicationRequest"></a>
 
 ### GetApplicationRequest
@@ -523,6 +599,37 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Infos | [ApplicationInfo](#application.management.v1.ApplicationInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetGroupByOwnerRequest"></a>
+
+### GetGroupByOwnerRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| Owner | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetGroupByOwnerResponse"></a>
+
+### GetGroupByOwnerResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [OwnerGroup](#application.management.v1.OwnerGroup) |  |  |
 
 
 
@@ -591,6 +698,37 @@
 
 
 
+<a name="application.management.v1.GetResourceByCreatorRequest"></a>
+
+### GetResourceByCreatorRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| Creator | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetResourceByCreatorResponse"></a>
+
+### GetResourceByCreatorResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [CreatorResource](#application.management.v1.CreatorResource) |  |  |
+
+
+
+
+
+
 <a name="application.management.v1.GetResourceRequest"></a>
 
 ### GetResourceRequest
@@ -646,6 +784,37 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Infos | [ResourceInfo](#application.management.v1.ResourceInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetRoleByCreatorRequest"></a>
+
+### GetRoleByCreatorRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| Creator | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetRoleByCreatorResponse"></a>
+
+### GetRoleByCreatorResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [CreatorRole](#application.management.v1.CreatorRole) |  |  |
 
 
 
@@ -872,6 +1041,39 @@
 | UserID | [string](#string) |  |  |
 | Annotation | [string](#string) |  |  |
 | CreateAT | [int32](#int32) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.OwnerApplication"></a>
+
+### OwnerApplication
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Owner | [string](#string) |  |  |
+| Infos | [ApplicationInfo](#application.management.v1.ApplicationInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.OwnerGroup"></a>
+
+### OwnerGroup
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| Owner | [string](#string) |  |  |
+| Infos | [GroupInfo](#application.management.v1.GroupInfo) | repeated |  |
 
 
 
@@ -1257,11 +1459,13 @@ rpc Echo (StringMessage) returns (StringMessage){
 | CreateApplication | [CreateApplicationRequest](#application.management.v1.CreateApplicationRequest) | [CreateApplicationResponse](#application.management.v1.CreateApplicationResponse) | Create an application. |
 | UpdateApplication | [UpdateApplicationRequest](#application.management.v1.UpdateApplicationRequest) | [UpdateApplicationResponse](#application.management.v1.UpdateApplicationResponse) | Update an application&#39;s basic info. |
 | GetApplication | [GetApplicationRequest](#application.management.v1.GetApplicationRequest) | [GetApplicationResponse](#application.management.v1.GetApplicationResponse) | Get application. |
+| GetApplicationByOwner | [GetApplicationByOwnerRequest](#application.management.v1.GetApplicationByOwnerRequest) | [GetApplicationByOwnerResponse](#application.management.v1.GetApplicationByOwnerResponse) | Get application by owner. |
 | GetApplications | [GetApplicationsRequest](#application.management.v1.GetApplicationsRequest) | [GetApplicationsResponse](#application.management.v1.GetApplicationsResponse) | Get all applications. |
 | DeleteApplication | [DeleteApplicationRequest](#application.management.v1.DeleteApplicationRequest) | [DeleteApplicationResponse](#application.management.v1.DeleteApplicationResponse) | Delete an application. |
 | CreateRole | [CreateRoleRequest](#application.management.v1.CreateRoleRequest) | [CreateRoleResponse](#application.management.v1.CreateRoleResponse) | Create a role in app. |
 | UpdateRole | [UpdateRoleRequest](#application.management.v1.UpdateRoleRequest) | [UpdateRoleResponse](#application.management.v1.UpdateRoleResponse) | Update role&#39;s basic info. |
 | GetRole | [GetRoleRequest](#application.management.v1.GetRoleRequest) | [GetRoleResponse](#application.management.v1.GetRoleResponse) | Get Role. |
+| GetRoleByCreator | [GetRoleByCreatorRequest](#application.management.v1.GetRoleByCreatorRequest) | [GetRoleByCreatorResponse](#application.management.v1.GetRoleByCreatorResponse) | Get role by creator. |
 | GetRoles | [GetRolesRequest](#application.management.v1.GetRolesRequest) | [GetRolesResponse](#application.management.v1.GetRolesResponse) | Get Roles. |
 | DeleteRole | [DeleteRoleRequest](#application.management.v1.DeleteRoleRequest) | [DeleteRoleResponse](#application.management.v1.DeleteRoleResponse) | Delete role from app. |
 | SetUserRole | [SetUserRoleRequest](#application.management.v1.SetUserRoleRequest) | [SetUserRoleResponse](#application.management.v1.SetUserRoleResponse) | Set role to user. |
@@ -1274,6 +1478,7 @@ rpc Echo (StringMessage) returns (StringMessage){
 | RemoveUsersFromApplication | [RemoveUsersFromApplicationRequest](#application.management.v1.RemoveUsersFromApplicationRequest) | [RemoveUsersFromApplicationResponse](#application.management.v1.RemoveUsersFromApplicationResponse) | Remove users from app. |
 | CreateGroup | [CreateGroupRequest](#application.management.v1.CreateGroupRequest) | [CreateGroupResponse](#application.management.v1.CreateGroupResponse) | Create group in an application. |
 | GetGroup | [GetGroupRequest](#application.management.v1.GetGroupRequest) | [GetGroupResponse](#application.management.v1.GetGroupResponse) | Get group info. |
+| GetGroupByOwner | [GetGroupByOwnerRequest](#application.management.v1.GetGroupByOwnerRequest) | [GetGroupByOwnerResponse](#application.management.v1.GetGroupByOwnerResponse) | Get group by owner. |
 | GetAllGroups | [GetAllGroupsRequest](#application.management.v1.GetAllGroupsRequest) | [GetAllGroupsResponse](#application.management.v1.GetAllGroupsResponse) | Get all groups. |
 | UpdateGroup | [UpdateGroupRequest](#application.management.v1.UpdateGroupRequest) | [UpdateGroupResponse](#application.management.v1.UpdateGroupResponse) | Update group info. |
 | DeleteGroup | [DeleteGroupRequest](#application.management.v1.DeleteGroupRequest) | [DeleteGroupResponse](#application.management.v1.DeleteGroupResponse) | Delete group. |
@@ -1283,6 +1488,7 @@ rpc Echo (StringMessage) returns (StringMessage){
 | CreateResource | [CreateResourceRequest](#application.management.v1.CreateResourceRequest) | [CreateResourceResponse](#application.management.v1.CreateResourceResponse) | Create resource for app. |
 | UpdateResource | [UpdateResourceRequest](#application.management.v1.UpdateResourceRequest) | [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse) | Update resource of app. |
 | GetResource | [GetResourceRequest](#application.management.v1.GetResourceRequest) | [GetResourceResponse](#application.management.v1.GetResourceResponse) | Get resource. |
+| GetResourceByCreator | [GetResourceByCreatorRequest](#application.management.v1.GetResourceByCreatorRequest) | [GetResourceByCreatorResponse](#application.management.v1.GetResourceByCreatorResponse) | Get resource by creator. |
 | GetResources | [GetResourcesRequest](#application.management.v1.GetResourcesRequest) | [GetResourcesResponse](#application.management.v1.GetResourcesResponse) | Get all resources from app. |
 | DeleteResource | [DeleteResourceRequest](#application.management.v1.DeleteResourceRequest) | [DeleteResourceResponse](#application.management.v1.DeleteResourceResponse) | Delete resource from app. |
 

@@ -56,3 +56,12 @@ func (s *Server) DeleteResource(ctx context.Context, in *npool.DeleteResourceReq
 	}
 	return resp, nil
 }
+
+func (s *Server) GetResourceByCreator(ctx context.Context, in *npool.GetResourceByCreatorRequest) (*npool.GetResourceByCreatorResponse, error) {
+	resp, err := applicationresource.GetResourceByCreator(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get resource by creator error: %v", err)
+		return &npool.GetResourceByCreatorResponse{}, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}

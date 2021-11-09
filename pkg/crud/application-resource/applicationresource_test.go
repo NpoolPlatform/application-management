@@ -89,6 +89,19 @@ func TestApplicationResourceCRUD(t *testing.T) { // nolint
 		assert.Equal(t, resp3.Info.Creator, resource.Creator)
 	}
 
+	resp4, err := GetResourceByCreator(context.Background(), &npool.GetResourceByCreatorRequest{
+		AppID:   resource.AppID,
+		Creator: resource.Creator,
+	})
+	assert.Nil(t, err)
+	fmt.Printf("get resource by creator resp is: %v", resp4)
+
+	_, err = GetResourceByCreator(context.Background(), &npool.GetResourceByCreatorRequest{
+		AppID:   uuid.New().String(),
+		Creator: uuid.New().String(),
+	})
+	assert.NotNil(t, err)
+
 	_, err = Delete(context.Background(), &npool.DeleteResourceRequest{
 		ResourceID: resource.ID,
 		AppID:      resource.AppID,

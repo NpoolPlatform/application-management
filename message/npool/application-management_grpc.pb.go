@@ -31,6 +31,9 @@ type ApplicationManagementClient interface {
 	//Get application.
 	GetApplication(ctx context.Context, in *GetApplicationRequest, opts ...grpc.CallOption) (*GetApplicationResponse, error)
 	//
+	//Get application by owner.
+	GetApplicationByOwner(ctx context.Context, in *GetApplicationByOwnerRequest, opts ...grpc.CallOption) (*GetApplicationByOwnerResponse, error)
+	//
 	//Get all applications.
 	GetApplications(ctx context.Context, in *GetApplicationsRequest, opts ...grpc.CallOption) (*GetApplicationsResponse, error)
 	//
@@ -45,6 +48,9 @@ type ApplicationManagementClient interface {
 	//
 	//Get Role.
 	GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleResponse, error)
+	//
+	//Get role by creator.
+	GetRoleByCreator(ctx context.Context, in *GetRoleByCreatorRequest, opts ...grpc.CallOption) (*GetRoleByCreatorResponse, error)
 	//
 	//Get Roles.
 	GetRoles(ctx context.Context, in *GetRolesRequest, opts ...grpc.CallOption) (*GetRolesResponse, error)
@@ -82,6 +88,9 @@ type ApplicationManagementClient interface {
 	//Get group info.
 	GetGroup(ctx context.Context, in *GetGroupRequest, opts ...grpc.CallOption) (*GetGroupResponse, error)
 	//
+	//Get group by owner.
+	GetGroupByOwner(ctx context.Context, in *GetGroupByOwnerRequest, opts ...grpc.CallOption) (*GetGroupByOwnerResponse, error)
+	//
 	//Get all groups.
 	GetAllGroups(ctx context.Context, in *GetAllGroupsRequest, opts ...grpc.CallOption) (*GetAllGroupsResponse, error)
 	//
@@ -108,6 +117,9 @@ type ApplicationManagementClient interface {
 	//
 	//Get resource.
 	GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (*GetResourceResponse, error)
+	//
+	//Get resource by creator.
+	GetResourceByCreator(ctx context.Context, in *GetResourceByCreatorRequest, opts ...grpc.CallOption) (*GetResourceByCreatorResponse, error)
 	//
 	//Get all resources from app.
 	GetResources(ctx context.Context, in *GetResourcesRequest, opts ...grpc.CallOption) (*GetResourcesResponse, error)
@@ -160,6 +172,15 @@ func (c *applicationManagementClient) GetApplication(ctx context.Context, in *Ge
 	return out, nil
 }
 
+func (c *applicationManagementClient) GetApplicationByOwner(ctx context.Context, in *GetApplicationByOwnerRequest, opts ...grpc.CallOption) (*GetApplicationByOwnerResponse, error) {
+	out := new(GetApplicationByOwnerResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetApplicationByOwner", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationManagementClient) GetApplications(ctx context.Context, in *GetApplicationsRequest, opts ...grpc.CallOption) (*GetApplicationsResponse, error) {
 	out := new(GetApplicationsResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetApplications", in, out, opts...)
@@ -199,6 +220,15 @@ func (c *applicationManagementClient) UpdateRole(ctx context.Context, in *Update
 func (c *applicationManagementClient) GetRole(ctx context.Context, in *GetRoleRequest, opts ...grpc.CallOption) (*GetRoleResponse, error) {
 	out := new(GetRoleResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetRole", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) GetRoleByCreator(ctx context.Context, in *GetRoleByCreatorRequest, opts ...grpc.CallOption) (*GetRoleByCreatorResponse, error) {
+	out := new(GetRoleByCreatorResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetRoleByCreator", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -313,6 +343,15 @@ func (c *applicationManagementClient) GetGroup(ctx context.Context, in *GetGroup
 	return out, nil
 }
 
+func (c *applicationManagementClient) GetGroupByOwner(ctx context.Context, in *GetGroupByOwnerRequest, opts ...grpc.CallOption) (*GetGroupByOwnerResponse, error) {
+	out := new(GetGroupByOwnerResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetGroupByOwner", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationManagementClient) GetAllGroups(ctx context.Context, in *GetAllGroupsRequest, opts ...grpc.CallOption) (*GetAllGroupsResponse, error) {
 	out := new(GetAllGroupsResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetAllGroups", in, out, opts...)
@@ -394,6 +433,15 @@ func (c *applicationManagementClient) GetResource(ctx context.Context, in *GetRe
 	return out, nil
 }
 
+func (c *applicationManagementClient) GetResourceByCreator(ctx context.Context, in *GetResourceByCreatorRequest, opts ...grpc.CallOption) (*GetResourceByCreatorResponse, error) {
+	out := new(GetResourceByCreatorResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetResourceByCreator", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationManagementClient) GetResources(ctx context.Context, in *GetResourcesRequest, opts ...grpc.CallOption) (*GetResourcesResponse, error) {
 	out := new(GetResourcesResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetResources", in, out, opts...)
@@ -428,6 +476,9 @@ type ApplicationManagementServer interface {
 	//Get application.
 	GetApplication(context.Context, *GetApplicationRequest) (*GetApplicationResponse, error)
 	//
+	//Get application by owner.
+	GetApplicationByOwner(context.Context, *GetApplicationByOwnerRequest) (*GetApplicationByOwnerResponse, error)
+	//
 	//Get all applications.
 	GetApplications(context.Context, *GetApplicationsRequest) (*GetApplicationsResponse, error)
 	//
@@ -442,6 +493,9 @@ type ApplicationManagementServer interface {
 	//
 	//Get Role.
 	GetRole(context.Context, *GetRoleRequest) (*GetRoleResponse, error)
+	//
+	//Get role by creator.
+	GetRoleByCreator(context.Context, *GetRoleByCreatorRequest) (*GetRoleByCreatorResponse, error)
 	//
 	//Get Roles.
 	GetRoles(context.Context, *GetRolesRequest) (*GetRolesResponse, error)
@@ -479,6 +533,9 @@ type ApplicationManagementServer interface {
 	//Get group info.
 	GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error)
 	//
+	//Get group by owner.
+	GetGroupByOwner(context.Context, *GetGroupByOwnerRequest) (*GetGroupByOwnerResponse, error)
+	//
 	//Get all groups.
 	GetAllGroups(context.Context, *GetAllGroupsRequest) (*GetAllGroupsResponse, error)
 	//
@@ -506,6 +563,9 @@ type ApplicationManagementServer interface {
 	//Get resource.
 	GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error)
 	//
+	//Get resource by creator.
+	GetResourceByCreator(context.Context, *GetResourceByCreatorRequest) (*GetResourceByCreatorResponse, error)
+	//
 	//Get all resources from app.
 	GetResources(context.Context, *GetResourcesRequest) (*GetResourcesResponse, error)
 	//
@@ -530,6 +590,9 @@ func (UnimplementedApplicationManagementServer) UpdateApplication(context.Contex
 func (UnimplementedApplicationManagementServer) GetApplication(context.Context, *GetApplicationRequest) (*GetApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetApplication not implemented")
 }
+func (UnimplementedApplicationManagementServer) GetApplicationByOwner(context.Context, *GetApplicationByOwnerRequest) (*GetApplicationByOwnerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetApplicationByOwner not implemented")
+}
 func (UnimplementedApplicationManagementServer) GetApplications(context.Context, *GetApplicationsRequest) (*GetApplicationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetApplications not implemented")
 }
@@ -544,6 +607,9 @@ func (UnimplementedApplicationManagementServer) UpdateRole(context.Context, *Upd
 }
 func (UnimplementedApplicationManagementServer) GetRole(context.Context, *GetRoleRequest) (*GetRoleResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRole not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetRoleByCreator(context.Context, *GetRoleByCreatorRequest) (*GetRoleByCreatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetRoleByCreator not implemented")
 }
 func (UnimplementedApplicationManagementServer) GetRoles(context.Context, *GetRolesRequest) (*GetRolesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetRoles not implemented")
@@ -581,6 +647,9 @@ func (UnimplementedApplicationManagementServer) CreateGroup(context.Context, *Cr
 func (UnimplementedApplicationManagementServer) GetGroup(context.Context, *GetGroupRequest) (*GetGroupResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroup not implemented")
 }
+func (UnimplementedApplicationManagementServer) GetGroupByOwner(context.Context, *GetGroupByOwnerRequest) (*GetGroupByOwnerResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroupByOwner not implemented")
+}
 func (UnimplementedApplicationManagementServer) GetAllGroups(context.Context, *GetAllGroupsRequest) (*GetAllGroupsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllGroups not implemented")
 }
@@ -607,6 +676,9 @@ func (UnimplementedApplicationManagementServer) UpdateResource(context.Context, 
 }
 func (UnimplementedApplicationManagementServer) GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetResource not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetResourceByCreator(context.Context, *GetResourceByCreatorRequest) (*GetResourceByCreatorResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetResourceByCreator not implemented")
 }
 func (UnimplementedApplicationManagementServer) GetResources(context.Context, *GetResourcesRequest) (*GetResourcesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetResources not implemented")
@@ -699,6 +771,24 @@ func _ApplicationManagement_GetApplication_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetApplicationByOwner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetApplicationByOwnerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetApplicationByOwner(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetApplicationByOwner",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetApplicationByOwner(ctx, req.(*GetApplicationByOwnerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationManagement_GetApplications_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetApplicationsRequest)
 	if err := dec(in); err != nil {
@@ -785,6 +875,24 @@ func _ApplicationManagement_GetRole_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ApplicationManagementServer).GetRole(ctx, req.(*GetRoleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetRoleByCreator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRoleByCreatorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetRoleByCreator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetRoleByCreator",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetRoleByCreator(ctx, req.(*GetRoleByCreatorRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1005,6 +1113,24 @@ func _ApplicationManagement_GetGroup_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetGroupByOwner_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetGroupByOwnerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetGroupByOwner(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetGroupByOwner",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetGroupByOwner(ctx, req.(*GetGroupByOwnerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationManagement_GetAllGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetAllGroupsRequest)
 	if err := dec(in); err != nil {
@@ -1167,6 +1293,24 @@ func _ApplicationManagement_GetResource_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetResourceByCreator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetResourceByCreatorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetResourceByCreator(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetResourceByCreator",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetResourceByCreator(ctx, req.(*GetResourceByCreatorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationManagement_GetResources_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetResourcesRequest)
 	if err := dec(in); err != nil {
@@ -1227,6 +1371,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_GetApplication_Handler,
 		},
 		{
+			MethodName: "GetApplicationByOwner",
+			Handler:    _ApplicationManagement_GetApplicationByOwner_Handler,
+		},
+		{
 			MethodName: "GetApplications",
 			Handler:    _ApplicationManagement_GetApplications_Handler,
 		},
@@ -1245,6 +1393,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRole",
 			Handler:    _ApplicationManagement_GetRole_Handler,
+		},
+		{
+			MethodName: "GetRoleByCreator",
+			Handler:    _ApplicationManagement_GetRoleByCreator_Handler,
 		},
 		{
 			MethodName: "GetRoles",
@@ -1295,6 +1447,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_GetGroup_Handler,
 		},
 		{
+			MethodName: "GetGroupByOwner",
+			Handler:    _ApplicationManagement_GetGroupByOwner_Handler,
+		},
+		{
 			MethodName: "GetAllGroups",
 			Handler:    _ApplicationManagement_GetAllGroups_Handler,
 		},
@@ -1329,6 +1485,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetResource",
 			Handler:    _ApplicationManagement_GetResource_Handler,
+		},
+		{
+			MethodName: "GetResourceByCreator",
+			Handler:    _ApplicationManagement_GetResourceByCreator_Handler,
 		},
 		{
 			MethodName: "GetResources",

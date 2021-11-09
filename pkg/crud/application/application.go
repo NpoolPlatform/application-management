@@ -133,8 +133,8 @@ func Delete(ctx context.Context, in *npool.DeleteApplicationRequest) (*npool.Del
 	}, nil
 }
 
-func GetApplicationsByOwner(ctx context.Context, owner string) ([]*npool.ApplicationInfo, error) {
-	ownerID, err := uuid.Parse(owner)
+func GetApplicationByOwner(ctx context.Context, in *npool.GetApplicationByOwnerRequest) (*npool.GetApplicationByOwnerResponse, error) {
+	ownerID, err := uuid.Parse(in.Owner)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid owner id: %v", err)
 	}
@@ -156,5 +156,10 @@ func GetApplicationsByOwner(ctx context.Context, owner string) ([]*npool.Applica
 	for _, info := range infos {
 		response = append(response, dbRowToApplication(info))
 	}
-	return response, nil
+	return &npool.GetApplicationByOwnerResponse{
+		Info: &npool.OwnerApplication{
+			Infos: response,
+			Owner: in.Owner,
+		},
+	}, nil
 }

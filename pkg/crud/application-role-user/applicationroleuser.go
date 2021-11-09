@@ -25,8 +25,7 @@ func dbRowToApplication(row *ent.ApplicationRoleUser) *npool.RoleUserInfo {
 }
 
 func preConditionJudge(ctx context.Context, roleIDString, appID string) (uuid.UUID, error) {
-	existApp, err := exist.Application(ctx, appID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, appID); err != nil || !existApp {
 		return uuid.UUID{}, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -35,10 +34,10 @@ func preConditionJudge(ctx context.Context, roleIDString, appID string) (uuid.UU
 		return uuid.UUID{}, xerrors.Errorf("invalid role id: %v", err)
 	}
 
-	existRole, err := exist.ApplicationRole(ctx, roleID, appID)
-	if err != nil || !existRole {
+	if existRole, err := exist.ApplicationRole(ctx, roleID, appID); err != nil || !existRole {
 		return uuid.UUID{}, xerrors.Errorf("role doesn't exist")
 	}
+
 	return roleID, nil
 }
 
@@ -50,9 +49,8 @@ func genCreate(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *np
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		existUser, err := exist.ApplicationUser(ctx, in.AppID, userID)
-		if err != nil || !existUser {
-			return nil, xerrors.Errorf("user doesn't exist in this app")
+		if existUser, err := exist.ApplicationUser(ctx, in.AppID, userID); err != nil || !existUser {
+			return nil, xerrors.Errorf("user does not exist: %v", err)
 		}
 
 		has, err := exist.UserRole(ctx, userID, roleID, in.AppID)
@@ -122,8 +120,7 @@ func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.Ge
 }
 
 func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetUserRoleResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -132,8 +129,7 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
-	existUser, err := exist.ApplicationUser(ctx, in.AppID, userID)
-	if err != nil || !existUser {
+	if existUser, err := exist.ApplicationUser(ctx, in.AppID, userID); err != nil || !existUser {
 		return nil, xerrors.Errorf("user does not exist: %v", err)
 	}
 

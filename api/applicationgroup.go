@@ -56,3 +56,12 @@ func (s *Server) DeleteGroup(ctx context.Context, in *npool.DeleteGroupRequest) 
 	}
 	return resp, nil
 }
+
+func (s *Server) GetGroupByOwner(ctx context.Context, in *npool.GetGroupByOwnerRequest) (*npool.GetGroupByOwnerResponse, error) {
+	resp, err := applicationgroup.GetGroupByOwner(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get group by owner error: %v", err)
+		return &npool.GetGroupByOwnerResponse{}, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}

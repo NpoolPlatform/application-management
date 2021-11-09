@@ -50,6 +50,16 @@ service ApplicationManagement {
         };
     };
     /*
+    Get application by owner.
+    */
+    rpc GetApplicationByOwner (GetApplicationByOwnerRequest) returns (GetApplicationByOwnerResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/app/by/owner"
+            body: "*"
+        };
+    };
+
+    /*
     Get all applications.
     */
     rpc GetApplications (GetApplicationsRequest) returns (GetApplicationsResponse) {
@@ -91,6 +101,15 @@ service ApplicationManagement {
     rpc GetRole (GetRoleRequest) returns (GetRoleResponse) {
         option (google.api.http) = {
             post: "/v1/get/role"
+            body: "*"
+        };
+    };
+    /*
+    Get role by creator.
+    */
+    rpc GetRoleByCreator (GetRoleByCreatorRequest) returns (GetRoleByCreatorResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/role/by/creator"
             body: "*"
         };
     };
@@ -203,6 +222,15 @@ service ApplicationManagement {
         };
     };
     /*
+    Get group by owner.
+    */
+    rpc GetGroupByOwner (GetGroupByOwnerRequest) returns (GetGroupByOwnerResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/group/by/owner"
+            body: "*"
+        };
+    };
+    /*
     Get all groups.
     */
     rpc GetAllGroups (GetAllGroupsRequest) returns (GetAllGroupsResponse) {
@@ -284,6 +312,15 @@ service ApplicationManagement {
         };
     };
     /*
+    Get resource by creator.
+    */
+    rpc GetResourceByCreator (GetResourceByCreatorRequest) returns (GetResourceByCreatorResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/resource/by/creator"
+            body: "*"
+        };
+    };
+    /*
     Get all resources from app.
     */
     rpc GetResources (GetResourcesRequest) returns (GetResourcesResponse) {
@@ -349,6 +386,19 @@ message GetApplicationResponse {
     ApplicationInfo Info = 1;
 }
 
+message GetApplicationByOwnerRequest {
+    string Owner = 2;
+}
+
+message OwnerApplication {
+    string Owner = 2;
+    repeated ApplicationInfo Infos = 3;
+}
+
+message GetApplicationByOwnerResponse {
+    OwnerApplication Info = 1;
+}
+
 message GetApplicationsRequest {
     PageInfo Info = 1;
 }
@@ -398,6 +448,21 @@ message GetRoleRequest {
 
 message GetRoleResponse {
     RoleInfo Info = 1;
+}
+
+message GetRoleByCreatorRequest {
+    string AppID = 1;
+    string Creator = 2;
+}
+
+message CreatorRole {
+    string AppID = 1;
+    string Creator = 2;
+    repeated RoleInfo Infos = 3;
+}
+
+message GetRoleByCreatorResponse {
+    CreatorRole Info = 1;
 }
 
 message DeleteRoleRequest {
@@ -541,6 +606,21 @@ message GetGroupResponse {
     GroupInfo Info = 1;
 }
 
+message GetGroupByOwnerRequest {
+    string AppID = 1;
+    string Owner = 2;
+}
+
+message OwnerGroup {
+    string AppID = 1;
+    string Owner = 2;
+    repeated GroupInfo Infos = 3;
+}
+
+message GetGroupByOwnerResponse {
+    OwnerGroup Info = 1;
+}
+
 message GetAllGroupsRequest {
     string AppID = 1;
 }
@@ -638,6 +718,21 @@ message GetResourceRequest {
 
 message GetResourceResponse {
     ResourceInfo Info = 1;
+}
+
+message GetResourceByCreatorRequest {
+    string AppID = 1;
+    string Creator = 2;
+}
+
+message CreatorResource {
+    string AppID = 1;
+    string Creator = 2;
+    repeated ResourceInfo Infos = 3;
+}
+
+message GetResourceByCreatorResponse {
+    CreatorResource Info = 1;
 }
 
 message GetResourcesRequest {

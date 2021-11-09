@@ -68,7 +68,9 @@ func TestApplicationCRUD(t *testing.T) { // nolint
 	_, err = GetAll(context.Background(), &npool.GetApplicationsRequest{})
 	assert.Nil(t, err)
 
-	_, err = GetApplicationsByOwner(context.Background(), application.ApplicationOwner)
+	_, err = GetApplicationByOwner(context.Background(), &npool.GetApplicationByOwnerRequest{
+		Owner: application.ApplicationOwner,
+	})
 	assert.Nil(t, err)
 
 	_, err = Delete(context.Background(), &npool.DeleteApplicationRequest{

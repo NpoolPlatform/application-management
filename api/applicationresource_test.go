@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestApplicationResourceAPI(t *testing.T) {
+func TestApplicationResourceAPI(t *testing.T) { // nolint
 	if runByGithubAction, err := strconv.ParseBool(os.Getenv("RUN_BY_GITHUB_ACTION")); err == nil && runByGithubAction {
 		return
 	}
@@ -120,11 +120,21 @@ func TestApplicationResourceAPI(t *testing.T) {
 
 	resp5, err := cli.R().
 		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetResourceByCreatorRequest{
+			AppID:   resourceInfo.AppID,
+			Creator: resourceInfo.Creator,
+		}).Post("http://localhost:32759/v1/get/resource/by/creator")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp5.StatusCode())
+	}
+
+	resp6, err := cli.R().
+		SetHeader("Content-Type", "application/json").
 		SetBody(npool.DeleteResourceRequest{
 			AppID:      resourceInfo.AppID,
 			ResourceID: resourceInfo.ID,
 		}).Post("http://localhost:32759/v1/delete/resource")
 	if assert.Nil(t, err) {
-		assert.Equal(t, 200, resp5.StatusCode())
+		assert.Equal(t, 200, resp6.StatusCode())
 	}
 }

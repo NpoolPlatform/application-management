@@ -25,8 +25,7 @@ func dbRawToApplicationGroupUser(row *ent.ApplicationGroupUser) *npool.GroupUser
 }
 
 func preConditionJudge(ctx context.Context, groupIDString, appID string) (uuid.UUID, error) {
-	existApp, err := exist.Application(ctx, appID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, appID); err != nil || !existApp {
 		return uuid.UUID{}, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -35,10 +34,10 @@ func preConditionJudge(ctx context.Context, groupIDString, appID string) (uuid.U
 		return uuid.UUID{}, xerrors.Errorf("invalid group id: %v", err)
 	}
 
-	existGroup, err := exist.ApplicationGroup(ctx, groupID, appID)
-	if err != nil || !existGroup {
+	if existGroup, err := exist.ApplicationGroup(ctx, groupID, appID); err != nil || !existGroup {
 		return uuid.UUID{}, xerrors.Errorf("group doesn't exist: %v", err)
 	}
+
 	return groupID, nil
 }
 

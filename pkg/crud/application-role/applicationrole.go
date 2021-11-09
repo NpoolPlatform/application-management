@@ -26,11 +26,9 @@ func dbRowToApplicationRole(row *ent.ApplicationRole) *npool.RoleInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRoleResponse, error) {
-	existApp, err := exist.Application(ctx, in.Info.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.Info.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
-
 	creator, err := uuid.Parse(in.Info.Creator)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
@@ -59,8 +57,7 @@ func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRole
 }
 
 func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -89,8 +86,7 @@ func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse,
 }
 
 func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -117,8 +113,7 @@ func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResp
 }
 
 func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRoleResponse, error) {
-	existApp, err := exist.Application(ctx, in.Info.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.Info.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -127,8 +122,7 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 		return nil, xerrors.Errorf("invalid role id: %v", err)
 	}
 
-	existRoleName, err := exist.RoleName(ctx, in.Info.RoleName, in.Info.AppID)
-	if err != nil || existRoleName == -1 {
+	if existRoleName, err := exist.RoleName(ctx, in.Info.RoleName, in.Info.AppID); err != nil || existRoleName == -1 {
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
 
@@ -165,8 +159,7 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 }
 
 func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRoleResponse, error) {
-	existApp, err := exist.Application(ctx, in.AppID)
-	if err != nil || !existApp {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
@@ -186,5 +179,43 @@ func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRole
 
 	return &npool.DeleteRoleResponse{
 		Info: "delete role successfully",
+	}, nil
+}
+
+func GetRoleByCreator(ctx context.Context, in *npool.GetRoleByCreatorRequest) (*npool.GetRoleByCreatorResponse, error) {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	creatorID, err := uuid.Parse(in.Creator)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid creator id: %v", err)
+	}
+
+	infos, err := db.Client().
+		ApplicationRole.
+		Query().
+		Where(
+			applicationrole.And(
+				applicationrole.AppID(in.AppID),
+				applicationrole.Creator(creatorID),
+				applicationrole.DeleteAt(0),
+			),
+		).All(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to get role by creator: %v", err)
+	}
+
+	response := []*npool.RoleInfo{}
+	for _, info := range infos {
+		response = append(response, dbRowToApplicationRole(info))
+	}
+
+	return &npool.GetRoleByCreatorResponse{
+		Info: &npool.CreatorRole{
+			Infos:   response,
+			AppID:   in.AppID,
+			Creator: in.Creator,
+		},
 	}, nil
 }

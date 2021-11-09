@@ -1,3 +1,5 @@
+// +build !codeanalysis
+
 package api
 
 import (
@@ -14,7 +16,7 @@ func (s *Server) CreateRole(ctx context.Context, in *npool.CreateRoleRequest) (*
 	resp, err := applicationrole.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return &npool.CreateRoleResponse{}, status.Error(codes.Internal, "internal server error")
 	}
 	return resp, nil
 }
@@ -23,7 +25,7 @@ func (s *Server) UpdateRole(ctx context.Context, in *npool.UpdateRoleRequest) (*
 	resp, err := applicationrole.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return &npool.UpdateRoleResponse{}, status.Error(codes.Internal, "internal server error")
 	}
 	return resp, nil
 }
@@ -32,7 +34,7 @@ func (s *Server) GetRole(ctx context.Context, in *npool.GetRoleRequest) (*npool.
 	resp, err := applicationrole.Get(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return &npool.GetRoleResponse{}, status.Error(codes.Internal, "internal server error")
 	}
 	return resp, nil
 }
@@ -41,7 +43,7 @@ func (s *Server) GetRoles(ctx context.Context, in *npool.GetRolesRequest) (*npoo
 	resp, err := applicationrole.GetAll(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return &npool.GetRolesResponse{}, status.Error(codes.Internal, "internal server error")
 	}
 	return resp, nil
 }
@@ -50,7 +52,16 @@ func (s *Server) DeleteRole(ctx context.Context, in *npool.DeleteRoleRequest) (*
 	resp, err := applicationrole.Delete(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("delete role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return &npool.DeleteRoleResponse{}, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}
+
+func (s *Server) GetRoleByCreator(ctx context.Context, in *npool.GetRoleByCreatorRequest) (*npool.GetRoleByCreatorResponse, error) {
+	resp, err := applicationrole.GetRoleByCreator(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("delete role error: %v", err)
+		return &npool.GetRoleByCreatorResponse{}, status.Error(codes.Internal, "internal server error")
 	}
 	return resp, nil
 }
