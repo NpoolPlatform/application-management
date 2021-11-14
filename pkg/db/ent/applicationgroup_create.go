@@ -67,43 +67,43 @@ func (agc *ApplicationGroupCreate) SetNillableAnnotation(s *string) *Application
 }
 
 // SetCreateAt sets the "create_at" field.
-func (agc *ApplicationGroupCreate) SetCreateAt(i int64) *ApplicationGroupCreate {
-	agc.mutation.SetCreateAt(i)
+func (agc *ApplicationGroupCreate) SetCreateAt(u uint32) *ApplicationGroupCreate {
+	agc.mutation.SetCreateAt(u)
 	return agc
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (agc *ApplicationGroupCreate) SetNillableCreateAt(i *int64) *ApplicationGroupCreate {
-	if i != nil {
-		agc.SetCreateAt(*i)
+func (agc *ApplicationGroupCreate) SetNillableCreateAt(u *uint32) *ApplicationGroupCreate {
+	if u != nil {
+		agc.SetCreateAt(*u)
 	}
 	return agc
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (agc *ApplicationGroupCreate) SetUpdateAt(i int64) *ApplicationGroupCreate {
-	agc.mutation.SetUpdateAt(i)
+func (agc *ApplicationGroupCreate) SetUpdateAt(u uint32) *ApplicationGroupCreate {
+	agc.mutation.SetUpdateAt(u)
 	return agc
 }
 
 // SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
-func (agc *ApplicationGroupCreate) SetNillableUpdateAt(i *int64) *ApplicationGroupCreate {
-	if i != nil {
-		agc.SetUpdateAt(*i)
+func (agc *ApplicationGroupCreate) SetNillableUpdateAt(u *uint32) *ApplicationGroupCreate {
+	if u != nil {
+		agc.SetUpdateAt(*u)
 	}
 	return agc
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (agc *ApplicationGroupCreate) SetDeleteAt(i int64) *ApplicationGroupCreate {
-	agc.mutation.SetDeleteAt(i)
+func (agc *ApplicationGroupCreate) SetDeleteAt(u uint32) *ApplicationGroupCreate {
+	agc.mutation.SetDeleteAt(u)
 	return agc
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (agc *ApplicationGroupCreate) SetNillableDeleteAt(i *int64) *ApplicationGroupCreate {
-	if i != nil {
-		agc.SetDeleteAt(*i)
+func (agc *ApplicationGroupCreate) SetNillableDeleteAt(u *uint32) *ApplicationGroupCreate {
+	if u != nil {
+		agc.SetDeleteAt(*u)
 	}
 	return agc
 }
@@ -297,7 +297,7 @@ func (agc *ApplicationGroupCreate) createSpec() (*ApplicationGroup, *sqlgraph.Cr
 	}
 	if value, ok := agc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldCreateAt,
 		})
@@ -305,7 +305,7 @@ func (agc *ApplicationGroupCreate) createSpec() (*ApplicationGroup, *sqlgraph.Cr
 	}
 	if value, ok := agc.mutation.UpdateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldUpdateAt,
 		})
@@ -313,7 +313,7 @@ func (agc *ApplicationGroupCreate) createSpec() (*ApplicationGroup, *sqlgraph.Cr
 	}
 	if value, ok := agc.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldDeleteAt,
 		})

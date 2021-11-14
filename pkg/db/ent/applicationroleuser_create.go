@@ -39,29 +39,29 @@ func (aruc *ApplicationRoleUserCreate) SetUserID(u uuid.UUID) *ApplicationRoleUs
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aruc *ApplicationRoleUserCreate) SetCreateAt(i int64) *ApplicationRoleUserCreate {
-	aruc.mutation.SetCreateAt(i)
+func (aruc *ApplicationRoleUserCreate) SetCreateAt(u uint32) *ApplicationRoleUserCreate {
+	aruc.mutation.SetCreateAt(u)
 	return aruc
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aruc *ApplicationRoleUserCreate) SetNillableCreateAt(i *int64) *ApplicationRoleUserCreate {
-	if i != nil {
-		aruc.SetCreateAt(*i)
+func (aruc *ApplicationRoleUserCreate) SetNillableCreateAt(u *uint32) *ApplicationRoleUserCreate {
+	if u != nil {
+		aruc.SetCreateAt(*u)
 	}
 	return aruc
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aruc *ApplicationRoleUserCreate) SetDeleteAt(i int64) *ApplicationRoleUserCreate {
-	aruc.mutation.SetDeleteAt(i)
+func (aruc *ApplicationRoleUserCreate) SetDeleteAt(u uint32) *ApplicationRoleUserCreate {
+	aruc.mutation.SetDeleteAt(u)
 	return aruc
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aruc *ApplicationRoleUserCreate) SetNillableDeleteAt(i *int64) *ApplicationRoleUserCreate {
-	if i != nil {
-		aruc.SetDeleteAt(*i)
+func (aruc *ApplicationRoleUserCreate) SetNillableDeleteAt(u *uint32) *ApplicationRoleUserCreate {
+	if u != nil {
+		aruc.SetDeleteAt(*u)
 	}
 	return aruc
 }
@@ -232,7 +232,7 @@ func (aruc *ApplicationRoleUserCreate) createSpec() (*ApplicationRoleUser, *sqlg
 	}
 	if value, ok := aruc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldCreateAt,
 		})
@@ -240,7 +240,7 @@ func (aruc *ApplicationRoleUserCreate) createSpec() (*ApplicationRoleUser, *sqlg
 	}
 	if value, ok := aruc.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldDeleteAt,
 		})

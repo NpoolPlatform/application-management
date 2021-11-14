@@ -20,8 +20,8 @@ func dbRowToApplication(row *ent.Application) *npool.ApplicationInfo {
 		ApplicationLogo:  row.ApplicationLogo,
 		HomepageUrl:      row.HomepageURL,
 		RedirectUrl:      row.RedirectURL,
-		CreateAT:         int32(row.CreateAt),
-		UpdateAT:         int32(row.UpdateAt),
+		CreateAT:         row.CreateAt,
+		UpdateAT:         row.UpdateAt,
 		ClientSecret:     row.ClientSecret,
 	}
 }
@@ -122,7 +122,7 @@ func Delete(ctx context.Context, in *npool.DeleteApplicationRequest) (*npool.Del
 	_, err := db.Client().
 		Application.
 		UpdateOneID(in.AppID).
-		SetDeleteAt(time.Now().UnixNano()).
+		SetDeleteAt(uint32(time.Now().Unix())).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to delete application: %v", err)

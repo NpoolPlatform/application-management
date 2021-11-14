@@ -66,44 +66,44 @@ func (aguu *ApplicationGroupUserUpdate) ClearAnnotation() *ApplicationGroupUserU
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aguu *ApplicationGroupUserUpdate) SetCreateAt(i int64) *ApplicationGroupUserUpdate {
+func (aguu *ApplicationGroupUserUpdate) SetCreateAt(u uint32) *ApplicationGroupUserUpdate {
 	aguu.mutation.ResetCreateAt()
-	aguu.mutation.SetCreateAt(i)
+	aguu.mutation.SetCreateAt(u)
 	return aguu
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aguu *ApplicationGroupUserUpdate) SetNillableCreateAt(i *int64) *ApplicationGroupUserUpdate {
-	if i != nil {
-		aguu.SetCreateAt(*i)
+func (aguu *ApplicationGroupUserUpdate) SetNillableCreateAt(u *uint32) *ApplicationGroupUserUpdate {
+	if u != nil {
+		aguu.SetCreateAt(*u)
 	}
 	return aguu
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aguu *ApplicationGroupUserUpdate) AddCreateAt(i int64) *ApplicationGroupUserUpdate {
-	aguu.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aguu *ApplicationGroupUserUpdate) AddCreateAt(u uint32) *ApplicationGroupUserUpdate {
+	aguu.mutation.AddCreateAt(u)
 	return aguu
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aguu *ApplicationGroupUserUpdate) SetDeleteAt(i int64) *ApplicationGroupUserUpdate {
+func (aguu *ApplicationGroupUserUpdate) SetDeleteAt(u uint32) *ApplicationGroupUserUpdate {
 	aguu.mutation.ResetDeleteAt()
-	aguu.mutation.SetDeleteAt(i)
+	aguu.mutation.SetDeleteAt(u)
 	return aguu
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aguu *ApplicationGroupUserUpdate) SetNillableDeleteAt(i *int64) *ApplicationGroupUserUpdate {
-	if i != nil {
-		aguu.SetDeleteAt(*i)
+func (aguu *ApplicationGroupUserUpdate) SetNillableDeleteAt(u *uint32) *ApplicationGroupUserUpdate {
+	if u != nil {
+		aguu.SetDeleteAt(*u)
 	}
 	return aguu
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aguu *ApplicationGroupUserUpdate) AddDeleteAt(i int64) *ApplicationGroupUserUpdate {
-	aguu.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aguu *ApplicationGroupUserUpdate) AddDeleteAt(u uint32) *ApplicationGroupUserUpdate {
+	aguu.mutation.AddDeleteAt(u)
 	return aguu
 }
 
@@ -220,28 +220,28 @@ func (aguu *ApplicationGroupUserUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if value, ok := aguu.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aguu.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aguu.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldDeleteAt,
 		})
 	}
 	if value, ok := aguu.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldDeleteAt,
 		})
@@ -304,44 +304,44 @@ func (aguuo *ApplicationGroupUserUpdateOne) ClearAnnotation() *ApplicationGroupU
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aguuo *ApplicationGroupUserUpdateOne) SetCreateAt(i int64) *ApplicationGroupUserUpdateOne {
+func (aguuo *ApplicationGroupUserUpdateOne) SetCreateAt(u uint32) *ApplicationGroupUserUpdateOne {
 	aguuo.mutation.ResetCreateAt()
-	aguuo.mutation.SetCreateAt(i)
+	aguuo.mutation.SetCreateAt(u)
 	return aguuo
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aguuo *ApplicationGroupUserUpdateOne) SetNillableCreateAt(i *int64) *ApplicationGroupUserUpdateOne {
-	if i != nil {
-		aguuo.SetCreateAt(*i)
+func (aguuo *ApplicationGroupUserUpdateOne) SetNillableCreateAt(u *uint32) *ApplicationGroupUserUpdateOne {
+	if u != nil {
+		aguuo.SetCreateAt(*u)
 	}
 	return aguuo
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aguuo *ApplicationGroupUserUpdateOne) AddCreateAt(i int64) *ApplicationGroupUserUpdateOne {
-	aguuo.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aguuo *ApplicationGroupUserUpdateOne) AddCreateAt(u uint32) *ApplicationGroupUserUpdateOne {
+	aguuo.mutation.AddCreateAt(u)
 	return aguuo
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aguuo *ApplicationGroupUserUpdateOne) SetDeleteAt(i int64) *ApplicationGroupUserUpdateOne {
+func (aguuo *ApplicationGroupUserUpdateOne) SetDeleteAt(u uint32) *ApplicationGroupUserUpdateOne {
 	aguuo.mutation.ResetDeleteAt()
-	aguuo.mutation.SetDeleteAt(i)
+	aguuo.mutation.SetDeleteAt(u)
 	return aguuo
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aguuo *ApplicationGroupUserUpdateOne) SetNillableDeleteAt(i *int64) *ApplicationGroupUserUpdateOne {
-	if i != nil {
-		aguuo.SetDeleteAt(*i)
+func (aguuo *ApplicationGroupUserUpdateOne) SetNillableDeleteAt(u *uint32) *ApplicationGroupUserUpdateOne {
+	if u != nil {
+		aguuo.SetDeleteAt(*u)
 	}
 	return aguuo
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aguuo *ApplicationGroupUserUpdateOne) AddDeleteAt(i int64) *ApplicationGroupUserUpdateOne {
-	aguuo.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aguuo *ApplicationGroupUserUpdateOne) AddDeleteAt(u uint32) *ApplicationGroupUserUpdateOne {
+	aguuo.mutation.AddDeleteAt(u)
 	return aguuo
 }
 
@@ -482,28 +482,28 @@ func (aguuo *ApplicationGroupUserUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := aguuo.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aguuo.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aguuo.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldDeleteAt,
 		})
 	}
 	if value, ok := aguuo.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldDeleteAt,
 		})

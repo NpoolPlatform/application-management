@@ -29,7 +29,7 @@ func TestApplicationAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/create/app")
+		}).Post("http://localhost:50080/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
 
@@ -48,7 +48,7 @@ func TestApplicationAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.UpdateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/update/app")
+		}).Post("http://localhost:50080/v1/update/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
 		err := json.Unmarshal(resp1.Body(), &response1)
@@ -65,7 +65,7 @@ func TestApplicationAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetApplicationRequest{
 			AppID: application.ID,
-		}).Post("http://localhost:32759/v1/get/app")
+		}).Post("http://localhost:50080/v1/get/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 		err := json.Unmarshal(resp2.Body(), &response2)
@@ -80,7 +80,7 @@ func TestApplicationAPI(t *testing.T) { // nolint
 	resp3, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetApplicationsRequest{}).
-		Post("http://localhost:32759/v1/get/apps")
+		Post("http://localhost:50080/v1/get/apps")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp3.StatusCode())
 	}
@@ -90,7 +90,7 @@ func TestApplicationAPI(t *testing.T) { // nolint
 		SetBody(npool.GetApplicationByOwnerRequest{
 			Owner: application.ApplicationOwner,
 		}).
-		Post("http://localhost:32759/v1/get/app/by/owner")
+		Post("http://localhost:50080/v1/get/app/by/owner")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
 	}
@@ -99,7 +99,7 @@ func TestApplicationAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.DeleteApplicationRequest{
 			AppID: application.ID,
-		}).Post("http://localhost:32759/v1/delete/app")
+		}).Post("http://localhost:50080/v1/delete/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp5.StatusCode())
 	}

@@ -29,7 +29,7 @@ func TestApplicationUserAPI(t *testing.T) {
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/create/app")
+		}).Post("http://localhost:50080/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
 
@@ -53,7 +53,7 @@ func TestApplicationUserAPI(t *testing.T) {
 		SetBody(npool.AddUsersToApplicationRequest{
 			AppID:   appUser.AppID,
 			UserIDs: []string{appUser.UserID},
-		}).Post("http://localhost:32759/v1/add/users/to/app")
+		}).Post("http://localhost:50080/v1/add/users/to/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, respUser.StatusCode())
 		err := json.Unmarshal(respUser.Body(), &responseUser)
@@ -71,7 +71,7 @@ func TestApplicationUserAPI(t *testing.T) {
 		SetBody(npool.GetUserFromApplicationRequest{
 			AppID:  appUser.AppID,
 			UserID: appUser.UserID,
-		}).Post("http://localhost:32759/v1/get/user/from/app")
+		}).Post("http://localhost:50080/v1/get/user/from/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
 		err := json.Unmarshal(resp1.Body(), &response1)
@@ -87,7 +87,7 @@ func TestApplicationUserAPI(t *testing.T) {
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetUsersFromApplicationRequest{
 			AppID: appUser.AppID,
-		}).Post("http://localhost:32759/v1/get/users/from/app")
+		}).Post("http://localhost:50080/v1/get/users/from/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 		err := json.Unmarshal(resp2.Body(), &response2)
@@ -99,7 +99,7 @@ func TestApplicationUserAPI(t *testing.T) {
 		SetBody(npool.RemoveUsersFromApplicationRequest{
 			AppID:   appUser.AppID,
 			UserIDs: []string{appUser.UserID},
-		}).Post("http://localhost:32759/v1/remove/users/from/app")
+		}).Post("http://localhost:50080/v1/remove/users/from/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp3.StatusCode())
 	}

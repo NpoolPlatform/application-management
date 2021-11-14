@@ -53,29 +53,29 @@ func (aguc *ApplicationGroupUserCreate) SetNillableAnnotation(s *string) *Applic
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aguc *ApplicationGroupUserCreate) SetCreateAt(i int64) *ApplicationGroupUserCreate {
-	aguc.mutation.SetCreateAt(i)
+func (aguc *ApplicationGroupUserCreate) SetCreateAt(u uint32) *ApplicationGroupUserCreate {
+	aguc.mutation.SetCreateAt(u)
 	return aguc
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aguc *ApplicationGroupUserCreate) SetNillableCreateAt(i *int64) *ApplicationGroupUserCreate {
-	if i != nil {
-		aguc.SetCreateAt(*i)
+func (aguc *ApplicationGroupUserCreate) SetNillableCreateAt(u *uint32) *ApplicationGroupUserCreate {
+	if u != nil {
+		aguc.SetCreateAt(*u)
 	}
 	return aguc
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aguc *ApplicationGroupUserCreate) SetDeleteAt(i int64) *ApplicationGroupUserCreate {
-	aguc.mutation.SetDeleteAt(i)
+func (aguc *ApplicationGroupUserCreate) SetDeleteAt(u uint32) *ApplicationGroupUserCreate {
+	aguc.mutation.SetDeleteAt(u)
 	return aguc
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aguc *ApplicationGroupUserCreate) SetNillableDeleteAt(i *int64) *ApplicationGroupUserCreate {
-	if i != nil {
-		aguc.SetDeleteAt(*i)
+func (aguc *ApplicationGroupUserCreate) SetNillableDeleteAt(u *uint32) *ApplicationGroupUserCreate {
+	if u != nil {
+		aguc.SetDeleteAt(*u)
 	}
 	return aguc
 }
@@ -254,7 +254,7 @@ func (aguc *ApplicationGroupUserCreate) createSpec() (*ApplicationGroupUser, *sq
 	}
 	if value, ok := aguc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldCreateAt,
 		})
@@ -262,7 +262,7 @@ func (aguc *ApplicationGroupUserCreate) createSpec() (*ApplicationGroupUser, *sq
 	}
 	if value, ok := aguc.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroupuser.FieldDeleteAt,
 		})

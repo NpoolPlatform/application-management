@@ -20,7 +20,7 @@ func dbRowToApplication(row *ent.ApplicationRoleUser) *npool.RoleUserInfo {
 		AppID:    row.AppID,
 		RoleID:   row.RoleID.String(),
 		UserID:   row.UserID.String(),
-		CreateAT: int32(row.CreateAt),
+		CreateAT: row.CreateAt,
 	}
 }
 
@@ -181,7 +181,7 @@ func genDelete(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *np
 					applicationroleuser.RoleID(roleID),
 				),
 			).
-			SetDeleteAt(time.Now().Unix()).
+			SetDeleteAt(uint32(time.Now().Unix())).
 			Save(ctx)
 		if err != nil {
 			return nil, xerrors.Errorf("fail to unset user role: %v", err)

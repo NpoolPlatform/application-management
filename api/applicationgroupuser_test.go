@@ -29,7 +29,7 @@ func TestApplicationGroupUserAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/create/app")
+		}).Post("http://localhost:50080/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
 
@@ -53,7 +53,7 @@ func TestApplicationGroupUserAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateGroupRequest{
 			Info: &groupInfo,
-		}).Post("http://localhost:32759/v1/create/group")
+		}).Post("http://localhost:50080/v1/create/group")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
 
@@ -78,7 +78,7 @@ func TestApplicationGroupUserAPI(t *testing.T) { // nolint
 		SetBody(npool.AddUsersToApplicationRequest{
 			AppID:   appUser.AppID,
 			UserIDs: []string{appUser.UserID},
-		}).Post("http://localhost:32759/v1/add/users/to/app")
+		}).Post("http://localhost:50080/v1/add/users/to/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 		err := json.Unmarshal(resp2.Body(), &response2)
@@ -103,7 +103,7 @@ func TestApplicationGroupUserAPI(t *testing.T) { // nolint
 			UserIDs: []string{groupUserInfo.UserID},
 			AppID:   groupInfo.AppID,
 			GroupID: groupUserInfo.GroupID,
-		}).Post("http://localhost:32759/v1/add/group/users")
+		}).Post("http://localhost:50080/v1/add/group/users")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp3.StatusCode())
 		err := json.Unmarshal(resp3.Body(), &response3)
@@ -121,7 +121,7 @@ func TestApplicationGroupUserAPI(t *testing.T) { // nolint
 		SetBody(npool.GetGroupUsersRequest{
 			AppID:   groupInfo.AppID,
 			GroupID: groupUserInfo.GroupID,
-		}).Post("http://localhost:32759/v1/get/group/users")
+		}).Post("http://localhost:50080/v1/get/group/users")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
 		err := json.Unmarshal(resp4.Body(), &response4)
@@ -138,7 +138,7 @@ func TestApplicationGroupUserAPI(t *testing.T) { // nolint
 			AppID:   groupUserInfo.AppID,
 			GroupID: groupUserInfo.GroupID,
 			UserIDs: []string{groupUserInfo.UserID},
-		}).Post("http://localhost:32759/v1/remove/group/users")
+		}).Post("http://localhost:50080/v1/remove/group/users")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp5.StatusCode())
 	}

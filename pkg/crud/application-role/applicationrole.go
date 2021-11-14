@@ -20,8 +20,8 @@ func dbRowToApplicationRole(row *ent.ApplicationRole) *npool.RoleInfo {
 		RoleName:   row.RoleName,
 		Creator:    row.Creator.String(),
 		Annotation: row.Annotation,
-		CreateAT:   int32(row.CreateAt),
-		UpdateAT:   int32(row.UpdateAt),
+		CreateAT:   row.CreateAt,
+		UpdateAT:   row.UpdateAt,
 	}
 }
 
@@ -171,7 +171,7 @@ func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRole
 	_, err = db.Client().
 		ApplicationRole.
 		UpdateOneID(roleID).
-		SetDeleteAt(time.Now().Unix()).
+		SetDeleteAt(uint32(time.Now().Unix())).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to delete role: %v", err)

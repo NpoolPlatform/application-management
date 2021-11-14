@@ -67,43 +67,43 @@ func (arc *ApplicationResourceCreate) SetCreator(u uuid.UUID) *ApplicationResour
 }
 
 // SetCreateAt sets the "create_at" field.
-func (arc *ApplicationResourceCreate) SetCreateAt(i int64) *ApplicationResourceCreate {
-	arc.mutation.SetCreateAt(i)
+func (arc *ApplicationResourceCreate) SetCreateAt(u uint32) *ApplicationResourceCreate {
+	arc.mutation.SetCreateAt(u)
 	return arc
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (arc *ApplicationResourceCreate) SetNillableCreateAt(i *int64) *ApplicationResourceCreate {
-	if i != nil {
-		arc.SetCreateAt(*i)
+func (arc *ApplicationResourceCreate) SetNillableCreateAt(u *uint32) *ApplicationResourceCreate {
+	if u != nil {
+		arc.SetCreateAt(*u)
 	}
 	return arc
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (arc *ApplicationResourceCreate) SetUpdateAt(i int64) *ApplicationResourceCreate {
-	arc.mutation.SetUpdateAt(i)
+func (arc *ApplicationResourceCreate) SetUpdateAt(u uint32) *ApplicationResourceCreate {
+	arc.mutation.SetUpdateAt(u)
 	return arc
 }
 
 // SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
-func (arc *ApplicationResourceCreate) SetNillableUpdateAt(i *int64) *ApplicationResourceCreate {
-	if i != nil {
-		arc.SetUpdateAt(*i)
+func (arc *ApplicationResourceCreate) SetNillableUpdateAt(u *uint32) *ApplicationResourceCreate {
+	if u != nil {
+		arc.SetUpdateAt(*u)
 	}
 	return arc
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (arc *ApplicationResourceCreate) SetDeleteAt(i int64) *ApplicationResourceCreate {
-	arc.mutation.SetDeleteAt(i)
+func (arc *ApplicationResourceCreate) SetDeleteAt(u uint32) *ApplicationResourceCreate {
+	arc.mutation.SetDeleteAt(u)
 	return arc
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (arc *ApplicationResourceCreate) SetNillableDeleteAt(i *int64) *ApplicationResourceCreate {
-	if i != nil {
-		arc.SetDeleteAt(*i)
+func (arc *ApplicationResourceCreate) SetNillableDeleteAt(u *uint32) *ApplicationResourceCreate {
+	if u != nil {
+		arc.SetDeleteAt(*u)
 	}
 	return arc
 }
@@ -304,7 +304,7 @@ func (arc *ApplicationResourceCreate) createSpec() (*ApplicationResource, *sqlgr
 	}
 	if value, ok := arc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldCreateAt,
 		})
@@ -312,7 +312,7 @@ func (arc *ApplicationResourceCreate) createSpec() (*ApplicationResource, *sqlgr
 	}
 	if value, ok := arc.mutation.UpdateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldUpdateAt,
 		})
@@ -320,7 +320,7 @@ func (arc *ApplicationResourceCreate) createSpec() (*ApplicationResource, *sqlgr
 	}
 	if value, ok := arc.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldDeleteAt,
 		})

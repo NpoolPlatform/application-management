@@ -47,29 +47,29 @@ func (auc *ApplicationUserCreate) SetNillableOriginal(b *bool) *ApplicationUserC
 }
 
 // SetCreateAt sets the "create_at" field.
-func (auc *ApplicationUserCreate) SetCreateAt(i int64) *ApplicationUserCreate {
-	auc.mutation.SetCreateAt(i)
+func (auc *ApplicationUserCreate) SetCreateAt(u uint32) *ApplicationUserCreate {
+	auc.mutation.SetCreateAt(u)
 	return auc
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (auc *ApplicationUserCreate) SetNillableCreateAt(i *int64) *ApplicationUserCreate {
-	if i != nil {
-		auc.SetCreateAt(*i)
+func (auc *ApplicationUserCreate) SetNillableCreateAt(u *uint32) *ApplicationUserCreate {
+	if u != nil {
+		auc.SetCreateAt(*u)
 	}
 	return auc
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (auc *ApplicationUserCreate) SetDeleteAt(i int64) *ApplicationUserCreate {
-	auc.mutation.SetDeleteAt(i)
+func (auc *ApplicationUserCreate) SetDeleteAt(u uint32) *ApplicationUserCreate {
+	auc.mutation.SetDeleteAt(u)
 	return auc
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (auc *ApplicationUserCreate) SetNillableDeleteAt(i *int64) *ApplicationUserCreate {
-	if i != nil {
-		auc.SetDeleteAt(*i)
+func (auc *ApplicationUserCreate) SetNillableDeleteAt(u *uint32) *ApplicationUserCreate {
+	if u != nil {
+		auc.SetDeleteAt(*u)
 	}
 	return auc
 }
@@ -244,7 +244,7 @@ func (auc *ApplicationUserCreate) createSpec() (*ApplicationUser, *sqlgraph.Crea
 	}
 	if value, ok := auc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationuser.FieldCreateAt,
 		})
@@ -252,7 +252,7 @@ func (auc *ApplicationUserCreate) createSpec() (*ApplicationUser, *sqlgraph.Crea
 	}
 	if value, ok := auc.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationuser.FieldDeleteAt,
 		})

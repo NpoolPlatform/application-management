@@ -30,7 +30,7 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/create/app")
+		}).Post("http://localhost:50080/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
 
@@ -54,7 +54,7 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateResourceRequest{
 			Info: &resourceInfo,
-		}).Post("http://localhost:32759/v1/create/resource")
+		}).Post("http://localhost:50080/v1/create/resource")
 	if assert.Nil(t, err) {
 		fmt.Println(err, resp1)
 		assert.Equal(t, 200, resp1.StatusCode())
@@ -74,7 +74,7 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		SetBody(npool.GetResourceRequest{
 			ResourceID: resourceInfo.ID,
 			AppID:      resourceInfo.AppID,
-		}).Post("http://localhost:32759/v1/get/resource")
+		}).Post("http://localhost:50080/v1/get/resource")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 
@@ -91,7 +91,7 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetResourcesRequest{
 			AppID: resourceInfo.AppID,
-		}).Post("http://localhost:32759/v1/get/resources")
+		}).Post("http://localhost:50080/v1/get/resources")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp3.StatusCode())
 
@@ -105,7 +105,7 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.UpdateResourceRequest{
 			Info: &resourceInfo,
-		}).Post("http://localhost:32759/v1/update/resource")
+		}).Post("http://localhost:50080/v1/update/resource")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
 
@@ -123,7 +123,7 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		SetBody(npool.GetResourceByCreatorRequest{
 			AppID:   resourceInfo.AppID,
 			Creator: resourceInfo.Creator,
-		}).Post("http://localhost:32759/v1/get/resource/by/creator")
+		}).Post("http://localhost:50080/v1/get/resource/by/creator")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp5.StatusCode())
 	}
@@ -133,7 +133,7 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		SetBody(npool.DeleteResourceRequest{
 			AppID:      resourceInfo.AppID,
 			ResourceID: resourceInfo.ID,
-		}).Post("http://localhost:32759/v1/delete/resource")
+		}).Post("http://localhost:50080/v1/delete/resource")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp6.StatusCode())
 	}

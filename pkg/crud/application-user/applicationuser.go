@@ -20,7 +20,7 @@ func dbRowToApplicationUser(row *ent.ApplicationUser) *npool.ApplicationUserInfo
 		AppID:    row.AppID,
 		UserID:   row.UserID.String(),
 		Original: row.Original,
-		CreateAT: int32(row.CreateAt),
+		CreateAT: row.CreateAt,
 	}
 }
 
@@ -145,7 +145,7 @@ func genDelete(ctx context.Context, client *ent.Client, in *npool.RemoveUsersFro
 					applicationuser.DeleteAt(0),
 				),
 			).
-			SetDeleteAt(time.Now().Unix()).
+			SetDeleteAt(uint32(time.Now().Unix())).
 			Save(ctx)
 		if err != nil {
 			return nil, xerrors.Errorf("fail to remove user from applciation: %v", err)

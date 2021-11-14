@@ -86,57 +86,57 @@ func (agu *ApplicationGroupUpdate) ClearAnnotation() *ApplicationGroupUpdate {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (agu *ApplicationGroupUpdate) SetCreateAt(i int64) *ApplicationGroupUpdate {
+func (agu *ApplicationGroupUpdate) SetCreateAt(u uint32) *ApplicationGroupUpdate {
 	agu.mutation.ResetCreateAt()
-	agu.mutation.SetCreateAt(i)
+	agu.mutation.SetCreateAt(u)
 	return agu
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (agu *ApplicationGroupUpdate) SetNillableCreateAt(i *int64) *ApplicationGroupUpdate {
-	if i != nil {
-		agu.SetCreateAt(*i)
+func (agu *ApplicationGroupUpdate) SetNillableCreateAt(u *uint32) *ApplicationGroupUpdate {
+	if u != nil {
+		agu.SetCreateAt(*u)
 	}
 	return agu
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (agu *ApplicationGroupUpdate) AddCreateAt(i int64) *ApplicationGroupUpdate {
-	agu.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (agu *ApplicationGroupUpdate) AddCreateAt(u uint32) *ApplicationGroupUpdate {
+	agu.mutation.AddCreateAt(u)
 	return agu
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (agu *ApplicationGroupUpdate) SetUpdateAt(i int64) *ApplicationGroupUpdate {
+func (agu *ApplicationGroupUpdate) SetUpdateAt(u uint32) *ApplicationGroupUpdate {
 	agu.mutation.ResetUpdateAt()
-	agu.mutation.SetUpdateAt(i)
+	agu.mutation.SetUpdateAt(u)
 	return agu
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (agu *ApplicationGroupUpdate) AddUpdateAt(i int64) *ApplicationGroupUpdate {
-	agu.mutation.AddUpdateAt(i)
+// AddUpdateAt adds u to the "update_at" field.
+func (agu *ApplicationGroupUpdate) AddUpdateAt(u uint32) *ApplicationGroupUpdate {
+	agu.mutation.AddUpdateAt(u)
 	return agu
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (agu *ApplicationGroupUpdate) SetDeleteAt(i int64) *ApplicationGroupUpdate {
+func (agu *ApplicationGroupUpdate) SetDeleteAt(u uint32) *ApplicationGroupUpdate {
 	agu.mutation.ResetDeleteAt()
-	agu.mutation.SetDeleteAt(i)
+	agu.mutation.SetDeleteAt(u)
 	return agu
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (agu *ApplicationGroupUpdate) SetNillableDeleteAt(i *int64) *ApplicationGroupUpdate {
-	if i != nil {
-		agu.SetDeleteAt(*i)
+func (agu *ApplicationGroupUpdate) SetNillableDeleteAt(u *uint32) *ApplicationGroupUpdate {
+	if u != nil {
+		agu.SetDeleteAt(*u)
 	}
 	return agu
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (agu *ApplicationGroupUpdate) AddDeleteAt(i int64) *ApplicationGroupUpdate {
-	agu.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (agu *ApplicationGroupUpdate) AddDeleteAt(u uint32) *ApplicationGroupUpdate {
+	agu.mutation.AddDeleteAt(u)
 	return agu
 }
 
@@ -275,42 +275,42 @@ func (agu *ApplicationGroupUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if value, ok := agu.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldCreateAt,
 		})
 	}
 	if value, ok := agu.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldCreateAt,
 		})
 	}
 	if value, ok := agu.mutation.UpdateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldUpdateAt,
 		})
 	}
 	if value, ok := agu.mutation.AddedUpdateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldUpdateAt,
 		})
 	}
 	if value, ok := agu.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldDeleteAt,
 		})
 	}
 	if value, ok := agu.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldDeleteAt,
 		})
@@ -393,57 +393,57 @@ func (aguo *ApplicationGroupUpdateOne) ClearAnnotation() *ApplicationGroupUpdate
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aguo *ApplicationGroupUpdateOne) SetCreateAt(i int64) *ApplicationGroupUpdateOne {
+func (aguo *ApplicationGroupUpdateOne) SetCreateAt(u uint32) *ApplicationGroupUpdateOne {
 	aguo.mutation.ResetCreateAt()
-	aguo.mutation.SetCreateAt(i)
+	aguo.mutation.SetCreateAt(u)
 	return aguo
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aguo *ApplicationGroupUpdateOne) SetNillableCreateAt(i *int64) *ApplicationGroupUpdateOne {
-	if i != nil {
-		aguo.SetCreateAt(*i)
+func (aguo *ApplicationGroupUpdateOne) SetNillableCreateAt(u *uint32) *ApplicationGroupUpdateOne {
+	if u != nil {
+		aguo.SetCreateAt(*u)
 	}
 	return aguo
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aguo *ApplicationGroupUpdateOne) AddCreateAt(i int64) *ApplicationGroupUpdateOne {
-	aguo.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aguo *ApplicationGroupUpdateOne) AddCreateAt(u uint32) *ApplicationGroupUpdateOne {
+	aguo.mutation.AddCreateAt(u)
 	return aguo
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (aguo *ApplicationGroupUpdateOne) SetUpdateAt(i int64) *ApplicationGroupUpdateOne {
+func (aguo *ApplicationGroupUpdateOne) SetUpdateAt(u uint32) *ApplicationGroupUpdateOne {
 	aguo.mutation.ResetUpdateAt()
-	aguo.mutation.SetUpdateAt(i)
+	aguo.mutation.SetUpdateAt(u)
 	return aguo
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (aguo *ApplicationGroupUpdateOne) AddUpdateAt(i int64) *ApplicationGroupUpdateOne {
-	aguo.mutation.AddUpdateAt(i)
+// AddUpdateAt adds u to the "update_at" field.
+func (aguo *ApplicationGroupUpdateOne) AddUpdateAt(u uint32) *ApplicationGroupUpdateOne {
+	aguo.mutation.AddUpdateAt(u)
 	return aguo
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aguo *ApplicationGroupUpdateOne) SetDeleteAt(i int64) *ApplicationGroupUpdateOne {
+func (aguo *ApplicationGroupUpdateOne) SetDeleteAt(u uint32) *ApplicationGroupUpdateOne {
 	aguo.mutation.ResetDeleteAt()
-	aguo.mutation.SetDeleteAt(i)
+	aguo.mutation.SetDeleteAt(u)
 	return aguo
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aguo *ApplicationGroupUpdateOne) SetNillableDeleteAt(i *int64) *ApplicationGroupUpdateOne {
-	if i != nil {
-		aguo.SetDeleteAt(*i)
+func (aguo *ApplicationGroupUpdateOne) SetNillableDeleteAt(u *uint32) *ApplicationGroupUpdateOne {
+	if u != nil {
+		aguo.SetDeleteAt(*u)
 	}
 	return aguo
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aguo *ApplicationGroupUpdateOne) AddDeleteAt(i int64) *ApplicationGroupUpdateOne {
-	aguo.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aguo *ApplicationGroupUpdateOne) AddDeleteAt(u uint32) *ApplicationGroupUpdateOne {
+	aguo.mutation.AddDeleteAt(u)
 	return aguo
 }
 
@@ -606,42 +606,42 @@ func (aguo *ApplicationGroupUpdateOne) sqlSave(ctx context.Context) (_node *Appl
 	}
 	if value, ok := aguo.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldCreateAt,
 		})
 	}
 	if value, ok := aguo.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldCreateAt,
 		})
 	}
 	if value, ok := aguo.mutation.UpdateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldUpdateAt,
 		})
 	}
 	if value, ok := aguo.mutation.AddedUpdateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldUpdateAt,
 		})
 	}
 	if value, ok := aguo.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldDeleteAt,
 		})
 	}
 	if value, ok := aguo.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationgroup.FieldDeleteAt,
 		})

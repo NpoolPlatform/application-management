@@ -30,7 +30,7 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/create/app")
+		}).Post("http://localhost:50080/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
 
@@ -54,7 +54,7 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateRoleRequest{
 			Info: &roleInfo,
-		}).Post("http://localhost:32759/v1/create/role")
+		}).Post("http://localhost:50080/v1/create/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
 		err := json.Unmarshal(resp1.Body(), &response1)
@@ -78,7 +78,7 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 		SetBody(npool.AddUsersToApplicationRequest{
 			AppID:   appUserInfo.AppID,
 			UserIDs: []string{appUserInfo.UserID},
-		}).Post("http://localhost:32759/v1/add/users/to/app")
+		}).Post("http://localhost:50080/v1/add/users/to/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, respUser.StatusCode())
 		err := json.Unmarshal(respUser.Body(), &responseUser)
@@ -96,7 +96,7 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 			UserIDs: []string{appUserInfo.UserID},
 			AppID:   appUserInfo.AppID,
 			RoleID:  roleInfo.ID,
-		}).Post("http://localhost:32759/v1/set/user/role")
+		}).Post("http://localhost:50080/v1/set/user/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 		err := json.Unmarshal(resp2.Body(), &response2)
@@ -114,7 +114,7 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 		SetBody(npool.GetUserRoleRequest{
 			UserID: appUserInfo.UserID,
 			AppID:  appUserInfo.AppID,
-		}).Post("http://localhost:32759/v1/get/user/role")
+		}).Post("http://localhost:50080/v1/get/user/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp3.StatusCode())
 		err := json.Unmarshal(resp3.Body(), &response3)
@@ -130,7 +130,7 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 		SetBody(npool.GetRoleUsersRequest{
 			AppID:  appUserInfo.AppID,
 			RoleID: roleInfo.ID,
-		}).Post("http://localhost:32759/v1/get/role/users")
+		}).Post("http://localhost:50080/v1/get/role/users")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
 		err := json.Unmarshal(resp4.Body(), &response4)
@@ -147,7 +147,7 @@ func TestApplicationRoleUserAPI(t *testing.T) { // nolint
 			UserIDs: []string{appUserInfo.UserID},
 			AppID:   appUserInfo.AppID,
 			RoleID:  roleInfo.ID,
-		}).Post("http://localhost:32759/v1/unset/user/role")
+		}).Post("http://localhost:50080/v1/unset/user/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
 		fmt.Printf("unset user role resp5 is %v", resp5)

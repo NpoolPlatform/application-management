@@ -50,12 +50,12 @@ type ApplicationMutation struct {
 	redirect_url      *string
 	client_secret     *string
 	application_logo  *string
-	create_at         *int64
-	addcreate_at      *int64
-	update_at         *int64
-	addupdate_at      *int64
-	delete_at         *int64
-	adddelete_at      *int64
+	create_at         *uint32
+	addcreate_at      *uint32
+	update_at         *uint32
+	addupdate_at      *uint32
+	delete_at         *uint32
+	adddelete_at      *uint32
 	clearedFields     map[string]struct{}
 	done              bool
 	oldValue          func(context.Context) (*Application, error)
@@ -403,13 +403,13 @@ func (m *ApplicationMutation) ResetApplicationLogo() {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (m *ApplicationMutation) SetCreateAt(i int64) {
-	m.create_at = &i
+func (m *ApplicationMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
 	m.addcreate_at = nil
 }
 
 // CreateAt returns the value of the "create_at" field in the mutation.
-func (m *ApplicationMutation) CreateAt() (r int64, exists bool) {
+func (m *ApplicationMutation) CreateAt() (r uint32, exists bool) {
 	v := m.create_at
 	if v == nil {
 		return
@@ -420,7 +420,7 @@ func (m *ApplicationMutation) CreateAt() (r int64, exists bool) {
 // OldCreateAt returns the old "create_at" field's value of the Application entity.
 // If the Application object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
 	}
@@ -434,17 +434,17 @@ func (m *ApplicationMutation) OldCreateAt(ctx context.Context) (v int64, err err
 	return oldValue.CreateAt, nil
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (m *ApplicationMutation) AddCreateAt(i int64) {
+// AddCreateAt adds u to the "create_at" field.
+func (m *ApplicationMutation) AddCreateAt(u uint32) {
 	if m.addcreate_at != nil {
-		*m.addcreate_at += i
+		*m.addcreate_at += u
 	} else {
-		m.addcreate_at = &i
+		m.addcreate_at = &u
 	}
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *ApplicationMutation) AddedCreateAt() (r int64, exists bool) {
+func (m *ApplicationMutation) AddedCreateAt() (r uint32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -459,13 +459,13 @@ func (m *ApplicationMutation) ResetCreateAt() {
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (m *ApplicationMutation) SetUpdateAt(i int64) {
-	m.update_at = &i
+func (m *ApplicationMutation) SetUpdateAt(u uint32) {
+	m.update_at = &u
 	m.addupdate_at = nil
 }
 
 // UpdateAt returns the value of the "update_at" field in the mutation.
-func (m *ApplicationMutation) UpdateAt() (r int64, exists bool) {
+func (m *ApplicationMutation) UpdateAt() (r uint32, exists bool) {
 	v := m.update_at
 	if v == nil {
 		return
@@ -476,7 +476,7 @@ func (m *ApplicationMutation) UpdateAt() (r int64, exists bool) {
 // OldUpdateAt returns the old "update_at" field's value of the Application entity.
 // If the Application object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
 	}
@@ -490,17 +490,17 @@ func (m *ApplicationMutation) OldUpdateAt(ctx context.Context) (v int64, err err
 	return oldValue.UpdateAt, nil
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (m *ApplicationMutation) AddUpdateAt(i int64) {
+// AddUpdateAt adds u to the "update_at" field.
+func (m *ApplicationMutation) AddUpdateAt(u uint32) {
 	if m.addupdate_at != nil {
-		*m.addupdate_at += i
+		*m.addupdate_at += u
 	} else {
-		m.addupdate_at = &i
+		m.addupdate_at = &u
 	}
 }
 
 // AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
-func (m *ApplicationMutation) AddedUpdateAt() (r int64, exists bool) {
+func (m *ApplicationMutation) AddedUpdateAt() (r uint32, exists bool) {
 	v := m.addupdate_at
 	if v == nil {
 		return
@@ -515,13 +515,13 @@ func (m *ApplicationMutation) ResetUpdateAt() {
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (m *ApplicationMutation) SetDeleteAt(i int64) {
-	m.delete_at = &i
+func (m *ApplicationMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
 	m.adddelete_at = nil
 }
 
 // DeleteAt returns the value of the "delete_at" field in the mutation.
-func (m *ApplicationMutation) DeleteAt() (r int64, exists bool) {
+func (m *ApplicationMutation) DeleteAt() (r uint32, exists bool) {
 	v := m.delete_at
 	if v == nil {
 		return
@@ -532,7 +532,7 @@ func (m *ApplicationMutation) DeleteAt() (r int64, exists bool) {
 // OldDeleteAt returns the old "delete_at" field's value of the Application entity.
 // If the Application object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
 	}
@@ -546,17 +546,17 @@ func (m *ApplicationMutation) OldDeleteAt(ctx context.Context) (v int64, err err
 	return oldValue.DeleteAt, nil
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (m *ApplicationMutation) AddDeleteAt(i int64) {
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *ApplicationMutation) AddDeleteAt(u uint32) {
 	if m.adddelete_at != nil {
-		*m.adddelete_at += i
+		*m.adddelete_at += u
 	} else {
-		m.adddelete_at = &i
+		m.adddelete_at = &u
 	}
 }
 
 // AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
-func (m *ApplicationMutation) AddedDeleteAt() (r int64, exists bool) {
+func (m *ApplicationMutation) AddedDeleteAt() (r uint32, exists bool) {
 	v := m.adddelete_at
 	if v == nil {
 		return
@@ -722,21 +722,21 @@ func (m *ApplicationMutation) SetField(name string, value ent.Value) error {
 		m.SetApplicationLogo(v)
 		return nil
 	case application.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateAt(v)
 		return nil
 	case application.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdateAt(v)
 		return nil
 	case application.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -783,21 +783,21 @@ func (m *ApplicationMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ApplicationMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case application.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case application.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdateAt(v)
 		return nil
 	case application.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -941,12 +941,12 @@ type ApplicationGroupMutation struct {
 	group_logo    *string
 	group_owner   *uuid.UUID
 	annotation    *string
-	create_at     *int64
-	addcreate_at  *int64
-	update_at     *int64
-	addupdate_at  *int64
-	delete_at     *int64
-	adddelete_at  *int64
+	create_at     *uint32
+	addcreate_at  *uint32
+	update_at     *uint32
+	addupdate_at  *uint32
+	delete_at     *uint32
+	adddelete_at  *uint32
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ApplicationGroup, error)
@@ -1245,13 +1245,13 @@ func (m *ApplicationGroupMutation) ResetAnnotation() {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (m *ApplicationGroupMutation) SetCreateAt(i int64) {
-	m.create_at = &i
+func (m *ApplicationGroupMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
 	m.addcreate_at = nil
 }
 
 // CreateAt returns the value of the "create_at" field in the mutation.
-func (m *ApplicationGroupMutation) CreateAt() (r int64, exists bool) {
+func (m *ApplicationGroupMutation) CreateAt() (r uint32, exists bool) {
 	v := m.create_at
 	if v == nil {
 		return
@@ -1262,7 +1262,7 @@ func (m *ApplicationGroupMutation) CreateAt() (r int64, exists bool) {
 // OldCreateAt returns the old "create_at" field's value of the ApplicationGroup entity.
 // If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationGroupMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationGroupMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
 	}
@@ -1276,17 +1276,17 @@ func (m *ApplicationGroupMutation) OldCreateAt(ctx context.Context) (v int64, er
 	return oldValue.CreateAt, nil
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (m *ApplicationGroupMutation) AddCreateAt(i int64) {
+// AddCreateAt adds u to the "create_at" field.
+func (m *ApplicationGroupMutation) AddCreateAt(u uint32) {
 	if m.addcreate_at != nil {
-		*m.addcreate_at += i
+		*m.addcreate_at += u
 	} else {
-		m.addcreate_at = &i
+		m.addcreate_at = &u
 	}
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *ApplicationGroupMutation) AddedCreateAt() (r int64, exists bool) {
+func (m *ApplicationGroupMutation) AddedCreateAt() (r uint32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -1301,13 +1301,13 @@ func (m *ApplicationGroupMutation) ResetCreateAt() {
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (m *ApplicationGroupMutation) SetUpdateAt(i int64) {
-	m.update_at = &i
+func (m *ApplicationGroupMutation) SetUpdateAt(u uint32) {
+	m.update_at = &u
 	m.addupdate_at = nil
 }
 
 // UpdateAt returns the value of the "update_at" field in the mutation.
-func (m *ApplicationGroupMutation) UpdateAt() (r int64, exists bool) {
+func (m *ApplicationGroupMutation) UpdateAt() (r uint32, exists bool) {
 	v := m.update_at
 	if v == nil {
 		return
@@ -1318,7 +1318,7 @@ func (m *ApplicationGroupMutation) UpdateAt() (r int64, exists bool) {
 // OldUpdateAt returns the old "update_at" field's value of the ApplicationGroup entity.
 // If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationGroupMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationGroupMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
 	}
@@ -1332,17 +1332,17 @@ func (m *ApplicationGroupMutation) OldUpdateAt(ctx context.Context) (v int64, er
 	return oldValue.UpdateAt, nil
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (m *ApplicationGroupMutation) AddUpdateAt(i int64) {
+// AddUpdateAt adds u to the "update_at" field.
+func (m *ApplicationGroupMutation) AddUpdateAt(u uint32) {
 	if m.addupdate_at != nil {
-		*m.addupdate_at += i
+		*m.addupdate_at += u
 	} else {
-		m.addupdate_at = &i
+		m.addupdate_at = &u
 	}
 }
 
 // AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
-func (m *ApplicationGroupMutation) AddedUpdateAt() (r int64, exists bool) {
+func (m *ApplicationGroupMutation) AddedUpdateAt() (r uint32, exists bool) {
 	v := m.addupdate_at
 	if v == nil {
 		return
@@ -1357,13 +1357,13 @@ func (m *ApplicationGroupMutation) ResetUpdateAt() {
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (m *ApplicationGroupMutation) SetDeleteAt(i int64) {
-	m.delete_at = &i
+func (m *ApplicationGroupMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
 	m.adddelete_at = nil
 }
 
 // DeleteAt returns the value of the "delete_at" field in the mutation.
-func (m *ApplicationGroupMutation) DeleteAt() (r int64, exists bool) {
+func (m *ApplicationGroupMutation) DeleteAt() (r uint32, exists bool) {
 	v := m.delete_at
 	if v == nil {
 		return
@@ -1374,7 +1374,7 @@ func (m *ApplicationGroupMutation) DeleteAt() (r int64, exists bool) {
 // OldDeleteAt returns the old "delete_at" field's value of the ApplicationGroup entity.
 // If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationGroupMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationGroupMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
 	}
@@ -1388,17 +1388,17 @@ func (m *ApplicationGroupMutation) OldDeleteAt(ctx context.Context) (v int64, er
 	return oldValue.DeleteAt, nil
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (m *ApplicationGroupMutation) AddDeleteAt(i int64) {
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *ApplicationGroupMutation) AddDeleteAt(u uint32) {
 	if m.adddelete_at != nil {
-		*m.adddelete_at += i
+		*m.adddelete_at += u
 	} else {
-		m.adddelete_at = &i
+		m.adddelete_at = &u
 	}
 }
 
 // AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
-func (m *ApplicationGroupMutation) AddedDeleteAt() (r int64, exists bool) {
+func (m *ApplicationGroupMutation) AddedDeleteAt() (r uint32, exists bool) {
 	v := m.adddelete_at
 	if v == nil {
 		return
@@ -1550,21 +1550,21 @@ func (m *ApplicationGroupMutation) SetField(name string, value ent.Value) error 
 		m.SetAnnotation(v)
 		return nil
 	case applicationgroup.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateAt(v)
 		return nil
 	case applicationgroup.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdateAt(v)
 		return nil
 	case applicationgroup.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1611,21 +1611,21 @@ func (m *ApplicationGroupMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ApplicationGroupMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case applicationgroup.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case applicationgroup.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdateAt(v)
 		return nil
 	case applicationgroup.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1759,10 +1759,10 @@ type ApplicationGroupUserMutation struct {
 	app_id        *string
 	user_id       *uuid.UUID
 	annotation    *string
-	create_at     *int64
-	addcreate_at  *int64
-	delete_at     *int64
-	adddelete_at  *int64
+	create_at     *uint32
+	addcreate_at  *uint32
+	delete_at     *uint32
+	adddelete_at  *uint32
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ApplicationGroupUser, error)
@@ -2012,13 +2012,13 @@ func (m *ApplicationGroupUserMutation) ResetAnnotation() {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (m *ApplicationGroupUserMutation) SetCreateAt(i int64) {
-	m.create_at = &i
+func (m *ApplicationGroupUserMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
 	m.addcreate_at = nil
 }
 
 // CreateAt returns the value of the "create_at" field in the mutation.
-func (m *ApplicationGroupUserMutation) CreateAt() (r int64, exists bool) {
+func (m *ApplicationGroupUserMutation) CreateAt() (r uint32, exists bool) {
 	v := m.create_at
 	if v == nil {
 		return
@@ -2029,7 +2029,7 @@ func (m *ApplicationGroupUserMutation) CreateAt() (r int64, exists bool) {
 // OldCreateAt returns the old "create_at" field's value of the ApplicationGroupUser entity.
 // If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationGroupUserMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationGroupUserMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
 	}
@@ -2043,17 +2043,17 @@ func (m *ApplicationGroupUserMutation) OldCreateAt(ctx context.Context) (v int64
 	return oldValue.CreateAt, nil
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (m *ApplicationGroupUserMutation) AddCreateAt(i int64) {
+// AddCreateAt adds u to the "create_at" field.
+func (m *ApplicationGroupUserMutation) AddCreateAt(u uint32) {
 	if m.addcreate_at != nil {
-		*m.addcreate_at += i
+		*m.addcreate_at += u
 	} else {
-		m.addcreate_at = &i
+		m.addcreate_at = &u
 	}
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *ApplicationGroupUserMutation) AddedCreateAt() (r int64, exists bool) {
+func (m *ApplicationGroupUserMutation) AddedCreateAt() (r uint32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -2068,13 +2068,13 @@ func (m *ApplicationGroupUserMutation) ResetCreateAt() {
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (m *ApplicationGroupUserMutation) SetDeleteAt(i int64) {
-	m.delete_at = &i
+func (m *ApplicationGroupUserMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
 	m.adddelete_at = nil
 }
 
 // DeleteAt returns the value of the "delete_at" field in the mutation.
-func (m *ApplicationGroupUserMutation) DeleteAt() (r int64, exists bool) {
+func (m *ApplicationGroupUserMutation) DeleteAt() (r uint32, exists bool) {
 	v := m.delete_at
 	if v == nil {
 		return
@@ -2085,7 +2085,7 @@ func (m *ApplicationGroupUserMutation) DeleteAt() (r int64, exists bool) {
 // OldDeleteAt returns the old "delete_at" field's value of the ApplicationGroupUser entity.
 // If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationGroupUserMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationGroupUserMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
 	}
@@ -2099,17 +2099,17 @@ func (m *ApplicationGroupUserMutation) OldDeleteAt(ctx context.Context) (v int64
 	return oldValue.DeleteAt, nil
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (m *ApplicationGroupUserMutation) AddDeleteAt(i int64) {
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *ApplicationGroupUserMutation) AddDeleteAt(u uint32) {
 	if m.adddelete_at != nil {
-		*m.adddelete_at += i
+		*m.adddelete_at += u
 	} else {
-		m.adddelete_at = &i
+		m.adddelete_at = &u
 	}
 }
 
 // AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
-func (m *ApplicationGroupUserMutation) AddedDeleteAt() (r int64, exists bool) {
+func (m *ApplicationGroupUserMutation) AddedDeleteAt() (r uint32, exists bool) {
 	v := m.adddelete_at
 	if v == nil {
 		return
@@ -2240,14 +2240,14 @@ func (m *ApplicationGroupUserMutation) SetField(name string, value ent.Value) er
 		m.SetAnnotation(v)
 		return nil
 	case applicationgroupuser.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateAt(v)
 		return nil
 	case applicationgroupuser.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2289,14 +2289,14 @@ func (m *ApplicationGroupUserMutation) AddedField(name string) (ent.Value, bool)
 func (m *ApplicationGroupUserMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case applicationgroupuser.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case applicationgroupuser.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2419,12 +2419,12 @@ type ApplicationResourceMutation struct {
 	resource_description *string
 	_type                *string
 	creator              *uuid.UUID
-	create_at            *int64
-	addcreate_at         *int64
-	update_at            *int64
-	addupdate_at         *int64
-	delete_at            *int64
-	adddelete_at         *int64
+	create_at            *uint32
+	addcreate_at         *uint32
+	update_at            *uint32
+	addupdate_at         *uint32
+	delete_at            *uint32
+	adddelete_at         *uint32
 	clearedFields        map[string]struct{}
 	done                 bool
 	oldValue             func(context.Context) (*ApplicationResource, error)
@@ -2710,13 +2710,13 @@ func (m *ApplicationResourceMutation) ResetCreator() {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (m *ApplicationResourceMutation) SetCreateAt(i int64) {
-	m.create_at = &i
+func (m *ApplicationResourceMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
 	m.addcreate_at = nil
 }
 
 // CreateAt returns the value of the "create_at" field in the mutation.
-func (m *ApplicationResourceMutation) CreateAt() (r int64, exists bool) {
+func (m *ApplicationResourceMutation) CreateAt() (r uint32, exists bool) {
 	v := m.create_at
 	if v == nil {
 		return
@@ -2727,7 +2727,7 @@ func (m *ApplicationResourceMutation) CreateAt() (r int64, exists bool) {
 // OldCreateAt returns the old "create_at" field's value of the ApplicationResource entity.
 // If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationResourceMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationResourceMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
 	}
@@ -2741,17 +2741,17 @@ func (m *ApplicationResourceMutation) OldCreateAt(ctx context.Context) (v int64,
 	return oldValue.CreateAt, nil
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (m *ApplicationResourceMutation) AddCreateAt(i int64) {
+// AddCreateAt adds u to the "create_at" field.
+func (m *ApplicationResourceMutation) AddCreateAt(u uint32) {
 	if m.addcreate_at != nil {
-		*m.addcreate_at += i
+		*m.addcreate_at += u
 	} else {
-		m.addcreate_at = &i
+		m.addcreate_at = &u
 	}
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *ApplicationResourceMutation) AddedCreateAt() (r int64, exists bool) {
+func (m *ApplicationResourceMutation) AddedCreateAt() (r uint32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -2766,13 +2766,13 @@ func (m *ApplicationResourceMutation) ResetCreateAt() {
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (m *ApplicationResourceMutation) SetUpdateAt(i int64) {
-	m.update_at = &i
+func (m *ApplicationResourceMutation) SetUpdateAt(u uint32) {
+	m.update_at = &u
 	m.addupdate_at = nil
 }
 
 // UpdateAt returns the value of the "update_at" field in the mutation.
-func (m *ApplicationResourceMutation) UpdateAt() (r int64, exists bool) {
+func (m *ApplicationResourceMutation) UpdateAt() (r uint32, exists bool) {
 	v := m.update_at
 	if v == nil {
 		return
@@ -2783,7 +2783,7 @@ func (m *ApplicationResourceMutation) UpdateAt() (r int64, exists bool) {
 // OldUpdateAt returns the old "update_at" field's value of the ApplicationResource entity.
 // If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationResourceMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationResourceMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
 	}
@@ -2797,17 +2797,17 @@ func (m *ApplicationResourceMutation) OldUpdateAt(ctx context.Context) (v int64,
 	return oldValue.UpdateAt, nil
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (m *ApplicationResourceMutation) AddUpdateAt(i int64) {
+// AddUpdateAt adds u to the "update_at" field.
+func (m *ApplicationResourceMutation) AddUpdateAt(u uint32) {
 	if m.addupdate_at != nil {
-		*m.addupdate_at += i
+		*m.addupdate_at += u
 	} else {
-		m.addupdate_at = &i
+		m.addupdate_at = &u
 	}
 }
 
 // AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
-func (m *ApplicationResourceMutation) AddedUpdateAt() (r int64, exists bool) {
+func (m *ApplicationResourceMutation) AddedUpdateAt() (r uint32, exists bool) {
 	v := m.addupdate_at
 	if v == nil {
 		return
@@ -2822,13 +2822,13 @@ func (m *ApplicationResourceMutation) ResetUpdateAt() {
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (m *ApplicationResourceMutation) SetDeleteAt(i int64) {
-	m.delete_at = &i
+func (m *ApplicationResourceMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
 	m.adddelete_at = nil
 }
 
 // DeleteAt returns the value of the "delete_at" field in the mutation.
-func (m *ApplicationResourceMutation) DeleteAt() (r int64, exists bool) {
+func (m *ApplicationResourceMutation) DeleteAt() (r uint32, exists bool) {
 	v := m.delete_at
 	if v == nil {
 		return
@@ -2839,7 +2839,7 @@ func (m *ApplicationResourceMutation) DeleteAt() (r int64, exists bool) {
 // OldDeleteAt returns the old "delete_at" field's value of the ApplicationResource entity.
 // If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationResourceMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationResourceMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
 	}
@@ -2853,17 +2853,17 @@ func (m *ApplicationResourceMutation) OldDeleteAt(ctx context.Context) (v int64,
 	return oldValue.DeleteAt, nil
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (m *ApplicationResourceMutation) AddDeleteAt(i int64) {
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *ApplicationResourceMutation) AddDeleteAt(u uint32) {
 	if m.adddelete_at != nil {
-		*m.adddelete_at += i
+		*m.adddelete_at += u
 	} else {
-		m.adddelete_at = &i
+		m.adddelete_at = &u
 	}
 }
 
 // AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
-func (m *ApplicationResourceMutation) AddedDeleteAt() (r int64, exists bool) {
+func (m *ApplicationResourceMutation) AddedDeleteAt() (r uint32, exists bool) {
 	v := m.adddelete_at
 	if v == nil {
 		return
@@ -3015,21 +3015,21 @@ func (m *ApplicationResourceMutation) SetField(name string, value ent.Value) err
 		m.SetCreator(v)
 		return nil
 	case applicationresource.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateAt(v)
 		return nil
 	case applicationresource.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdateAt(v)
 		return nil
 	case applicationresource.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3076,21 +3076,21 @@ func (m *ApplicationResourceMutation) AddedField(name string) (ent.Value, bool) 
 func (m *ApplicationResourceMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case applicationresource.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case applicationresource.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdateAt(v)
 		return nil
 	case applicationresource.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3217,12 +3217,12 @@ type ApplicationRoleMutation struct {
 	app_id        *string
 	role_name     *string
 	creator       *uuid.UUID
-	create_at     *int64
-	addcreate_at  *int64
-	update_at     *int64
-	addupdate_at  *int64
-	delete_at     *int64
-	adddelete_at  *int64
+	create_at     *uint32
+	addcreate_at  *uint32
+	update_at     *uint32
+	addupdate_at  *uint32
+	delete_at     *uint32
+	adddelete_at  *uint32
 	annotation    *string
 	clearedFields map[string]struct{}
 	done          bool
@@ -3424,13 +3424,13 @@ func (m *ApplicationRoleMutation) ResetCreator() {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (m *ApplicationRoleMutation) SetCreateAt(i int64) {
-	m.create_at = &i
+func (m *ApplicationRoleMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
 	m.addcreate_at = nil
 }
 
 // CreateAt returns the value of the "create_at" field in the mutation.
-func (m *ApplicationRoleMutation) CreateAt() (r int64, exists bool) {
+func (m *ApplicationRoleMutation) CreateAt() (r uint32, exists bool) {
 	v := m.create_at
 	if v == nil {
 		return
@@ -3441,7 +3441,7 @@ func (m *ApplicationRoleMutation) CreateAt() (r int64, exists bool) {
 // OldCreateAt returns the old "create_at" field's value of the ApplicationRole entity.
 // If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationRoleMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationRoleMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
 	}
@@ -3455,17 +3455,17 @@ func (m *ApplicationRoleMutation) OldCreateAt(ctx context.Context) (v int64, err
 	return oldValue.CreateAt, nil
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (m *ApplicationRoleMutation) AddCreateAt(i int64) {
+// AddCreateAt adds u to the "create_at" field.
+func (m *ApplicationRoleMutation) AddCreateAt(u uint32) {
 	if m.addcreate_at != nil {
-		*m.addcreate_at += i
+		*m.addcreate_at += u
 	} else {
-		m.addcreate_at = &i
+		m.addcreate_at = &u
 	}
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *ApplicationRoleMutation) AddedCreateAt() (r int64, exists bool) {
+func (m *ApplicationRoleMutation) AddedCreateAt() (r uint32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -3480,13 +3480,13 @@ func (m *ApplicationRoleMutation) ResetCreateAt() {
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (m *ApplicationRoleMutation) SetUpdateAt(i int64) {
-	m.update_at = &i
+func (m *ApplicationRoleMutation) SetUpdateAt(u uint32) {
+	m.update_at = &u
 	m.addupdate_at = nil
 }
 
 // UpdateAt returns the value of the "update_at" field in the mutation.
-func (m *ApplicationRoleMutation) UpdateAt() (r int64, exists bool) {
+func (m *ApplicationRoleMutation) UpdateAt() (r uint32, exists bool) {
 	v := m.update_at
 	if v == nil {
 		return
@@ -3497,7 +3497,7 @@ func (m *ApplicationRoleMutation) UpdateAt() (r int64, exists bool) {
 // OldUpdateAt returns the old "update_at" field's value of the ApplicationRole entity.
 // If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationRoleMutation) OldUpdateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationRoleMutation) OldUpdateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldUpdateAt is only allowed on UpdateOne operations")
 	}
@@ -3511,17 +3511,17 @@ func (m *ApplicationRoleMutation) OldUpdateAt(ctx context.Context) (v int64, err
 	return oldValue.UpdateAt, nil
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (m *ApplicationRoleMutation) AddUpdateAt(i int64) {
+// AddUpdateAt adds u to the "update_at" field.
+func (m *ApplicationRoleMutation) AddUpdateAt(u uint32) {
 	if m.addupdate_at != nil {
-		*m.addupdate_at += i
+		*m.addupdate_at += u
 	} else {
-		m.addupdate_at = &i
+		m.addupdate_at = &u
 	}
 }
 
 // AddedUpdateAt returns the value that was added to the "update_at" field in this mutation.
-func (m *ApplicationRoleMutation) AddedUpdateAt() (r int64, exists bool) {
+func (m *ApplicationRoleMutation) AddedUpdateAt() (r uint32, exists bool) {
 	v := m.addupdate_at
 	if v == nil {
 		return
@@ -3536,13 +3536,13 @@ func (m *ApplicationRoleMutation) ResetUpdateAt() {
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (m *ApplicationRoleMutation) SetDeleteAt(i int64) {
-	m.delete_at = &i
+func (m *ApplicationRoleMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
 	m.adddelete_at = nil
 }
 
 // DeleteAt returns the value of the "delete_at" field in the mutation.
-func (m *ApplicationRoleMutation) DeleteAt() (r int64, exists bool) {
+func (m *ApplicationRoleMutation) DeleteAt() (r uint32, exists bool) {
 	v := m.delete_at
 	if v == nil {
 		return
@@ -3553,7 +3553,7 @@ func (m *ApplicationRoleMutation) DeleteAt() (r int64, exists bool) {
 // OldDeleteAt returns the old "delete_at" field's value of the ApplicationRole entity.
 // If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationRoleMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationRoleMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
 	}
@@ -3567,17 +3567,17 @@ func (m *ApplicationRoleMutation) OldDeleteAt(ctx context.Context) (v int64, err
 	return oldValue.DeleteAt, nil
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (m *ApplicationRoleMutation) AddDeleteAt(i int64) {
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *ApplicationRoleMutation) AddDeleteAt(u uint32) {
 	if m.adddelete_at != nil {
-		*m.adddelete_at += i
+		*m.adddelete_at += u
 	} else {
-		m.adddelete_at = &i
+		m.adddelete_at = &u
 	}
 }
 
 // AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
-func (m *ApplicationRoleMutation) AddedDeleteAt() (r int64, exists bool) {
+func (m *ApplicationRoleMutation) AddedDeleteAt() (r uint32, exists bool) {
 	v := m.adddelete_at
 	if v == nil {
 		return
@@ -3757,21 +3757,21 @@ func (m *ApplicationRoleMutation) SetField(name string, value ent.Value) error {
 		m.SetCreator(v)
 		return nil
 	case applicationrole.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateAt(v)
 		return nil
 	case applicationrole.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdateAt(v)
 		return nil
 	case applicationrole.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3825,21 +3825,21 @@ func (m *ApplicationRoleMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ApplicationRoleMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case applicationrole.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case applicationrole.FieldUpdateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdateAt(v)
 		return nil
 	case applicationrole.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3963,10 +3963,10 @@ type ApplicationRoleUserMutation struct {
 	app_id        *string
 	role_id       *uuid.UUID
 	user_id       *uuid.UUID
-	create_at     *int64
-	addcreate_at  *int64
-	delete_at     *int64
-	adddelete_at  *int64
+	create_at     *uint32
+	addcreate_at  *uint32
+	delete_at     *uint32
+	adddelete_at  *uint32
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ApplicationRoleUser, error)
@@ -4167,13 +4167,13 @@ func (m *ApplicationRoleUserMutation) ResetUserID() {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (m *ApplicationRoleUserMutation) SetCreateAt(i int64) {
-	m.create_at = &i
+func (m *ApplicationRoleUserMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
 	m.addcreate_at = nil
 }
 
 // CreateAt returns the value of the "create_at" field in the mutation.
-func (m *ApplicationRoleUserMutation) CreateAt() (r int64, exists bool) {
+func (m *ApplicationRoleUserMutation) CreateAt() (r uint32, exists bool) {
 	v := m.create_at
 	if v == nil {
 		return
@@ -4184,7 +4184,7 @@ func (m *ApplicationRoleUserMutation) CreateAt() (r int64, exists bool) {
 // OldCreateAt returns the old "create_at" field's value of the ApplicationRoleUser entity.
 // If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationRoleUserMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationRoleUserMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
 	}
@@ -4198,17 +4198,17 @@ func (m *ApplicationRoleUserMutation) OldCreateAt(ctx context.Context) (v int64,
 	return oldValue.CreateAt, nil
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (m *ApplicationRoleUserMutation) AddCreateAt(i int64) {
+// AddCreateAt adds u to the "create_at" field.
+func (m *ApplicationRoleUserMutation) AddCreateAt(u uint32) {
 	if m.addcreate_at != nil {
-		*m.addcreate_at += i
+		*m.addcreate_at += u
 	} else {
-		m.addcreate_at = &i
+		m.addcreate_at = &u
 	}
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *ApplicationRoleUserMutation) AddedCreateAt() (r int64, exists bool) {
+func (m *ApplicationRoleUserMutation) AddedCreateAt() (r uint32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -4223,13 +4223,13 @@ func (m *ApplicationRoleUserMutation) ResetCreateAt() {
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (m *ApplicationRoleUserMutation) SetDeleteAt(i int64) {
-	m.delete_at = &i
+func (m *ApplicationRoleUserMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
 	m.adddelete_at = nil
 }
 
 // DeleteAt returns the value of the "delete_at" field in the mutation.
-func (m *ApplicationRoleUserMutation) DeleteAt() (r int64, exists bool) {
+func (m *ApplicationRoleUserMutation) DeleteAt() (r uint32, exists bool) {
 	v := m.delete_at
 	if v == nil {
 		return
@@ -4240,7 +4240,7 @@ func (m *ApplicationRoleUserMutation) DeleteAt() (r int64, exists bool) {
 // OldDeleteAt returns the old "delete_at" field's value of the ApplicationRoleUser entity.
 // If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationRoleUserMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationRoleUserMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
 	}
@@ -4254,17 +4254,17 @@ func (m *ApplicationRoleUserMutation) OldDeleteAt(ctx context.Context) (v int64,
 	return oldValue.DeleteAt, nil
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (m *ApplicationRoleUserMutation) AddDeleteAt(i int64) {
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *ApplicationRoleUserMutation) AddDeleteAt(u uint32) {
 	if m.adddelete_at != nil {
-		*m.adddelete_at += i
+		*m.adddelete_at += u
 	} else {
-		m.adddelete_at = &i
+		m.adddelete_at = &u
 	}
 }
 
 // AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
-func (m *ApplicationRoleUserMutation) AddedDeleteAt() (r int64, exists bool) {
+func (m *ApplicationRoleUserMutation) AddedDeleteAt() (r uint32, exists bool) {
 	v := m.adddelete_at
 	if v == nil {
 		return
@@ -4381,14 +4381,14 @@ func (m *ApplicationRoleUserMutation) SetField(name string, value ent.Value) err
 		m.SetUserID(v)
 		return nil
 	case applicationroleuser.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateAt(v)
 		return nil
 	case applicationroleuser.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4430,14 +4430,14 @@ func (m *ApplicationRoleUserMutation) AddedField(name string) (ent.Value, bool) 
 func (m *ApplicationRoleUserMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case applicationroleuser.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case applicationroleuser.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4546,10 +4546,10 @@ type ApplicationUserMutation struct {
 	app_id        *string
 	user_id       *uuid.UUID
 	original      *bool
-	create_at     *int64
-	addcreate_at  *int64
-	delete_at     *int64
-	adddelete_at  *int64
+	create_at     *uint32
+	addcreate_at  *uint32
+	delete_at     *uint32
+	adddelete_at  *uint32
 	clearedFields map[string]struct{}
 	done          bool
 	oldValue      func(context.Context) (*ApplicationUser, error)
@@ -4750,13 +4750,13 @@ func (m *ApplicationUserMutation) ResetOriginal() {
 }
 
 // SetCreateAt sets the "create_at" field.
-func (m *ApplicationUserMutation) SetCreateAt(i int64) {
-	m.create_at = &i
+func (m *ApplicationUserMutation) SetCreateAt(u uint32) {
+	m.create_at = &u
 	m.addcreate_at = nil
 }
 
 // CreateAt returns the value of the "create_at" field in the mutation.
-func (m *ApplicationUserMutation) CreateAt() (r int64, exists bool) {
+func (m *ApplicationUserMutation) CreateAt() (r uint32, exists bool) {
 	v := m.create_at
 	if v == nil {
 		return
@@ -4767,7 +4767,7 @@ func (m *ApplicationUserMutation) CreateAt() (r int64, exists bool) {
 // OldCreateAt returns the old "create_at" field's value of the ApplicationUser entity.
 // If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationUserMutation) OldCreateAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationUserMutation) OldCreateAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldCreateAt is only allowed on UpdateOne operations")
 	}
@@ -4781,17 +4781,17 @@ func (m *ApplicationUserMutation) OldCreateAt(ctx context.Context) (v int64, err
 	return oldValue.CreateAt, nil
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (m *ApplicationUserMutation) AddCreateAt(i int64) {
+// AddCreateAt adds u to the "create_at" field.
+func (m *ApplicationUserMutation) AddCreateAt(u uint32) {
 	if m.addcreate_at != nil {
-		*m.addcreate_at += i
+		*m.addcreate_at += u
 	} else {
-		m.addcreate_at = &i
+		m.addcreate_at = &u
 	}
 }
 
 // AddedCreateAt returns the value that was added to the "create_at" field in this mutation.
-func (m *ApplicationUserMutation) AddedCreateAt() (r int64, exists bool) {
+func (m *ApplicationUserMutation) AddedCreateAt() (r uint32, exists bool) {
 	v := m.addcreate_at
 	if v == nil {
 		return
@@ -4806,13 +4806,13 @@ func (m *ApplicationUserMutation) ResetCreateAt() {
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (m *ApplicationUserMutation) SetDeleteAt(i int64) {
-	m.delete_at = &i
+func (m *ApplicationUserMutation) SetDeleteAt(u uint32) {
+	m.delete_at = &u
 	m.adddelete_at = nil
 }
 
 // DeleteAt returns the value of the "delete_at" field in the mutation.
-func (m *ApplicationUserMutation) DeleteAt() (r int64, exists bool) {
+func (m *ApplicationUserMutation) DeleteAt() (r uint32, exists bool) {
 	v := m.delete_at
 	if v == nil {
 		return
@@ -4823,7 +4823,7 @@ func (m *ApplicationUserMutation) DeleteAt() (r int64, exists bool) {
 // OldDeleteAt returns the old "delete_at" field's value of the ApplicationUser entity.
 // If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationUserMutation) OldDeleteAt(ctx context.Context) (v int64, err error) {
+func (m *ApplicationUserMutation) OldDeleteAt(ctx context.Context) (v uint32, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldDeleteAt is only allowed on UpdateOne operations")
 	}
@@ -4837,17 +4837,17 @@ func (m *ApplicationUserMutation) OldDeleteAt(ctx context.Context) (v int64, err
 	return oldValue.DeleteAt, nil
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (m *ApplicationUserMutation) AddDeleteAt(i int64) {
+// AddDeleteAt adds u to the "delete_at" field.
+func (m *ApplicationUserMutation) AddDeleteAt(u uint32) {
 	if m.adddelete_at != nil {
-		*m.adddelete_at += i
+		*m.adddelete_at += u
 	} else {
-		m.adddelete_at = &i
+		m.adddelete_at = &u
 	}
 }
 
 // AddedDeleteAt returns the value that was added to the "delete_at" field in this mutation.
-func (m *ApplicationUserMutation) AddedDeleteAt() (r int64, exists bool) {
+func (m *ApplicationUserMutation) AddedDeleteAt() (r uint32, exists bool) {
 	v := m.adddelete_at
 	if v == nil {
 		return
@@ -4964,14 +4964,14 @@ func (m *ApplicationUserMutation) SetField(name string, value ent.Value) error {
 		m.SetOriginal(v)
 		return nil
 	case applicationuser.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreateAt(v)
 		return nil
 	case applicationuser.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -5013,14 +5013,14 @@ func (m *ApplicationUserMutation) AddedField(name string) (ent.Value, bool) {
 func (m *ApplicationUserMutation) AddField(name string, value ent.Value) error {
 	switch name {
 	case applicationuser.FieldCreateAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreateAt(v)
 		return nil
 	case applicationuser.FieldDeleteAt:
-		v, ok := value.(int64)
+		v, ok := value.(uint32)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

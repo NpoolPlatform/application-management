@@ -21,8 +21,8 @@ func dbRowToApplicationGroup(row *ent.ApplicationGroup) *npool.GroupInfo {
 		GroupOwner: row.GroupOwner.String(),
 		GroupLogo:  row.GroupLogo,
 		Annotation: row.Annotation,
-		CreateAT:   int32(row.CreateAt),
-		UpdateAT:   int32(row.UpdateAt),
+		CreateAT:   row.CreateAt,
+		UpdateAT:   row.UpdateAt,
 	}
 }
 
@@ -212,7 +212,7 @@ func Delete(ctx context.Context, in *npool.DeleteGroupRequest) (*npool.DeleteGro
 	_, err = db.Client().
 		ApplicationGroup.
 		UpdateOneID(groupID).
-		SetDeleteAt(time.Now().Unix()).
+		SetDeleteAt(uint32(time.Now().Unix())).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to delete group: %v", err)

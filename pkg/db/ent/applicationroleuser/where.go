@@ -113,14 +113,14 @@ func UserID(v uuid.UUID) predicate.ApplicationRoleUser {
 }
 
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
-func CreateAt(v int64) predicate.ApplicationRoleUser {
+func CreateAt(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldCreateAt), v))
 	})
 }
 
 // DeleteAt applies equality check predicate on the "delete_at" field. It's identical to DeleteAtEQ.
-func DeleteAt(v int64) predicate.ApplicationRoleUser {
+func DeleteAt(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldDeleteAt), v))
 	})
@@ -390,21 +390,21 @@ func UserIDLTE(v uuid.UUID) predicate.ApplicationRoleUser {
 }
 
 // CreateAtEQ applies the EQ predicate on the "create_at" field.
-func CreateAtEQ(v int64) predicate.ApplicationRoleUser {
+func CreateAtEQ(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldCreateAt), v))
 	})
 }
 
 // CreateAtNEQ applies the NEQ predicate on the "create_at" field.
-func CreateAtNEQ(v int64) predicate.ApplicationRoleUser {
+func CreateAtNEQ(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldCreateAt), v))
 	})
 }
 
 // CreateAtIn applies the In predicate on the "create_at" field.
-func CreateAtIn(vs ...int64) predicate.ApplicationRoleUser {
+func CreateAtIn(vs ...uint32) predicate.ApplicationRoleUser {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -421,7 +421,7 @@ func CreateAtIn(vs ...int64) predicate.ApplicationRoleUser {
 }
 
 // CreateAtNotIn applies the NotIn predicate on the "create_at" field.
-func CreateAtNotIn(vs ...int64) predicate.ApplicationRoleUser {
+func CreateAtNotIn(vs ...uint32) predicate.ApplicationRoleUser {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -438,49 +438,49 @@ func CreateAtNotIn(vs ...int64) predicate.ApplicationRoleUser {
 }
 
 // CreateAtGT applies the GT predicate on the "create_at" field.
-func CreateAtGT(v int64) predicate.ApplicationRoleUser {
+func CreateAtGT(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldCreateAt), v))
 	})
 }
 
 // CreateAtGTE applies the GTE predicate on the "create_at" field.
-func CreateAtGTE(v int64) predicate.ApplicationRoleUser {
+func CreateAtGTE(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldCreateAt), v))
 	})
 }
 
 // CreateAtLT applies the LT predicate on the "create_at" field.
-func CreateAtLT(v int64) predicate.ApplicationRoleUser {
+func CreateAtLT(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldCreateAt), v))
 	})
 }
 
 // CreateAtLTE applies the LTE predicate on the "create_at" field.
-func CreateAtLTE(v int64) predicate.ApplicationRoleUser {
+func CreateAtLTE(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldCreateAt), v))
 	})
 }
 
 // DeleteAtEQ applies the EQ predicate on the "delete_at" field.
-func DeleteAtEQ(v int64) predicate.ApplicationRoleUser {
+func DeleteAtEQ(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldDeleteAt), v))
 	})
 }
 
 // DeleteAtNEQ applies the NEQ predicate on the "delete_at" field.
-func DeleteAtNEQ(v int64) predicate.ApplicationRoleUser {
+func DeleteAtNEQ(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldDeleteAt), v))
 	})
 }
 
 // DeleteAtIn applies the In predicate on the "delete_at" field.
-func DeleteAtIn(vs ...int64) predicate.ApplicationRoleUser {
+func DeleteAtIn(vs ...uint32) predicate.ApplicationRoleUser {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -497,7 +497,7 @@ func DeleteAtIn(vs ...int64) predicate.ApplicationRoleUser {
 }
 
 // DeleteAtNotIn applies the NotIn predicate on the "delete_at" field.
-func DeleteAtNotIn(vs ...int64) predicate.ApplicationRoleUser {
+func DeleteAtNotIn(vs ...uint32) predicate.ApplicationRoleUser {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -514,28 +514,28 @@ func DeleteAtNotIn(vs ...int64) predicate.ApplicationRoleUser {
 }
 
 // DeleteAtGT applies the GT predicate on the "delete_at" field.
-func DeleteAtGT(v int64) predicate.ApplicationRoleUser {
+func DeleteAtGT(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldDeleteAt), v))
 	})
 }
 
 // DeleteAtGTE applies the GTE predicate on the "delete_at" field.
-func DeleteAtGTE(v int64) predicate.ApplicationRoleUser {
+func DeleteAtGTE(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldDeleteAt), v))
 	})
 }
 
 // DeleteAtLT applies the LT predicate on the "delete_at" field.
-func DeleteAtLT(v int64) predicate.ApplicationRoleUser {
+func DeleteAtLT(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldDeleteAt), v))
 	})
 }
 
 // DeleteAtLTE applies the LTE predicate on the "delete_at" field.
-func DeleteAtLTE(v int64) predicate.ApplicationRoleUser {
+func DeleteAtLTE(v uint32) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldDeleteAt), v))
 	})

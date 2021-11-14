@@ -89,43 +89,43 @@ func (ac *ApplicationCreate) SetNillableApplicationLogo(s *string) *ApplicationC
 }
 
 // SetCreateAt sets the "create_at" field.
-func (ac *ApplicationCreate) SetCreateAt(i int64) *ApplicationCreate {
-	ac.mutation.SetCreateAt(i)
+func (ac *ApplicationCreate) SetCreateAt(u uint32) *ApplicationCreate {
+	ac.mutation.SetCreateAt(u)
 	return ac
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (ac *ApplicationCreate) SetNillableCreateAt(i *int64) *ApplicationCreate {
-	if i != nil {
-		ac.SetCreateAt(*i)
+func (ac *ApplicationCreate) SetNillableCreateAt(u *uint32) *ApplicationCreate {
+	if u != nil {
+		ac.SetCreateAt(*u)
 	}
 	return ac
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (ac *ApplicationCreate) SetUpdateAt(i int64) *ApplicationCreate {
-	ac.mutation.SetUpdateAt(i)
+func (ac *ApplicationCreate) SetUpdateAt(u uint32) *ApplicationCreate {
+	ac.mutation.SetUpdateAt(u)
 	return ac
 }
 
 // SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
-func (ac *ApplicationCreate) SetNillableUpdateAt(i *int64) *ApplicationCreate {
-	if i != nil {
-		ac.SetUpdateAt(*i)
+func (ac *ApplicationCreate) SetNillableUpdateAt(u *uint32) *ApplicationCreate {
+	if u != nil {
+		ac.SetUpdateAt(*u)
 	}
 	return ac
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (ac *ApplicationCreate) SetDeleteAt(i int64) *ApplicationCreate {
-	ac.mutation.SetDeleteAt(i)
+func (ac *ApplicationCreate) SetDeleteAt(u uint32) *ApplicationCreate {
+	ac.mutation.SetDeleteAt(u)
 	return ac
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (ac *ApplicationCreate) SetNillableDeleteAt(i *int64) *ApplicationCreate {
-	if i != nil {
-		ac.SetDeleteAt(*i)
+func (ac *ApplicationCreate) SetNillableDeleteAt(u *uint32) *ApplicationCreate {
+	if u != nil {
+		ac.SetDeleteAt(*u)
 	}
 	return ac
 }
@@ -339,7 +339,7 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ac.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: application.FieldCreateAt,
 		})
@@ -347,7 +347,7 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ac.mutation.UpdateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: application.FieldUpdateAt,
 		})
@@ -355,7 +355,7 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 	}
 	if value, ok := ac.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: application.FieldDeleteAt,
 		})

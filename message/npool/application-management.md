@@ -180,8 +180,8 @@
 | HomepageUrl | [string](#string) |  |  |
 | RedirectUrl | [string](#string) |  |  |
 | ApplicationLogo | [string](#string) |  |  |
-| CreateAT | [int32](#int32) |  |  |
-| UpdateAT | [int32](#int32) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
+| UpdateAT | [uint32](#uint32) |  |  |
 | ClientSecret | [string](#string) |  |  |
 
 
@@ -201,7 +201,7 @@
 | AppID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
 | Original | [bool](#bool) |  |  |
-| CreateAT | [int32](#int32) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
 
 
 
@@ -1019,8 +1019,8 @@
 | GroupOwner | [string](#string) |  |  |
 | GroupLogo | [string](#string) |  |  |
 | Annotation | [string](#string) |  |  |
-| CreateAT | [int32](#int32) |  |  |
-| UpdateAT | [int32](#int32) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
+| UpdateAT | [uint32](#uint32) |  |  |
 
 
 
@@ -1040,7 +1040,7 @@
 | AppID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
 | Annotation | [string](#string) |  |  |
-| CreateAT | [int32](#int32) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
 
 
 
@@ -1088,8 +1088,8 @@
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| PageIndex | [int32](#int32) |  |  |
-| PageSize | [int32](#int32) |  |  |
+| PageIndex | [uint32](#uint32) |  |  |
+| PageSize | [uint32](#uint32) |  |  |
 
 
 
@@ -1173,8 +1173,8 @@
 | ResourceDescription | [string](#string) |  |  |
 | Type | [string](#string) |  |  |
 | Creator | [string](#string) |  |  |
-| CreateAT | [int32](#int32) |  |  |
-| UpdateAT | [int32](#int32) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
+| UpdateAT | [uint32](#uint32) |  |  |
 
 
 
@@ -1193,8 +1193,8 @@
 | AppID | [string](#string) |  |  |
 | RoleName | [string](#string) |  |  |
 | Creator | [string](#string) |  |  |
-| CreateAT | [int32](#int32) |  |  |
-| UpdateAT | [int32](#int32) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
+| UpdateAT | [uint32](#uint32) |  |  |
 | Annotation | [string](#string) |  |  |
 
 
@@ -1214,7 +1214,7 @@
 | AppID | [string](#string) |  |  |
 | RoleID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
-| CreateAT | [int32](#int32) |  |  |
+| CreateAT | [uint32](#uint32) |  |  |
 
 
 

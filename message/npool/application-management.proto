@@ -346,8 +346,8 @@ message VersionResponse {
 }
 
 message PageInfo {
-    int32 PageIndex = 1;
-    int32 PageSize = 2;
+    uint32 PageIndex = 1;
+    uint32 PageSize = 2;
 }
 
 message ApplicationInfo {
@@ -357,8 +357,8 @@ message ApplicationInfo {
     string HomepageUrl = 4;
     string RedirectUrl = 5;
     string ApplicationLogo = 6;
-    int32 CreateAT = 7;
-    int32 UpdateAT = 8;
+    uint32 CreateAT = 7;
+    uint32 UpdateAT = 8;
     string ClientSecret = 9;
 }
 
@@ -420,8 +420,8 @@ message RoleInfo {
     string AppID = 2;
     string RoleName = 3;
     string Creator = 4;
-    int32 CreateAT = 5;
-    int32 UpdateAT = 6;
+    uint32 CreateAT = 5;
+    uint32 UpdateAT = 6;
     string Annotation = 7;
 }
 
@@ -487,7 +487,7 @@ message RoleUserInfo {
     string AppID = 2;
     string RoleID = 3;
     string UserID = 4;
-    int32 CreateAT = 5;
+    uint32 CreateAT = 5;
 }
 
 message SetUserRoleRequest {
@@ -539,7 +539,7 @@ message ApplicationUserInfo {
     string AppID = 2;
     string UserID = 3;
     bool Original = 4;
-    int32 CreateAT = 5;
+    uint32 CreateAT = 5;
 }
 
 message AddUsersToApplicationRequest {
@@ -585,8 +585,8 @@ message GroupInfo {
     string GroupOwner = 4;
     string GroupLogo = 5;
     string Annotation = 6;
-    int32 CreateAT = 7;
-    int32 UpdateAT = 8;
+    uint32 CreateAT = 7;
+    uint32 UpdateAT = 8;
 }
 
 message CreateGroupRequest {
@@ -652,7 +652,7 @@ message GroupUserInfo {
     string AppID = 3;
     string UserID = 4;
     string Annotation = 5;
-    int32 CreateAT = 6;
+    uint32 CreateAT = 6;
 }
 
 message AddGroupUsersRequest {
@@ -691,8 +691,8 @@ message ResourceInfo {
     string ResourceDescription = 4;
     string Type = 5;
     string Creator = 6;
-    int32 CreateAT = 7;
-    int32 UpdateAT = 8;
+    uint32 CreateAT = 7;
+    uint32 UpdateAT = 8;
 }
 
 message CreateResourceRequest {

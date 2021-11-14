@@ -39,43 +39,43 @@ func (arc *ApplicationRoleCreate) SetCreator(u uuid.UUID) *ApplicationRoleCreate
 }
 
 // SetCreateAt sets the "create_at" field.
-func (arc *ApplicationRoleCreate) SetCreateAt(i int64) *ApplicationRoleCreate {
-	arc.mutation.SetCreateAt(i)
+func (arc *ApplicationRoleCreate) SetCreateAt(u uint32) *ApplicationRoleCreate {
+	arc.mutation.SetCreateAt(u)
 	return arc
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (arc *ApplicationRoleCreate) SetNillableCreateAt(i *int64) *ApplicationRoleCreate {
-	if i != nil {
-		arc.SetCreateAt(*i)
+func (arc *ApplicationRoleCreate) SetNillableCreateAt(u *uint32) *ApplicationRoleCreate {
+	if u != nil {
+		arc.SetCreateAt(*u)
 	}
 	return arc
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (arc *ApplicationRoleCreate) SetUpdateAt(i int64) *ApplicationRoleCreate {
-	arc.mutation.SetUpdateAt(i)
+func (arc *ApplicationRoleCreate) SetUpdateAt(u uint32) *ApplicationRoleCreate {
+	arc.mutation.SetUpdateAt(u)
 	return arc
 }
 
 // SetNillableUpdateAt sets the "update_at" field if the given value is not nil.
-func (arc *ApplicationRoleCreate) SetNillableUpdateAt(i *int64) *ApplicationRoleCreate {
-	if i != nil {
-		arc.SetUpdateAt(*i)
+func (arc *ApplicationRoleCreate) SetNillableUpdateAt(u *uint32) *ApplicationRoleCreate {
+	if u != nil {
+		arc.SetUpdateAt(*u)
 	}
 	return arc
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (arc *ApplicationRoleCreate) SetDeleteAt(i int64) *ApplicationRoleCreate {
-	arc.mutation.SetDeleteAt(i)
+func (arc *ApplicationRoleCreate) SetDeleteAt(u uint32) *ApplicationRoleCreate {
+	arc.mutation.SetDeleteAt(u)
 	return arc
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (arc *ApplicationRoleCreate) SetNillableDeleteAt(i *int64) *ApplicationRoleCreate {
-	if i != nil {
-		arc.SetDeleteAt(*i)
+func (arc *ApplicationRoleCreate) SetNillableDeleteAt(u *uint32) *ApplicationRoleCreate {
+	if u != nil {
+		arc.SetDeleteAt(*u)
 	}
 	return arc
 }
@@ -267,7 +267,7 @@ func (arc *ApplicationRoleCreate) createSpec() (*ApplicationRole, *sqlgraph.Crea
 	}
 	if value, ok := arc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldCreateAt,
 		})
@@ -275,7 +275,7 @@ func (arc *ApplicationRoleCreate) createSpec() (*ApplicationRole, *sqlgraph.Crea
 	}
 	if value, ok := arc.mutation.UpdateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldUpdateAt,
 		})
@@ -283,7 +283,7 @@ func (arc *ApplicationRoleCreate) createSpec() (*ApplicationRole, *sqlgraph.Crea
 	}
 	if value, ok := arc.mutation.DeleteAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldDeleteAt,
 		})

@@ -21,8 +21,8 @@ func dbRowToApplicationResource(row *ent.ApplicationResource) *npool.ResourceInf
 		Type:                row.Type,
 		ResourceDescription: row.ResourceDescription,
 		Creator:             row.Creator.String(),
-		CreateAT:            int32(row.CreateAt),
-		UpdateAT:            int32(row.UpdateAt),
+		CreateAT:            row.CreateAt,
+		UpdateAT:            row.UpdateAt,
 	}
 }
 
@@ -209,7 +209,7 @@ func Delete(ctx context.Context, in *npool.DeleteResourceRequest) (*npool.Delete
 	_, err = db.Client().
 		ApplicationResource.
 		UpdateOneID(resourceID).
-		SetDeleteAt(time.Now().Unix()).
+		SetDeleteAt(uint32(time.Now().Unix())).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to delete resource: %v", err)

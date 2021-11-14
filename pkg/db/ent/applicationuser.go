@@ -23,9 +23,9 @@ type ApplicationUser struct {
 	// Original holds the value of the "original" field.
 	Original bool `json:"original,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
-	CreateAt int64 `json:"create_at,omitempty"`
+	CreateAt uint32 `json:"create_at,omitempty"`
 	// DeleteAt holds the value of the "delete_at" field.
-	DeleteAt int64 `json:"delete_at,omitempty"`
+	DeleteAt uint32 `json:"delete_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -84,13 +84,13 @@ func (au *ApplicationUser) assignValues(columns []string, values []interface{}) 
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field create_at", values[i])
 			} else if value.Valid {
-				au.CreateAt = value.Int64
+				au.CreateAt = uint32(value.Int64)
 			}
 		case applicationuser.FieldDeleteAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
 			} else if value.Valid {
-				au.DeleteAt = value.Int64
+				au.DeleteAt = uint32(value.Int64)
 			}
 		}
 	}

@@ -46,57 +46,57 @@ func (aru *ApplicationRoleUpdate) SetCreator(u uuid.UUID) *ApplicationRoleUpdate
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aru *ApplicationRoleUpdate) SetCreateAt(i int64) *ApplicationRoleUpdate {
+func (aru *ApplicationRoleUpdate) SetCreateAt(u uint32) *ApplicationRoleUpdate {
 	aru.mutation.ResetCreateAt()
-	aru.mutation.SetCreateAt(i)
+	aru.mutation.SetCreateAt(u)
 	return aru
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aru *ApplicationRoleUpdate) SetNillableCreateAt(i *int64) *ApplicationRoleUpdate {
-	if i != nil {
-		aru.SetCreateAt(*i)
+func (aru *ApplicationRoleUpdate) SetNillableCreateAt(u *uint32) *ApplicationRoleUpdate {
+	if u != nil {
+		aru.SetCreateAt(*u)
 	}
 	return aru
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aru *ApplicationRoleUpdate) AddCreateAt(i int64) *ApplicationRoleUpdate {
-	aru.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aru *ApplicationRoleUpdate) AddCreateAt(u uint32) *ApplicationRoleUpdate {
+	aru.mutation.AddCreateAt(u)
 	return aru
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (aru *ApplicationRoleUpdate) SetUpdateAt(i int64) *ApplicationRoleUpdate {
+func (aru *ApplicationRoleUpdate) SetUpdateAt(u uint32) *ApplicationRoleUpdate {
 	aru.mutation.ResetUpdateAt()
-	aru.mutation.SetUpdateAt(i)
+	aru.mutation.SetUpdateAt(u)
 	return aru
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (aru *ApplicationRoleUpdate) AddUpdateAt(i int64) *ApplicationRoleUpdate {
-	aru.mutation.AddUpdateAt(i)
+// AddUpdateAt adds u to the "update_at" field.
+func (aru *ApplicationRoleUpdate) AddUpdateAt(u uint32) *ApplicationRoleUpdate {
+	aru.mutation.AddUpdateAt(u)
 	return aru
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aru *ApplicationRoleUpdate) SetDeleteAt(i int64) *ApplicationRoleUpdate {
+func (aru *ApplicationRoleUpdate) SetDeleteAt(u uint32) *ApplicationRoleUpdate {
 	aru.mutation.ResetDeleteAt()
-	aru.mutation.SetDeleteAt(i)
+	aru.mutation.SetDeleteAt(u)
 	return aru
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aru *ApplicationRoleUpdate) SetNillableDeleteAt(i *int64) *ApplicationRoleUpdate {
-	if i != nil {
-		aru.SetDeleteAt(*i)
+func (aru *ApplicationRoleUpdate) SetNillableDeleteAt(u *uint32) *ApplicationRoleUpdate {
+	if u != nil {
+		aru.SetDeleteAt(*u)
 	}
 	return aru
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aru *ApplicationRoleUpdate) AddDeleteAt(i int64) *ApplicationRoleUpdate {
-	aru.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aru *ApplicationRoleUpdate) AddDeleteAt(u uint32) *ApplicationRoleUpdate {
+	aru.mutation.AddDeleteAt(u)
 	return aru
 }
 
@@ -229,42 +229,42 @@ func (aru *ApplicationRoleUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if value, ok := aru.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldCreateAt,
 		})
 	}
 	if value, ok := aru.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldCreateAt,
 		})
 	}
 	if value, ok := aru.mutation.UpdateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldUpdateAt,
 		})
 	}
 	if value, ok := aru.mutation.AddedUpdateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldUpdateAt,
 		})
 	}
 	if value, ok := aru.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldDeleteAt,
 		})
 	}
 	if value, ok := aru.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldDeleteAt,
 		})
@@ -320,57 +320,57 @@ func (aruo *ApplicationRoleUpdateOne) SetCreator(u uuid.UUID) *ApplicationRoleUp
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aruo *ApplicationRoleUpdateOne) SetCreateAt(i int64) *ApplicationRoleUpdateOne {
+func (aruo *ApplicationRoleUpdateOne) SetCreateAt(u uint32) *ApplicationRoleUpdateOne {
 	aruo.mutation.ResetCreateAt()
-	aruo.mutation.SetCreateAt(i)
+	aruo.mutation.SetCreateAt(u)
 	return aruo
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aruo *ApplicationRoleUpdateOne) SetNillableCreateAt(i *int64) *ApplicationRoleUpdateOne {
-	if i != nil {
-		aruo.SetCreateAt(*i)
+func (aruo *ApplicationRoleUpdateOne) SetNillableCreateAt(u *uint32) *ApplicationRoleUpdateOne {
+	if u != nil {
+		aruo.SetCreateAt(*u)
 	}
 	return aruo
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aruo *ApplicationRoleUpdateOne) AddCreateAt(i int64) *ApplicationRoleUpdateOne {
-	aruo.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aruo *ApplicationRoleUpdateOne) AddCreateAt(u uint32) *ApplicationRoleUpdateOne {
+	aruo.mutation.AddCreateAt(u)
 	return aruo
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (aruo *ApplicationRoleUpdateOne) SetUpdateAt(i int64) *ApplicationRoleUpdateOne {
+func (aruo *ApplicationRoleUpdateOne) SetUpdateAt(u uint32) *ApplicationRoleUpdateOne {
 	aruo.mutation.ResetUpdateAt()
-	aruo.mutation.SetUpdateAt(i)
+	aruo.mutation.SetUpdateAt(u)
 	return aruo
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (aruo *ApplicationRoleUpdateOne) AddUpdateAt(i int64) *ApplicationRoleUpdateOne {
-	aruo.mutation.AddUpdateAt(i)
+// AddUpdateAt adds u to the "update_at" field.
+func (aruo *ApplicationRoleUpdateOne) AddUpdateAt(u uint32) *ApplicationRoleUpdateOne {
+	aruo.mutation.AddUpdateAt(u)
 	return aruo
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aruo *ApplicationRoleUpdateOne) SetDeleteAt(i int64) *ApplicationRoleUpdateOne {
+func (aruo *ApplicationRoleUpdateOne) SetDeleteAt(u uint32) *ApplicationRoleUpdateOne {
 	aruo.mutation.ResetDeleteAt()
-	aruo.mutation.SetDeleteAt(i)
+	aruo.mutation.SetDeleteAt(u)
 	return aruo
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aruo *ApplicationRoleUpdateOne) SetNillableDeleteAt(i *int64) *ApplicationRoleUpdateOne {
-	if i != nil {
-		aruo.SetDeleteAt(*i)
+func (aruo *ApplicationRoleUpdateOne) SetNillableDeleteAt(u *uint32) *ApplicationRoleUpdateOne {
+	if u != nil {
+		aruo.SetDeleteAt(*u)
 	}
 	return aruo
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aruo *ApplicationRoleUpdateOne) AddDeleteAt(i int64) *ApplicationRoleUpdateOne {
-	aruo.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aruo *ApplicationRoleUpdateOne) AddDeleteAt(u uint32) *ApplicationRoleUpdateOne {
+	aruo.mutation.AddDeleteAt(u)
 	return aruo
 }
 
@@ -527,42 +527,42 @@ func (aruo *ApplicationRoleUpdateOne) sqlSave(ctx context.Context) (_node *Appli
 	}
 	if value, ok := aruo.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldCreateAt,
 		})
 	}
 	if value, ok := aruo.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldCreateAt,
 		})
 	}
 	if value, ok := aruo.mutation.UpdateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldUpdateAt,
 		})
 	}
 	if value, ok := aruo.mutation.AddedUpdateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldUpdateAt,
 		})
 	}
 	if value, ok := aruo.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldDeleteAt,
 		})
 	}
 	if value, ok := aruo.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationrole.FieldDeleteAt,
 		})

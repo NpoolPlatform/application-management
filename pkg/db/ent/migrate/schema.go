@@ -17,9 +17,9 @@ var (
 		{Name: "redirect_url", Type: field.TypeString, Nullable: true},
 		{Name: "client_secret", Type: field.TypeString, Unique: true},
 		{Name: "application_logo", Type: field.TypeString, Nullable: true},
-		{Name: "create_at", Type: field.TypeInt64},
-		{Name: "update_at", Type: field.TypeInt64},
-		{Name: "delete_at", Type: field.TypeInt64},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// ApplicationsTable holds the schema information for the "applications" table.
 	ApplicationsTable = &schema.Table{
@@ -35,9 +35,9 @@ var (
 		{Name: "group_logo", Type: field.TypeString, Nullable: true},
 		{Name: "group_owner", Type: field.TypeUUID},
 		{Name: "annotation", Type: field.TypeString, Nullable: true},
-		{Name: "create_at", Type: field.TypeInt64},
-		{Name: "update_at", Type: field.TypeInt64},
-		{Name: "delete_at", Type: field.TypeInt64},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// ApplicationGroupsTable holds the schema information for the "application_groups" table.
 	ApplicationGroupsTable = &schema.Table{
@@ -64,8 +64,8 @@ var (
 		{Name: "app_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "annotation", Type: field.TypeString, Nullable: true},
-		{Name: "create_at", Type: field.TypeInt64},
-		{Name: "delete_at", Type: field.TypeInt64},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// ApplicationGroupUsersTable holds the schema information for the "application_group_users" table.
 	ApplicationGroupUsersTable = &schema.Table{
@@ -103,9 +103,9 @@ var (
 		{Name: "resource_description", Type: field.TypeString, Nullable: true},
 		{Name: "type", Type: field.TypeString, Default: "API"},
 		{Name: "creator", Type: field.TypeUUID},
-		{Name: "create_at", Type: field.TypeInt64},
-		{Name: "update_at", Type: field.TypeInt64},
-		{Name: "delete_at", Type: field.TypeInt64},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// ApplicationResourcesTable holds the schema information for the "application_resources" table.
 	ApplicationResourcesTable = &schema.Table{
@@ -126,9 +126,9 @@ var (
 		{Name: "app_id", Type: field.TypeString},
 		{Name: "role_name", Type: field.TypeString},
 		{Name: "creator", Type: field.TypeUUID},
-		{Name: "create_at", Type: field.TypeInt64},
-		{Name: "update_at", Type: field.TypeInt64},
-		{Name: "delete_at", Type: field.TypeInt64},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "update_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 		{Name: "annotation", Type: field.TypeString, Nullable: true},
 	}
 	// ApplicationRolesTable holds the schema information for the "application_roles" table.
@@ -155,8 +155,8 @@ var (
 		{Name: "app_id", Type: field.TypeString},
 		{Name: "role_id", Type: field.TypeUUID},
 		{Name: "user_id", Type: field.TypeUUID},
-		{Name: "create_at", Type: field.TypeInt64},
-		{Name: "delete_at", Type: field.TypeInt64},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// ApplicationRoleUsersTable holds the schema information for the "application_role_users" table.
 	ApplicationRoleUsersTable = &schema.Table{
@@ -182,8 +182,8 @@ var (
 		{Name: "app_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "original", Type: field.TypeBool, Default: true},
-		{Name: "create_at", Type: field.TypeInt64},
-		{Name: "delete_at", Type: field.TypeInt64},
+		{Name: "create_at", Type: field.TypeUint32},
+		{Name: "delete_at", Type: field.TypeUint32},
 	}
 	// ApplicationUsersTable holds the schema information for the "application_users" table.
 	ApplicationUsersTable = &schema.Table{

@@ -80,57 +80,57 @@ func (aru *ApplicationResourceUpdate) SetCreator(u uuid.UUID) *ApplicationResour
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aru *ApplicationResourceUpdate) SetCreateAt(i int64) *ApplicationResourceUpdate {
+func (aru *ApplicationResourceUpdate) SetCreateAt(u uint32) *ApplicationResourceUpdate {
 	aru.mutation.ResetCreateAt()
-	aru.mutation.SetCreateAt(i)
+	aru.mutation.SetCreateAt(u)
 	return aru
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aru *ApplicationResourceUpdate) SetNillableCreateAt(i *int64) *ApplicationResourceUpdate {
-	if i != nil {
-		aru.SetCreateAt(*i)
+func (aru *ApplicationResourceUpdate) SetNillableCreateAt(u *uint32) *ApplicationResourceUpdate {
+	if u != nil {
+		aru.SetCreateAt(*u)
 	}
 	return aru
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aru *ApplicationResourceUpdate) AddCreateAt(i int64) *ApplicationResourceUpdate {
-	aru.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aru *ApplicationResourceUpdate) AddCreateAt(u uint32) *ApplicationResourceUpdate {
+	aru.mutation.AddCreateAt(u)
 	return aru
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (aru *ApplicationResourceUpdate) SetUpdateAt(i int64) *ApplicationResourceUpdate {
+func (aru *ApplicationResourceUpdate) SetUpdateAt(u uint32) *ApplicationResourceUpdate {
 	aru.mutation.ResetUpdateAt()
-	aru.mutation.SetUpdateAt(i)
+	aru.mutation.SetUpdateAt(u)
 	return aru
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (aru *ApplicationResourceUpdate) AddUpdateAt(i int64) *ApplicationResourceUpdate {
-	aru.mutation.AddUpdateAt(i)
+// AddUpdateAt adds u to the "update_at" field.
+func (aru *ApplicationResourceUpdate) AddUpdateAt(u uint32) *ApplicationResourceUpdate {
+	aru.mutation.AddUpdateAt(u)
 	return aru
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aru *ApplicationResourceUpdate) SetDeleteAt(i int64) *ApplicationResourceUpdate {
+func (aru *ApplicationResourceUpdate) SetDeleteAt(u uint32) *ApplicationResourceUpdate {
 	aru.mutation.ResetDeleteAt()
-	aru.mutation.SetDeleteAt(i)
+	aru.mutation.SetDeleteAt(u)
 	return aru
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aru *ApplicationResourceUpdate) SetNillableDeleteAt(i *int64) *ApplicationResourceUpdate {
-	if i != nil {
-		aru.SetDeleteAt(*i)
+func (aru *ApplicationResourceUpdate) SetNillableDeleteAt(u *uint32) *ApplicationResourceUpdate {
+	if u != nil {
+		aru.SetDeleteAt(*u)
 	}
 	return aru
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aru *ApplicationResourceUpdate) AddDeleteAt(i int64) *ApplicationResourceUpdate {
-	aru.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aru *ApplicationResourceUpdate) AddDeleteAt(u uint32) *ApplicationResourceUpdate {
+	aru.mutation.AddDeleteAt(u)
 	return aru
 }
 
@@ -263,42 +263,42 @@ func (aru *ApplicationResourceUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if value, ok := aru.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldCreateAt,
 		})
 	}
 	if value, ok := aru.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldCreateAt,
 		})
 	}
 	if value, ok := aru.mutation.UpdateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldUpdateAt,
 		})
 	}
 	if value, ok := aru.mutation.AddedUpdateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldUpdateAt,
 		})
 	}
 	if value, ok := aru.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldDeleteAt,
 		})
 	}
 	if value, ok := aru.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldDeleteAt,
 		})
@@ -375,57 +375,57 @@ func (aruo *ApplicationResourceUpdateOne) SetCreator(u uuid.UUID) *ApplicationRe
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aruo *ApplicationResourceUpdateOne) SetCreateAt(i int64) *ApplicationResourceUpdateOne {
+func (aruo *ApplicationResourceUpdateOne) SetCreateAt(u uint32) *ApplicationResourceUpdateOne {
 	aruo.mutation.ResetCreateAt()
-	aruo.mutation.SetCreateAt(i)
+	aruo.mutation.SetCreateAt(u)
 	return aruo
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aruo *ApplicationResourceUpdateOne) SetNillableCreateAt(i *int64) *ApplicationResourceUpdateOne {
-	if i != nil {
-		aruo.SetCreateAt(*i)
+func (aruo *ApplicationResourceUpdateOne) SetNillableCreateAt(u *uint32) *ApplicationResourceUpdateOne {
+	if u != nil {
+		aruo.SetCreateAt(*u)
 	}
 	return aruo
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aruo *ApplicationResourceUpdateOne) AddCreateAt(i int64) *ApplicationResourceUpdateOne {
-	aruo.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aruo *ApplicationResourceUpdateOne) AddCreateAt(u uint32) *ApplicationResourceUpdateOne {
+	aruo.mutation.AddCreateAt(u)
 	return aruo
 }
 
 // SetUpdateAt sets the "update_at" field.
-func (aruo *ApplicationResourceUpdateOne) SetUpdateAt(i int64) *ApplicationResourceUpdateOne {
+func (aruo *ApplicationResourceUpdateOne) SetUpdateAt(u uint32) *ApplicationResourceUpdateOne {
 	aruo.mutation.ResetUpdateAt()
-	aruo.mutation.SetUpdateAt(i)
+	aruo.mutation.SetUpdateAt(u)
 	return aruo
 }
 
-// AddUpdateAt adds i to the "update_at" field.
-func (aruo *ApplicationResourceUpdateOne) AddUpdateAt(i int64) *ApplicationResourceUpdateOne {
-	aruo.mutation.AddUpdateAt(i)
+// AddUpdateAt adds u to the "update_at" field.
+func (aruo *ApplicationResourceUpdateOne) AddUpdateAt(u uint32) *ApplicationResourceUpdateOne {
+	aruo.mutation.AddUpdateAt(u)
 	return aruo
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aruo *ApplicationResourceUpdateOne) SetDeleteAt(i int64) *ApplicationResourceUpdateOne {
+func (aruo *ApplicationResourceUpdateOne) SetDeleteAt(u uint32) *ApplicationResourceUpdateOne {
 	aruo.mutation.ResetDeleteAt()
-	aruo.mutation.SetDeleteAt(i)
+	aruo.mutation.SetDeleteAt(u)
 	return aruo
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aruo *ApplicationResourceUpdateOne) SetNillableDeleteAt(i *int64) *ApplicationResourceUpdateOne {
-	if i != nil {
-		aruo.SetDeleteAt(*i)
+func (aruo *ApplicationResourceUpdateOne) SetNillableDeleteAt(u *uint32) *ApplicationResourceUpdateOne {
+	if u != nil {
+		aruo.SetDeleteAt(*u)
 	}
 	return aruo
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aruo *ApplicationResourceUpdateOne) AddDeleteAt(i int64) *ApplicationResourceUpdateOne {
-	aruo.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aruo *ApplicationResourceUpdateOne) AddDeleteAt(u uint32) *ApplicationResourceUpdateOne {
+	aruo.mutation.AddDeleteAt(u)
 	return aruo
 }
 
@@ -582,42 +582,42 @@ func (aruo *ApplicationResourceUpdateOne) sqlSave(ctx context.Context) (_node *A
 	}
 	if value, ok := aruo.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldCreateAt,
 		})
 	}
 	if value, ok := aruo.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldCreateAt,
 		})
 	}
 	if value, ok := aruo.mutation.UpdateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldUpdateAt,
 		})
 	}
 	if value, ok := aruo.mutation.AddedUpdateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldUpdateAt,
 		})
 	}
 	if value, ok := aruo.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldDeleteAt,
 		})
 	}
 	if value, ok := aruo.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationresource.FieldDeleteAt,
 		})

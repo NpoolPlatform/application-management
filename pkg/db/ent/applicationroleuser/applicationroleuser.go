@@ -47,9 +47,9 @@ func ValidColumn(column string) bool {
 
 var (
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.
-	DefaultCreateAt func() int64
+	DefaultCreateAt func() uint32
 	// DefaultDeleteAt holds the default value on creation for the "delete_at" field.
-	DefaultDeleteAt func() int64
+	DefaultDeleteAt func() uint32
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() uuid.UUID
 )

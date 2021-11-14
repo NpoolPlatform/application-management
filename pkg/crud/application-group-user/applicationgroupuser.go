@@ -20,7 +20,7 @@ func dbRawToApplicationGroupUser(row *ent.ApplicationGroupUser) *npool.GroupUser
 		AppID:      row.AppID,
 		GroupID:    row.GroupID.String(),
 		Annotation: row.Annotation,
-		CreateAT:   int32(row.CreateAt),
+		CreateAT:   row.CreateAt,
 	}
 }
 
@@ -140,7 +140,7 @@ func genDelete(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *n
 					applicationgroupuser.DeleteAt(0),
 				),
 			).
-			SetDeleteAt(time.Now().Unix()).
+			SetDeleteAt(uint32(time.Now().Unix())).
 			Save(ctx)
 		if err != nil {
 			return nil, xerrors.Errorf("fail to remove group user: %v", err)

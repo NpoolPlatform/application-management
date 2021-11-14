@@ -46,44 +46,44 @@ func (aruu *ApplicationRoleUserUpdate) SetUserID(u uuid.UUID) *ApplicationRoleUs
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aruu *ApplicationRoleUserUpdate) SetCreateAt(i int64) *ApplicationRoleUserUpdate {
+func (aruu *ApplicationRoleUserUpdate) SetCreateAt(u uint32) *ApplicationRoleUserUpdate {
 	aruu.mutation.ResetCreateAt()
-	aruu.mutation.SetCreateAt(i)
+	aruu.mutation.SetCreateAt(u)
 	return aruu
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aruu *ApplicationRoleUserUpdate) SetNillableCreateAt(i *int64) *ApplicationRoleUserUpdate {
-	if i != nil {
-		aruu.SetCreateAt(*i)
+func (aruu *ApplicationRoleUserUpdate) SetNillableCreateAt(u *uint32) *ApplicationRoleUserUpdate {
+	if u != nil {
+		aruu.SetCreateAt(*u)
 	}
 	return aruu
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aruu *ApplicationRoleUserUpdate) AddCreateAt(i int64) *ApplicationRoleUserUpdate {
-	aruu.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aruu *ApplicationRoleUserUpdate) AddCreateAt(u uint32) *ApplicationRoleUserUpdate {
+	aruu.mutation.AddCreateAt(u)
 	return aruu
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aruu *ApplicationRoleUserUpdate) SetDeleteAt(i int64) *ApplicationRoleUserUpdate {
+func (aruu *ApplicationRoleUserUpdate) SetDeleteAt(u uint32) *ApplicationRoleUserUpdate {
 	aruu.mutation.ResetDeleteAt()
-	aruu.mutation.SetDeleteAt(i)
+	aruu.mutation.SetDeleteAt(u)
 	return aruu
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aruu *ApplicationRoleUserUpdate) SetNillableDeleteAt(i *int64) *ApplicationRoleUserUpdate {
-	if i != nil {
-		aruu.SetDeleteAt(*i)
+func (aruu *ApplicationRoleUserUpdate) SetNillableDeleteAt(u *uint32) *ApplicationRoleUserUpdate {
+	if u != nil {
+		aruu.SetDeleteAt(*u)
 	}
 	return aruu
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aruu *ApplicationRoleUserUpdate) AddDeleteAt(i int64) *ApplicationRoleUserUpdate {
-	aruu.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aruu *ApplicationRoleUserUpdate) AddDeleteAt(u uint32) *ApplicationRoleUserUpdate {
+	aruu.mutation.AddDeleteAt(u)
 	return aruu
 }
 
@@ -187,28 +187,28 @@ func (aruu *ApplicationRoleUserUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if value, ok := aruu.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aruu.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aruu.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldDeleteAt,
 		})
 	}
 	if value, ok := aruu.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldDeleteAt,
 		})
@@ -251,44 +251,44 @@ func (aruuo *ApplicationRoleUserUpdateOne) SetUserID(u uuid.UUID) *ApplicationRo
 }
 
 // SetCreateAt sets the "create_at" field.
-func (aruuo *ApplicationRoleUserUpdateOne) SetCreateAt(i int64) *ApplicationRoleUserUpdateOne {
+func (aruuo *ApplicationRoleUserUpdateOne) SetCreateAt(u uint32) *ApplicationRoleUserUpdateOne {
 	aruuo.mutation.ResetCreateAt()
-	aruuo.mutation.SetCreateAt(i)
+	aruuo.mutation.SetCreateAt(u)
 	return aruuo
 }
 
 // SetNillableCreateAt sets the "create_at" field if the given value is not nil.
-func (aruuo *ApplicationRoleUserUpdateOne) SetNillableCreateAt(i *int64) *ApplicationRoleUserUpdateOne {
-	if i != nil {
-		aruuo.SetCreateAt(*i)
+func (aruuo *ApplicationRoleUserUpdateOne) SetNillableCreateAt(u *uint32) *ApplicationRoleUserUpdateOne {
+	if u != nil {
+		aruuo.SetCreateAt(*u)
 	}
 	return aruuo
 }
 
-// AddCreateAt adds i to the "create_at" field.
-func (aruuo *ApplicationRoleUserUpdateOne) AddCreateAt(i int64) *ApplicationRoleUserUpdateOne {
-	aruuo.mutation.AddCreateAt(i)
+// AddCreateAt adds u to the "create_at" field.
+func (aruuo *ApplicationRoleUserUpdateOne) AddCreateAt(u uint32) *ApplicationRoleUserUpdateOne {
+	aruuo.mutation.AddCreateAt(u)
 	return aruuo
 }
 
 // SetDeleteAt sets the "delete_at" field.
-func (aruuo *ApplicationRoleUserUpdateOne) SetDeleteAt(i int64) *ApplicationRoleUserUpdateOne {
+func (aruuo *ApplicationRoleUserUpdateOne) SetDeleteAt(u uint32) *ApplicationRoleUserUpdateOne {
 	aruuo.mutation.ResetDeleteAt()
-	aruuo.mutation.SetDeleteAt(i)
+	aruuo.mutation.SetDeleteAt(u)
 	return aruuo
 }
 
 // SetNillableDeleteAt sets the "delete_at" field if the given value is not nil.
-func (aruuo *ApplicationRoleUserUpdateOne) SetNillableDeleteAt(i *int64) *ApplicationRoleUserUpdateOne {
-	if i != nil {
-		aruuo.SetDeleteAt(*i)
+func (aruuo *ApplicationRoleUserUpdateOne) SetNillableDeleteAt(u *uint32) *ApplicationRoleUserUpdateOne {
+	if u != nil {
+		aruuo.SetDeleteAt(*u)
 	}
 	return aruuo
 }
 
-// AddDeleteAt adds i to the "delete_at" field.
-func (aruuo *ApplicationRoleUserUpdateOne) AddDeleteAt(i int64) *ApplicationRoleUserUpdateOne {
-	aruuo.mutation.AddDeleteAt(i)
+// AddDeleteAt adds u to the "delete_at" field.
+func (aruuo *ApplicationRoleUserUpdateOne) AddDeleteAt(u uint32) *ApplicationRoleUserUpdateOne {
+	aruuo.mutation.AddDeleteAt(u)
 	return aruuo
 }
 
@@ -416,28 +416,28 @@ func (aruuo *ApplicationRoleUserUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if value, ok := aruuo.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aruuo.mutation.AddedCreateAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldCreateAt,
 		})
 	}
 	if value, ok := aruuo.mutation.DeleteAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldDeleteAt,
 		})
 	}
 	if value, ok := aruuo.mutation.AddedDeleteAt(); ok {
 		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
-			Type:   field.TypeInt64,
+			Type:   field.TypeUint32,
 			Value:  value,
 			Column: applicationroleuser.FieldDeleteAt,
 		})

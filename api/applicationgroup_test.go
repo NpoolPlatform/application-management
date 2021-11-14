@@ -30,7 +30,7 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/create/app")
+		}).Post("http://localhost:50080/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
 
@@ -54,7 +54,7 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateGroupRequest{
 			Info: &groupInfo,
-		}).Post("http://localhost:32759/v1/create/group")
+		}).Post("http://localhost:50080/v1/create/group")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
 
@@ -74,7 +74,7 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 		SetBody(npool.GetGroupRequest{
 			GroupID: groupInfo.ID,
 			AppID:   groupInfo.AppID,
-		}).Post("http://localhost:32759/v1/get/group")
+		}).Post("http://localhost:50080/v1/get/group")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 
@@ -92,7 +92,7 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetAllGroupsRequest{
 			AppID: groupInfo.AppID,
-		}).Post("http://localhost:32759/v1/get/all/groups")
+		}).Post("http://localhost:50080/v1/get/all/groups")
 	if assert.Nil(t, err) {
 		fmt.Println(err, resp3)
 		assert.Equal(t, 200, resp3.StatusCode())
@@ -106,7 +106,7 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.UpdateGroupRequest{
 			Info: &groupInfo,
-		}).Post("http://localhost:32759/v1/update/group")
+		}).Post("http://localhost:50080/v1/update/group")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
 
@@ -125,7 +125,7 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 		SetBody(npool.GetGroupByOwnerRequest{
 			AppID: groupInfo.AppID,
 			Owner: groupInfo.GroupOwner,
-		}).Post("http://localhost:32759/v1/get/group/by/owner")
+		}).Post("http://localhost:50080/v1/get/group/by/owner")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp5.StatusCode())
 	}
@@ -135,7 +135,7 @@ func TestApplicationGroupAPI(t *testing.T) { // nolint
 		SetBody(npool.DeleteGroupRequest{
 			AppID:   groupInfo.AppID,
 			GroupID: groupInfo.ID,
-		}).Post("http://localhost:32759/v1/delete/group")
+		}).Post("http://localhost:50080/v1/delete/group")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp6.StatusCode())
 	}

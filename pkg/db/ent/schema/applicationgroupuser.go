@@ -24,12 +24,12 @@ func (ApplicationGroupUser) Fields() []ent.Field {
 		field.String("app_id"),
 		field.UUID("user_id", uuid.UUID{}),
 		field.String("annotation").Optional(),
-		field.Int64("create_at").
-			DefaultFunc(func() int64 {
-				return time.Now().Unix()
+		field.Uint32("create_at").
+			DefaultFunc(func() uint32 {
+				return uint32(time.Now().Unix())
 			}),
-		field.Int64("delete_at").
-			DefaultFunc(func() int64 {
+		field.Uint32("delete_at").
+			DefaultFunc(func() uint32 {
 				return 0
 			}),
 	}

@@ -27,11 +27,11 @@ type ApplicationResource struct {
 	// Creator holds the value of the "creator" field.
 	Creator uuid.UUID `json:"creator,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
-	CreateAt int64 `json:"create_at,omitempty"`
+	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
-	UpdateAt int64 `json:"update_at,omitempty"`
+	UpdateAt uint32 `json:"update_at,omitempty"`
 	// DeleteAt holds the value of the "delete_at" field.
-	DeleteAt int64 `json:"delete_at,omitempty"`
+	DeleteAt uint32 `json:"delete_at,omitempty"`
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -100,19 +100,19 @@ func (ar *ApplicationResource) assignValues(columns []string, values []interface
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field create_at", values[i])
 			} else if value.Valid {
-				ar.CreateAt = value.Int64
+				ar.CreateAt = uint32(value.Int64)
 			}
 		case applicationresource.FieldUpdateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field update_at", values[i])
 			} else if value.Valid {
-				ar.UpdateAt = value.Int64
+				ar.UpdateAt = uint32(value.Int64)
 			}
 		case applicationresource.FieldDeleteAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field delete_at", values[i])
 			} else if value.Valid {
-				ar.DeleteAt = value.Int64
+				ar.DeleteAt = uint32(value.Int64)
 			}
 		}
 	}

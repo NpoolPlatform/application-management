@@ -29,7 +29,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateApplicationRequest{
 			Info: &application,
-		}).Post("http://localhost:32759/v1/create/app")
+		}).Post("http://localhost:50080/v1/create/app")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp.StatusCode())
 
@@ -53,7 +53,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.CreateRoleRequest{
 			Info: &roleInfo,
-		}).Post("http://localhost:32759/v1/create/role")
+		}).Post("http://localhost:50080/v1/create/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp1.StatusCode())
 		err := json.Unmarshal(resp1.Body(), &response1)
@@ -72,7 +72,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.UpdateRoleRequest{
 			Info: &roleInfo,
-		}).Post("http://localhost:32759/v1/update/role")
+		}).Post("http://localhost:50080/v1/update/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 		err := json.Unmarshal(resp2.Body(), &response2)
@@ -90,7 +90,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 		SetBody(npool.GetRoleRequest{
 			AppID:  roleInfo.AppID,
 			RoleID: roleInfo.ID,
-		}).Post("http://localhost:32759/v1/get/role")
+		}).Post("http://localhost:50080/v1/get/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp3.StatusCode())
 		err := json.Unmarshal(resp3.Body(), &response3)
@@ -106,7 +106,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.GetRolesRequest{
 			AppID: roleInfo.AppID,
-		}).Post("http://localhost:32759/v1/get/roles")
+		}).Post("http://localhost:50080/v1/get/roles")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp4.StatusCode())
 	}
@@ -116,7 +116,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 		SetBody(npool.GetRoleByCreatorRequest{
 			AppID:   roleInfo.AppID,
 			Creator: roleInfo.Creator,
-		}).Post("http://localhost:32759/v1/get/role/by/creator")
+		}).Post("http://localhost:50080/v1/get/role/by/creator")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp5.StatusCode())
 	}
@@ -126,7 +126,7 @@ func TestApplicationRoleAPI(t *testing.T) { // nolint
 		SetBody(npool.DeleteRoleRequest{
 			AppID:  roleInfo.AppID,
 			RoleID: roleInfo.ID,
-		}).Post("http://localhost:32759/v1/delete/role")
+		}).Post("http://localhost:50080/v1/delete/role")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp6.StatusCode())
 	}
