@@ -254,7 +254,7 @@ func (agq *ApplicationGroupQuery) Clone() *ApplicationGroupQuery {
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -281,7 +281,7 @@ func (agq *ApplicationGroupQuery) GroupBy(field string, fields ...string) *Appli
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //	}
 //
 //	client.ApplicationGroup.Query().

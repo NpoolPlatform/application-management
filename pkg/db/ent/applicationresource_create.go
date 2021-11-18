@@ -21,8 +21,8 @@ type ApplicationResourceCreate struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (arc *ApplicationResourceCreate) SetAppID(s string) *ApplicationResourceCreate {
-	arc.mutation.SetAppID(s)
+func (arc *ApplicationResourceCreate) SetAppID(u uuid.UUID) *ApplicationResourceCreate {
+	arc.mutation.SetAppID(u)
 	return arc
 }
 
@@ -264,7 +264,7 @@ func (arc *ApplicationResourceCreate) createSpec() (*ApplicationResource, *sqlgr
 	}
 	if value, ok := arc.mutation.AppID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationresource.FieldAppID,
 		})

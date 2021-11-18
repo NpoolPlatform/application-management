@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/application"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/predicate"
+	"github.com/google/uuid"
 )
 
 // ApplicationQuery is the builder for querying Application entities.
@@ -84,8 +85,8 @@ func (aq *ApplicationQuery) FirstX(ctx context.Context) *Application {
 
 // FirstID returns the first Application ID from the query.
 // Returns a *NotFoundError when no Application ID was found.
-func (aq *ApplicationQuery) FirstID(ctx context.Context) (id string, err error) {
-	var ids []string
+func (aq *ApplicationQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = aq.Limit(1).IDs(ctx); err != nil {
 		return
 	}
@@ -97,7 +98,7 @@ func (aq *ApplicationQuery) FirstID(ctx context.Context) (id string, err error) 
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (aq *ApplicationQuery) FirstIDX(ctx context.Context) string {
+func (aq *ApplicationQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := aq.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -135,8 +136,8 @@ func (aq *ApplicationQuery) OnlyX(ctx context.Context) *Application {
 // OnlyID is like Only, but returns the only Application ID in the query.
 // Returns a *NotSingularError when exactly one Application ID is not found.
 // Returns a *NotFoundError when no entities are found.
-func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id string, err error) {
-	var ids []string
+func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = aq.Limit(2).IDs(ctx); err != nil {
 		return
 	}
@@ -152,7 +153,7 @@ func (aq *ApplicationQuery) OnlyID(ctx context.Context) (id string, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (aq *ApplicationQuery) OnlyIDX(ctx context.Context) string {
+func (aq *ApplicationQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := aq.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,8 +179,8 @@ func (aq *ApplicationQuery) AllX(ctx context.Context) []*Application {
 }
 
 // IDs executes the query and returns a list of Application IDs.
-func (aq *ApplicationQuery) IDs(ctx context.Context) ([]string, error) {
-	var ids []string
+func (aq *ApplicationQuery) IDs(ctx context.Context) ([]uuid.UUID, error) {
+	var ids []uuid.UUID
 	if err := aq.Select(application.FieldID).Scan(ctx, &ids); err != nil {
 		return nil, err
 	}
@@ -187,7 +188,7 @@ func (aq *ApplicationQuery) IDs(ctx context.Context) ([]string, error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (aq *ApplicationQuery) IDsX(ctx context.Context) []string {
+func (aq *ApplicationQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := aq.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -353,7 +354,7 @@ func (aq *ApplicationQuery) querySpec() *sqlgraph.QuerySpec {
 			Table:   application.Table,
 			Columns: application.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
+				Type:   field.TypeUUID,
 				Column: application.FieldID,
 			},
 		},

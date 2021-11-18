@@ -43,7 +43,7 @@ type ApplicationMutation struct {
 	config
 	op                Op
 	typ               string
-	id                *string
+	id                *uuid.UUID
 	application_name  *string
 	application_owner *uuid.UUID
 	homepage_url      *string
@@ -82,7 +82,7 @@ func newApplicationMutation(c config, op Op, opts ...applicationOption) *Applica
 }
 
 // withApplicationID sets the ID field of the mutation.
-func withApplicationID(id string) applicationOption {
+func withApplicationID(id uuid.UUID) applicationOption {
 	return func(m *ApplicationMutation) {
 		var (
 			err   error
@@ -134,13 +134,13 @@ func (m ApplicationMutation) Tx() (*Tx, error) {
 
 // SetID sets the value of the id field. Note that this
 // operation is only accepted on creation of Application entities.
-func (m *ApplicationMutation) SetID(id string) {
+func (m *ApplicationMutation) SetID(id uuid.UUID) {
 	m.id = &id
 }
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ApplicationMutation) ID() (id string, exists bool) {
+func (m *ApplicationMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -936,7 +936,7 @@ type ApplicationGroupMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	app_id        *string
+	app_id        *uuid.UUID
 	group_name    *string
 	group_logo    *string
 	group_owner   *uuid.UUID
@@ -1039,12 +1039,12 @@ func (m *ApplicationGroupMutation) ID() (id uuid.UUID, exists bool) {
 }
 
 // SetAppID sets the "app_id" field.
-func (m *ApplicationGroupMutation) SetAppID(s string) {
-	m.app_id = &s
+func (m *ApplicationGroupMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
 }
 
 // AppID returns the value of the "app_id" field in the mutation.
-func (m *ApplicationGroupMutation) AppID() (r string, exists bool) {
+func (m *ApplicationGroupMutation) AppID() (r uuid.UUID, exists bool) {
 	v := m.app_id
 	if v == nil {
 		return
@@ -1055,7 +1055,7 @@ func (m *ApplicationGroupMutation) AppID() (r string, exists bool) {
 // OldAppID returns the old "app_id" field's value of the ApplicationGroup entity.
 // If the ApplicationGroup object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationGroupMutation) OldAppID(ctx context.Context) (v string, err error) {
+func (m *ApplicationGroupMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
 	}
@@ -1515,7 +1515,7 @@ func (m *ApplicationGroupMutation) OldField(ctx context.Context, name string) (e
 func (m *ApplicationGroupMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case applicationgroup.FieldAppID:
-		v, ok := value.(string)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -1756,7 +1756,7 @@ type ApplicationGroupUserMutation struct {
 	typ           string
 	id            *uuid.UUID
 	group_id      *uuid.UUID
-	app_id        *string
+	app_id        *uuid.UUID
 	user_id       *uuid.UUID
 	annotation    *string
 	create_at     *uint32
@@ -1891,12 +1891,12 @@ func (m *ApplicationGroupUserMutation) ResetGroupID() {
 }
 
 // SetAppID sets the "app_id" field.
-func (m *ApplicationGroupUserMutation) SetAppID(s string) {
-	m.app_id = &s
+func (m *ApplicationGroupUserMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
 }
 
 // AppID returns the value of the "app_id" field in the mutation.
-func (m *ApplicationGroupUserMutation) AppID() (r string, exists bool) {
+func (m *ApplicationGroupUserMutation) AppID() (r uuid.UUID, exists bool) {
 	v := m.app_id
 	if v == nil {
 		return
@@ -1907,7 +1907,7 @@ func (m *ApplicationGroupUserMutation) AppID() (r string, exists bool) {
 // OldAppID returns the old "app_id" field's value of the ApplicationGroupUser entity.
 // If the ApplicationGroupUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationGroupUserMutation) OldAppID(ctx context.Context) (v string, err error) {
+func (m *ApplicationGroupUserMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
 	}
@@ -2219,7 +2219,7 @@ func (m *ApplicationGroupUserMutation) SetField(name string, value ent.Value) er
 		m.SetGroupID(v)
 		return nil
 	case applicationgroupuser.FieldAppID:
-		v, ok := value.(string)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -2414,7 +2414,7 @@ type ApplicationResourceMutation struct {
 	op                   Op
 	typ                  string
 	id                   *uuid.UUID
-	app_id               *string
+	app_id               *uuid.UUID
 	resource_name        *string
 	resource_description *string
 	_type                *string
@@ -2517,12 +2517,12 @@ func (m *ApplicationResourceMutation) ID() (id uuid.UUID, exists bool) {
 }
 
 // SetAppID sets the "app_id" field.
-func (m *ApplicationResourceMutation) SetAppID(s string) {
-	m.app_id = &s
+func (m *ApplicationResourceMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
 }
 
 // AppID returns the value of the "app_id" field in the mutation.
-func (m *ApplicationResourceMutation) AppID() (r string, exists bool) {
+func (m *ApplicationResourceMutation) AppID() (r uuid.UUID, exists bool) {
 	v := m.app_id
 	if v == nil {
 		return
@@ -2533,7 +2533,7 @@ func (m *ApplicationResourceMutation) AppID() (r string, exists bool) {
 // OldAppID returns the old "app_id" field's value of the ApplicationResource entity.
 // If the ApplicationResource object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationResourceMutation) OldAppID(ctx context.Context) (v string, err error) {
+func (m *ApplicationResourceMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
 	}
@@ -2980,7 +2980,7 @@ func (m *ApplicationResourceMutation) OldField(ctx context.Context, name string)
 func (m *ApplicationResourceMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case applicationresource.FieldAppID:
-		v, ok := value.(string)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3214,7 +3214,7 @@ type ApplicationRoleMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	app_id        *string
+	app_id        *uuid.UUID
 	role_name     *string
 	creator       *uuid.UUID
 	create_at     *uint32
@@ -3316,12 +3316,12 @@ func (m *ApplicationRoleMutation) ID() (id uuid.UUID, exists bool) {
 }
 
 // SetAppID sets the "app_id" field.
-func (m *ApplicationRoleMutation) SetAppID(s string) {
-	m.app_id = &s
+func (m *ApplicationRoleMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
 }
 
 // AppID returns the value of the "app_id" field in the mutation.
-func (m *ApplicationRoleMutation) AppID() (r string, exists bool) {
+func (m *ApplicationRoleMutation) AppID() (r uuid.UUID, exists bool) {
 	v := m.app_id
 	if v == nil {
 		return
@@ -3332,7 +3332,7 @@ func (m *ApplicationRoleMutation) AppID() (r string, exists bool) {
 // OldAppID returns the old "app_id" field's value of the ApplicationRole entity.
 // If the ApplicationRole object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationRoleMutation) OldAppID(ctx context.Context) (v string, err error) {
+func (m *ApplicationRoleMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
 	}
@@ -3736,7 +3736,7 @@ func (m *ApplicationRoleMutation) OldField(ctx context.Context, name string) (en
 func (m *ApplicationRoleMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case applicationrole.FieldAppID:
-		v, ok := value.(string)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -3960,7 +3960,7 @@ type ApplicationRoleUserMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	app_id        *string
+	app_id        *uuid.UUID
 	role_id       *uuid.UUID
 	user_id       *uuid.UUID
 	create_at     *uint32
@@ -4059,12 +4059,12 @@ func (m *ApplicationRoleUserMutation) ID() (id uuid.UUID, exists bool) {
 }
 
 // SetAppID sets the "app_id" field.
-func (m *ApplicationRoleUserMutation) SetAppID(s string) {
-	m.app_id = &s
+func (m *ApplicationRoleUserMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
 }
 
 // AppID returns the value of the "app_id" field in the mutation.
-func (m *ApplicationRoleUserMutation) AppID() (r string, exists bool) {
+func (m *ApplicationRoleUserMutation) AppID() (r uuid.UUID, exists bool) {
 	v := m.app_id
 	if v == nil {
 		return
@@ -4075,7 +4075,7 @@ func (m *ApplicationRoleUserMutation) AppID() (r string, exists bool) {
 // OldAppID returns the old "app_id" field's value of the ApplicationRoleUser entity.
 // If the ApplicationRoleUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationRoleUserMutation) OldAppID(ctx context.Context) (v string, err error) {
+func (m *ApplicationRoleUserMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
 	}
@@ -4360,7 +4360,7 @@ func (m *ApplicationRoleUserMutation) OldField(ctx context.Context, name string)
 func (m *ApplicationRoleUserMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case applicationroleuser.FieldAppID:
-		v, ok := value.(string)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -4543,7 +4543,7 @@ type ApplicationUserMutation struct {
 	op            Op
 	typ           string
 	id            *uuid.UUID
-	app_id        *string
+	app_id        *uuid.UUID
 	user_id       *uuid.UUID
 	original      *bool
 	create_at     *uint32
@@ -4642,12 +4642,12 @@ func (m *ApplicationUserMutation) ID() (id uuid.UUID, exists bool) {
 }
 
 // SetAppID sets the "app_id" field.
-func (m *ApplicationUserMutation) SetAppID(s string) {
-	m.app_id = &s
+func (m *ApplicationUserMutation) SetAppID(u uuid.UUID) {
+	m.app_id = &u
 }
 
 // AppID returns the value of the "app_id" field in the mutation.
-func (m *ApplicationUserMutation) AppID() (r string, exists bool) {
+func (m *ApplicationUserMutation) AppID() (r uuid.UUID, exists bool) {
 	v := m.app_id
 	if v == nil {
 		return
@@ -4658,7 +4658,7 @@ func (m *ApplicationUserMutation) AppID() (r string, exists bool) {
 // OldAppID returns the old "app_id" field's value of the ApplicationUser entity.
 // If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ApplicationUserMutation) OldAppID(ctx context.Context) (v string, err error) {
+func (m *ApplicationUserMutation) OldAppID(ctx context.Context) (v uuid.UUID, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, fmt.Errorf("OldAppID is only allowed on UpdateOne operations")
 	}
@@ -4943,7 +4943,7 @@ func (m *ApplicationUserMutation) OldField(ctx context.Context, name string) (en
 func (m *ApplicationUserMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	case applicationuser.FieldAppID:
-		v, ok := value.(string)
+		v, ok := value.(uuid.UUID)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

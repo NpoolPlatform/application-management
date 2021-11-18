@@ -28,8 +28,8 @@ func (aru *ApplicationRoleUpdate) Where(ps ...predicate.ApplicationRole) *Applic
 }
 
 // SetAppID sets the "app_id" field.
-func (aru *ApplicationRoleUpdate) SetAppID(s string) *ApplicationRoleUpdate {
-	aru.mutation.SetAppID(s)
+func (aru *ApplicationRoleUpdate) SetAppID(u uuid.UUID) *ApplicationRoleUpdate {
+	aru.mutation.SetAppID(u)
 	return aru
 }
 
@@ -208,7 +208,7 @@ func (aru *ApplicationRoleUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if value, ok := aru.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationrole.FieldAppID,
 		})
@@ -302,8 +302,8 @@ type ApplicationRoleUpdateOne struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (aruo *ApplicationRoleUpdateOne) SetAppID(s string) *ApplicationRoleUpdateOne {
-	aruo.mutation.SetAppID(s)
+func (aruo *ApplicationRoleUpdateOne) SetAppID(u uuid.UUID) *ApplicationRoleUpdateOne {
+	aruo.mutation.SetAppID(u)
 	return aruo
 }
 
@@ -506,7 +506,7 @@ func (aruo *ApplicationRoleUpdateOne) sqlSave(ctx context.Context) (_node *Appli
 	}
 	if value, ok := aruo.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationrole.FieldAppID,
 		})

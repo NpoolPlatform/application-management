@@ -21,8 +21,8 @@ type ApplicationGroupCreate struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (agc *ApplicationGroupCreate) SetAppID(s string) *ApplicationGroupCreate {
-	agc.mutation.SetAppID(s)
+func (agc *ApplicationGroupCreate) SetAppID(u uuid.UUID) *ApplicationGroupCreate {
+	agc.mutation.SetAppID(u)
 	return agc
 }
 
@@ -257,7 +257,7 @@ func (agc *ApplicationGroupCreate) createSpec() (*ApplicationGroup, *sqlgraph.Cr
 	}
 	if value, ok := agc.mutation.AppID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationgroup.FieldAppID,
 		})

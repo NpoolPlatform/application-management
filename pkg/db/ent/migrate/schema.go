@@ -10,7 +10,7 @@ import (
 var (
 	// ApplicationsColumns holds the columns for the "applications" table.
 	ApplicationsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString, Unique: true},
+		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "application_name", Type: field.TypeString, Unique: true},
 		{Name: "application_owner", Type: field.TypeUUID},
 		{Name: "homepage_url", Type: field.TypeString, Nullable: true},
@@ -30,7 +30,7 @@ var (
 	// ApplicationGroupsColumns holds the columns for the "application_groups" table.
 	ApplicationGroupsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "app_id", Type: field.TypeString},
+		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "group_name", Type: field.TypeString},
 		{Name: "group_logo", Type: field.TypeString, Nullable: true},
 		{Name: "group_owner", Type: field.TypeUUID},
@@ -61,7 +61,7 @@ var (
 	ApplicationGroupUsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
 		{Name: "group_id", Type: field.TypeUUID},
-		{Name: "app_id", Type: field.TypeString},
+		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "annotation", Type: field.TypeString, Nullable: true},
 		{Name: "create_at", Type: field.TypeUint32},
@@ -98,7 +98,7 @@ var (
 	// ApplicationResourcesColumns holds the columns for the "application_resources" table.
 	ApplicationResourcesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "app_id", Type: field.TypeString},
+		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "resource_name", Type: field.TypeString},
 		{Name: "resource_description", Type: field.TypeString, Nullable: true},
 		{Name: "type", Type: field.TypeString, Default: "API"},
@@ -123,7 +123,7 @@ var (
 	// ApplicationRolesColumns holds the columns for the "application_roles" table.
 	ApplicationRolesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "app_id", Type: field.TypeString},
+		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "role_name", Type: field.TypeString},
 		{Name: "creator", Type: field.TypeUUID},
 		{Name: "create_at", Type: field.TypeUint32},
@@ -152,7 +152,7 @@ var (
 	// ApplicationRoleUsersColumns holds the columns for the "application_role_users" table.
 	ApplicationRoleUsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "app_id", Type: field.TypeString},
+		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "role_id", Type: field.TypeUUID},
 		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "create_at", Type: field.TypeUint32},
@@ -179,7 +179,7 @@ var (
 	// ApplicationUsersColumns holds the columns for the "application_users" table.
 	ApplicationUsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID, Unique: true},
-		{Name: "app_id", Type: field.TypeString},
+		{Name: "app_id", Type: field.TypeUUID},
 		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "original", Type: field.TypeBool, Default: true},
 		{Name: "create_at", Type: field.TypeUint32},

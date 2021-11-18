@@ -21,7 +21,7 @@ func (ApplicationGroupUser) Fields() []ent.Field {
 			Default(uuid.New).
 			Unique(),
 		field.UUID("group_id", uuid.UUID{}),
-		field.String("app_id"),
+		field.UUID("app_id", uuid.UUID{}),
 		field.UUID("user_id", uuid.UUID{}),
 		field.String("annotation").Optional(),
 		field.Uint32("create_at").

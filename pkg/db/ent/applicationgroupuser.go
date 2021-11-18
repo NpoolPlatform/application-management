@@ -19,7 +19,7 @@ type ApplicationGroupUser struct {
 	// GroupID holds the value of the "group_id" field.
 	GroupID uuid.UUID `json:"group_id,omitempty"`
 	// AppID holds the value of the "app_id" field.
-	AppID string `json:"app_id,omitempty"`
+	AppID uuid.UUID `json:"app_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// Annotation holds the value of the "annotation" field.
@@ -37,9 +37,9 @@ func (*ApplicationGroupUser) scanValues(columns []string) ([]interface{}, error)
 		switch columns[i] {
 		case applicationgroupuser.FieldCreateAt, applicationgroupuser.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case applicationgroupuser.FieldAppID, applicationgroupuser.FieldAnnotation:
+		case applicationgroupuser.FieldAnnotation:
 			values[i] = new(sql.NullString)
-		case applicationgroupuser.FieldID, applicationgroupuser.FieldGroupID, applicationgroupuser.FieldUserID:
+		case applicationgroupuser.FieldID, applicationgroupuser.FieldGroupID, applicationgroupuser.FieldAppID, applicationgroupuser.FieldUserID:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type ApplicationGroupUser", columns[i])
@@ -69,10 +69,10 @@ func (agu *ApplicationGroupUser) assignValues(columns []string, values []interfa
 				agu.GroupID = *value
 			}
 		case applicationgroupuser.FieldAppID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
-			} else if value.Valid {
-				agu.AppID = value.String
+			} else if value != nil {
+				agu.AppID = *value
 			}
 		case applicationgroupuser.FieldUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -129,7 +129,7 @@ func (agu *ApplicationGroupUser) String() string {
 	builder.WriteString(", group_id=")
 	builder.WriteString(fmt.Sprintf("%v", agu.GroupID))
 	builder.WriteString(", app_id=")
-	builder.WriteString(agu.AppID)
+	builder.WriteString(fmt.Sprintf("%v", agu.AppID))
 	builder.WriteString(", user_id=")
 	builder.WriteString(fmt.Sprintf("%v", agu.UserID))
 	builder.WriteString(", annotation=")

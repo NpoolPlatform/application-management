@@ -14,7 +14,7 @@ import (
 
 func dbRowToApplication(row *ent.Application) *npool.ApplicationInfo {
 	return &npool.ApplicationInfo{
-		ID:               row.ID,
+		ID:               row.ID.String(),
 		ApplicationName:  row.ApplicationName,
 		ApplicationOwner: row.ApplicationOwner.String(),
 		ApplicationLogo:  row.ApplicationLogo,
@@ -50,12 +50,16 @@ func Create(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.Cre
 }
 
 func Get(ctx context.Context, in *npool.GetApplicationRequest) (*npool.GetApplicationResponse, error) {
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		Application.
 		Query().
 		Where(
 			application.And(
-				application.ID(in.AppID),
+				application.ID(id),
 				application.DeleteAt(0),
 			),
 		).All(ctx)
@@ -101,9 +105,13 @@ func GetAll(ctx context.Context, in *npool.GetApplicationsRequest) (*npool.GetAp
 }
 
 func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.UpdateApplicationResponse, error) {
+	id, err := uuid.Parse(in.Info.ID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		Application.
-		UpdateOneID(in.Info.ID).
+		UpdateOneID(id).
 		SetApplicationName(in.Info.ApplicationName).
 		SetApplicationLogo(in.Info.ApplicationLogo).
 		SetHomepageURL(in.Info.HomepageUrl).
@@ -119,9 +127,13 @@ func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.Upd
 }
 
 func Delete(ctx context.Context, in *npool.DeleteApplicationRequest) (*npool.DeleteApplicationResponse, error) {
-	_, err := db.Client().
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+	_, err = db.Client().
 		Application.
-		UpdateOneID(in.AppID).
+		UpdateOneID(id).
 		SetDeleteAt(uint32(time.Now().Unix())).
 		Save(ctx)
 	if err != nil {

@@ -44,6 +44,8 @@ func TestApplicationGroupCRUD(t *testing.T) { // nolint
 		applicationInfo.ID = respApp.Info.ID
 	}
 
+	fmt.Println(applicationInfo)
+
 	applicationGroup := &npool.GroupInfo{
 		AppID:      applicationInfo.ID,
 		GroupName:  "test" + uuid.New().String(),

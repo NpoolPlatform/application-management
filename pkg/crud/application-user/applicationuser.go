@@ -17,7 +17,7 @@ import (
 func dbRowToApplicationUser(row *ent.ApplicationUser) *npool.ApplicationUserInfo {
 	return &npool.ApplicationUserInfo{
 		ID:       row.ID.String(),
-		AppID:    row.AppID,
+		AppID:    row.AppID.String(),
 		UserID:   row.UserID.String(),
 		Original: row.Original,
 		CreateAT: row.CreateAt,
@@ -26,6 +26,10 @@ func dbRowToApplicationUser(row *ent.ApplicationUser) *npool.ApplicationUserInfo
 
 func genCreate(ctx context.Context, client *ent.Client, in *npool.AddUsersToApplicationRequest) ([]*npool.ApplicationUserInfo, error) {
 	createResponse := []*npool.ApplicationUserInfo{}
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
@@ -39,7 +43,7 @@ func genCreate(ctx context.Context, client *ent.Client, in *npool.AddUsersToAppl
 		info, err := client.
 			ApplicationUser.
 			Create().
-			SetAppID(in.AppID).
+			SetAppID(id).
 			SetUserID(userID).
 			SetOriginal(in.Original).
 			Save(ctx)
@@ -78,12 +82,17 @@ func Get(ctx context.Context, in *npool.GetUserFromApplicationRequest) (*npool.G
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	info, err := db.Client().
 		ApplicationUser.
 		Query().
 		Where(
 			applicationuser.And(
-				applicationuser.AppID(in.AppID),
+				applicationuser.AppID(id),
 				applicationuser.UserID(userID),
 				applicationuser.DeleteAt(0),
 			),
@@ -106,12 +115,17 @@ func GetAll(ctx context.Context, in *npool.GetUsersFromApplicationRequest) (*npo
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationUser.
 		Query().
 		Where(
 			applicationuser.And(
-				applicationuser.AppID(in.AppID),
+				applicationuser.AppID(id),
 				applicationuser.DeleteAt(0),
 			),
 		).All(ctx)
@@ -129,6 +143,10 @@ func GetAll(ctx context.Context, in *npool.GetUsersFromApplicationRequest) (*npo
 }
 
 func genDelete(ctx context.Context, client *ent.Client, in *npool.RemoveUsersFromApplicationRequest) (interface{}, error) {
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
@@ -140,7 +158,7 @@ func genDelete(ctx context.Context, client *ent.Client, in *npool.RemoveUsersFro
 			Update().
 			Where(
 				applicationuser.And(
-					applicationuser.AppID(in.AppID),
+					applicationuser.AppID(id),
 					applicationuser.UserID(userID),
 					applicationuser.DeleteAt(0),
 				),

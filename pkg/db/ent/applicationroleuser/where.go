@@ -92,7 +92,7 @@ func IDLTE(id uuid.UUID) predicate.ApplicationRoleUser {
 }
 
 // AppID applies equality check predicate on the "app_id" field. It's identical to AppIDEQ.
-func AppID(v string) predicate.ApplicationRoleUser {
+func AppID(v uuid.UUID) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAppID), v))
 	})
@@ -127,21 +127,21 @@ func DeleteAt(v uint32) predicate.ApplicationRoleUser {
 }
 
 // AppIDEQ applies the EQ predicate on the "app_id" field.
-func AppIDEQ(v string) predicate.ApplicationRoleUser {
+func AppIDEQ(v uuid.UUID) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.EQ(s.C(FieldAppID), v))
 	})
 }
 
 // AppIDNEQ applies the NEQ predicate on the "app_id" field.
-func AppIDNEQ(v string) predicate.ApplicationRoleUser {
+func AppIDNEQ(v uuid.UUID) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldAppID), v))
 	})
 }
 
 // AppIDIn applies the In predicate on the "app_id" field.
-func AppIDIn(vs ...string) predicate.ApplicationRoleUser {
+func AppIDIn(vs ...uuid.UUID) predicate.ApplicationRoleUser {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -158,7 +158,7 @@ func AppIDIn(vs ...string) predicate.ApplicationRoleUser {
 }
 
 // AppIDNotIn applies the NotIn predicate on the "app_id" field.
-func AppIDNotIn(vs ...string) predicate.ApplicationRoleUser {
+func AppIDNotIn(vs ...uuid.UUID) predicate.ApplicationRoleUser {
 	v := make([]interface{}, len(vs))
 	for i := range v {
 		v[i] = vs[i]
@@ -175,65 +175,30 @@ func AppIDNotIn(vs ...string) predicate.ApplicationRoleUser {
 }
 
 // AppIDGT applies the GT predicate on the "app_id" field.
-func AppIDGT(v string) predicate.ApplicationRoleUser {
+func AppIDGT(v uuid.UUID) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.GT(s.C(FieldAppID), v))
 	})
 }
 
 // AppIDGTE applies the GTE predicate on the "app_id" field.
-func AppIDGTE(v string) predicate.ApplicationRoleUser {
+func AppIDGTE(v uuid.UUID) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.GTE(s.C(FieldAppID), v))
 	})
 }
 
 // AppIDLT applies the LT predicate on the "app_id" field.
-func AppIDLT(v string) predicate.ApplicationRoleUser {
+func AppIDLT(v uuid.UUID) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.LT(s.C(FieldAppID), v))
 	})
 }
 
 // AppIDLTE applies the LTE predicate on the "app_id" field.
-func AppIDLTE(v string) predicate.ApplicationRoleUser {
+func AppIDLTE(v uuid.UUID) predicate.ApplicationRoleUser {
 	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
 		s.Where(sql.LTE(s.C(FieldAppID), v))
-	})
-}
-
-// AppIDContains applies the Contains predicate on the "app_id" field.
-func AppIDContains(v string) predicate.ApplicationRoleUser {
-	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
-		s.Where(sql.Contains(s.C(FieldAppID), v))
-	})
-}
-
-// AppIDHasPrefix applies the HasPrefix predicate on the "app_id" field.
-func AppIDHasPrefix(v string) predicate.ApplicationRoleUser {
-	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
-		s.Where(sql.HasPrefix(s.C(FieldAppID), v))
-	})
-}
-
-// AppIDHasSuffix applies the HasSuffix predicate on the "app_id" field.
-func AppIDHasSuffix(v string) predicate.ApplicationRoleUser {
-	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
-		s.Where(sql.HasSuffix(s.C(FieldAppID), v))
-	})
-}
-
-// AppIDEqualFold applies the EqualFold predicate on the "app_id" field.
-func AppIDEqualFold(v string) predicate.ApplicationRoleUser {
-	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
-		s.Where(sql.EqualFold(s.C(FieldAppID), v))
-	})
-}
-
-// AppIDContainsFold applies the ContainsFold predicate on the "app_id" field.
-func AppIDContainsFold(v string) predicate.ApplicationRoleUser {
-	return predicate.ApplicationRoleUser(func(s *sql.Selector) {
-		s.Where(sql.ContainsFold(s.C(FieldAppID), v))
 	})
 }
 

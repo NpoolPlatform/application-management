@@ -204,7 +204,7 @@ func (c *ApplicationClient) UpdateOne(a *Application) *ApplicationUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ApplicationClient) UpdateOneID(id string) *ApplicationUpdateOne {
+func (c *ApplicationClient) UpdateOneID(id uuid.UUID) *ApplicationUpdateOne {
 	mutation := newApplicationMutation(c.config, OpUpdateOne, withApplicationID(id))
 	return &ApplicationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -221,7 +221,7 @@ func (c *ApplicationClient) DeleteOne(a *Application) *ApplicationDeleteOne {
 }
 
 // DeleteOneID returns a delete builder for the given id.
-func (c *ApplicationClient) DeleteOneID(id string) *ApplicationDeleteOne {
+func (c *ApplicationClient) DeleteOneID(id uuid.UUID) *ApplicationDeleteOne {
 	builder := c.Delete().Where(application.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -236,12 +236,12 @@ func (c *ApplicationClient) Query() *ApplicationQuery {
 }
 
 // Get returns a Application entity by its id.
-func (c *ApplicationClient) Get(ctx context.Context, id string) (*Application, error) {
+func (c *ApplicationClient) Get(ctx context.Context, id uuid.UUID) (*Application, error) {
 	return c.Query().Where(application.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ApplicationClient) GetX(ctx context.Context, id string) *Application {
+func (c *ApplicationClient) GetX(ctx context.Context, id uuid.UUID) *Application {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

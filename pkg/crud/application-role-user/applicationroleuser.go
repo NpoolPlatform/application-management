@@ -17,7 +17,7 @@ import (
 func dbRowToApplication(row *ent.ApplicationRoleUser) *npool.RoleUserInfo {
 	return &npool.RoleUserInfo{
 		ID:       row.ID.String(),
-		AppID:    row.AppID,
+		AppID:    row.AppID.String(),
 		RoleID:   row.RoleID.String(),
 		UserID:   row.UserID.String(),
 		CreateAT: row.CreateAt,
@@ -58,11 +58,16 @@ func genCreate(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *np
 			return nil, xerrors.Errorf("user already has the role: %v", err)
 		}
 
+		id, err := uuid.Parse(in.AppID)
+		if err != nil {
+			return nil, xerrors.Errorf("invalid app id: %v", err)
+		}
+
 		info, err := client.
 			ApplicationRoleUser.
 			Create().
 			SetRoleID(roleID).
-			SetAppID(in.AppID).
+			SetAppID(id).
 			SetUserID(userID).
 			Save(ctx)
 		if err != nil {
@@ -97,12 +102,17 @@ func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.Ge
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationRoleUser.
 		Query().
 		Where(
 			applicationroleuser.And(
-				applicationroleuser.AppID(in.AppID),
+				applicationroleuser.AppID(id),
 				applicationroleuser.RoleID(roleID),
 				applicationroleuser.DeleteAt(0),
 			),
@@ -133,13 +143,18 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 		return nil, xerrors.Errorf("user does not exist: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationRoleUser.
 		Query().
 		Where(
 			applicationroleuser.And(
 				applicationroleuser.DeleteAt(0),
-				applicationroleuser.AppID(in.AppID),
+				applicationroleuser.AppID(id),
 				applicationroleuser.UserID(userID),
 			),
 		).All(ctx)
@@ -170,13 +185,18 @@ func genDelete(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *np
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
+		id, err := uuid.Parse(in.AppID)
+		if err != nil {
+			return nil, xerrors.Errorf("invalid app id: %v", err)
+		}
+
 		_, err = client.
 			ApplicationRoleUser.
 			Update().
 			Where(
 				applicationroleuser.And(
 					applicationroleuser.DeleteAt(0),
-					applicationroleuser.AppID(in.AppID),
+					applicationroleuser.AppID(id),
 					applicationroleuser.UserID(userID),
 					applicationroleuser.RoleID(roleID),
 				),

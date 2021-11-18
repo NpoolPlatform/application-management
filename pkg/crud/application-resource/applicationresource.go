@@ -16,7 +16,7 @@ import (
 func dbRowToApplicationResource(row *ent.ApplicationResource) *npool.ResourceInfo {
 	return &npool.ResourceInfo{
 		ID:                  row.ID.String(),
-		AppID:               row.AppID,
+		AppID:               row.AppID.String(),
 		ResourceName:        row.ResourceName,
 		Type:                row.Type,
 		ResourceDescription: row.ResourceDescription,
@@ -40,10 +40,15 @@ func Create(ctx context.Context, in *npool.CreateResourceRequest) (*npool.Create
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	info, err := db.Client().
 		ApplicationResource.
 		Create().
-		SetAppID(in.Info.AppID).
+		SetAppID(id).
 		SetResourceName(in.Info.ResourceName).
 		SetType(in.Info.Type).
 		SetResourceDescription(in.Info.ResourceDescription).
@@ -67,13 +72,18 @@ func Get(ctx context.Context, in *npool.GetResourceRequest) (*npool.GetResourceR
 		return nil, xerrors.Errorf("invalid resource id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	info, err := db.Client().
 		ApplicationResource.
 		Query().
 		Where(
 			applicationresource.And(
 				applicationresource.ID(resourceID),
-				applicationresource.AppID(in.AppID),
+				applicationresource.AppID(id),
 				applicationresource.DeleteAt(0),
 			),
 		).Only(ctx)
@@ -95,13 +105,18 @@ func GetResourceByCreator(ctx context.Context, in *npool.GetResourceByCreatorReq
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationResource.
 		Query().
 		Where(
 			applicationresource.And(
 				applicationresource.Creator(creatorID),
-				applicationresource.AppID(in.AppID),
+				applicationresource.AppID(id),
 				applicationresource.DeleteAt(0),
 			),
 		).All(ctx)
@@ -128,12 +143,17 @@ func GetAll(ctx context.Context, in *npool.GetResourcesRequest) (*npool.GetResou
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationResource.
 		Query().
 		Where(
 			applicationresource.And(
-				applicationresource.AppID(in.AppID),
+				applicationresource.AppID(id),
 				applicationresource.DeleteAt(0),
 			),
 		).All(ctx)
@@ -164,13 +184,18 @@ func Update(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.Update
 		return nil, xerrors.Errorf("invalid resource id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	query, err := db.Client().
 		ApplicationResource.
 		Query().
 		Where(
 			applicationresource.And(
 				applicationresource.ID(resourceID),
-				applicationresource.AppID(in.Info.AppID),
+				applicationresource.AppID(id),
 			),
 		).Only(ctx)
 	if err != nil {

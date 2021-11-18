@@ -242,7 +242,7 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Table:   application.Table,
 			Columns: application.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
+				Type:   field.TypeUUID,
 				Column: application.FieldID,
 			},
 		},
@@ -597,7 +597,7 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 			Table:   application.Table,
 			Columns: application.Columns,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
+				Type:   field.TypeUUID,
 				Column: application.FieldID,
 			},
 		},

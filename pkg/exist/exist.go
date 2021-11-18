@@ -16,13 +16,17 @@ import (
 )
 
 func Application(ctx context.Context, appID string) (bool, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return true, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		Application.
 		Query().
 		Where(
 			application.And(
 				application.DeleteAt(0),
-				application.ID(appID),
+				application.ID(id),
 			),
 		).All(ctx)
 	if err != nil {
@@ -37,6 +41,10 @@ func Application(ctx context.Context, appID string) (bool, error) {
 }
 
 func ApplicationRole(ctx context.Context, roleID uuid.UUID, appID string) (bool, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return true, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationRole.
 		Query().
@@ -44,7 +52,7 @@ func ApplicationRole(ctx context.Context, roleID uuid.UUID, appID string) (bool,
 			applicationrole.And(
 				applicationrole.DeleteAt(0),
 				applicationrole.ID(roleID),
-				applicationrole.AppID(appID),
+				applicationrole.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {
@@ -59,6 +67,10 @@ func ApplicationRole(ctx context.Context, roleID uuid.UUID, appID string) (bool,
 }
 
 func RoleName(ctx context.Context, roleName, appID string) (int, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return -1, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationRole.
 		Query().
@@ -66,7 +78,7 @@ func RoleName(ctx context.Context, roleName, appID string) (int, error) {
 			applicationrole.And(
 				applicationrole.DeleteAt(0),
 				applicationrole.RoleName(roleName),
-				applicationrole.AppID(appID),
+				applicationrole.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {
@@ -83,6 +95,10 @@ func RoleName(ctx context.Context, roleName, appID string) (int, error) {
 }
 
 func UserRole(ctx context.Context, userID, roleID uuid.UUID, appID string) (bool, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return true, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationRoleUser.
 		Query().
@@ -90,7 +106,7 @@ func UserRole(ctx context.Context, userID, roleID uuid.UUID, appID string) (bool
 			applicationroleuser.And(
 				applicationroleuser.UserID(userID),
 				applicationroleuser.RoleID(roleID),
-				applicationroleuser.AppID(appID),
+				applicationroleuser.AppID(id),
 				applicationroleuser.DeleteAt(0),
 			),
 		).All(ctx)
@@ -106,13 +122,17 @@ func UserRole(ctx context.Context, userID, roleID uuid.UUID, appID string) (bool
 }
 
 func ApplicationUser(ctx context.Context, appID string, userID uuid.UUID) (bool, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return true, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationUser.
 		Query().
 		Where(
 			applicationuser.And(
 				applicationuser.UserID(userID),
-				applicationuser.AppID(appID),
+				applicationuser.AppID(id),
 				applicationuser.DeleteAt(0),
 			),
 		).All(ctx)
@@ -128,13 +148,17 @@ func ApplicationUser(ctx context.Context, appID string, userID uuid.UUID) (bool,
 }
 
 func ApplicationGroup(ctx context.Context, groupID uuid.UUID, appID string) (bool, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return true, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationGroup.
 		Query().
 		Where(
 			applicationgroup.And(
 				applicationgroup.ID(groupID),
-				applicationgroup.AppID(appID),
+				applicationgroup.AppID(id),
 				applicationgroup.DeleteAt(0),
 			),
 		).All(ctx)
@@ -150,6 +174,10 @@ func ApplicationGroup(ctx context.Context, groupID uuid.UUID, appID string) (boo
 }
 
 func GroupName(ctx context.Context, groupName, appID string) (int, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return -1, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationGroup.
 		Query().
@@ -157,7 +185,7 @@ func GroupName(ctx context.Context, groupName, appID string) (int, error) {
 			applicationgroup.And(
 				applicationgroup.DeleteAt(0),
 				applicationgroup.GroupName(groupName),
-				applicationgroup.AppID(appID),
+				applicationgroup.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {
@@ -174,13 +202,17 @@ func GroupName(ctx context.Context, groupName, appID string) (int, error) {
 }
 
 func GroupUser(ctx context.Context, userID, groupID uuid.UUID, appID string) (bool, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return true, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationGroupUser.
 		Query().
 		Where(
 			applicationgroupuser.And(
 				applicationgroupuser.GroupID(groupID),
-				applicationgroupuser.AppID(appID),
+				applicationgroupuser.AppID(id),
 				applicationgroupuser.UserID(userID),
 				applicationgroupuser.DeleteAt(0),
 			),
@@ -197,13 +229,17 @@ func GroupUser(ctx context.Context, userID, groupID uuid.UUID, appID string) (bo
 }
 
 func ApplicationResource(ctx context.Context, resourceID uuid.UUID, appID string) (bool, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return true, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationResource.
 		Query().
 		Where(
 			applicationresource.And(
 				applicationresource.ID(resourceID),
-				applicationresource.AppID(appID),
+				applicationresource.AppID(id),
 				applicationresource.DeleteAt(0),
 			),
 		).All(ctx)
@@ -219,6 +255,10 @@ func ApplicationResource(ctx context.Context, resourceID uuid.UUID, appID string
 }
 
 func ResourceName(ctx context.Context, resourceName, appID string) (int, error) {
+	id, err := uuid.Parse(appID)
+	if err != nil {
+		return -1, xerrors.Errorf("invalid app id: %v", err)
+	}
 	info, err := db.Client().
 		ApplicationResource.
 		Query().
@@ -226,7 +266,7 @@ func ResourceName(ctx context.Context, resourceName, appID string) (int, error) 
 			applicationresource.And(
 				applicationresource.DeleteAt(0),
 				applicationresource.ResourceName(resourceName),
-				applicationresource.AppID(appID),
+				applicationresource.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {

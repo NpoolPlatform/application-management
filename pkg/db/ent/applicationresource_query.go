@@ -254,7 +254,7 @@ func (arq *ApplicationResourceQuery) Clone() *ApplicationResourceQuery {
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -281,7 +281,7 @@ func (arq *ApplicationResourceQuery) GroupBy(field string, fields ...string) *Ap
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //	}
 //
 //	client.ApplicationResource.Query().

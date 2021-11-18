@@ -17,7 +17,7 @@ type ApplicationRole struct {
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
 	// AppID holds the value of the "app_id" field.
-	AppID string `json:"app_id,omitempty"`
+	AppID uuid.UUID `json:"app_id,omitempty"`
 	// RoleName holds the value of the "role_name" field.
 	RoleName string `json:"role_name,omitempty"`
 	// Creator holds the value of the "creator" field.
@@ -39,9 +39,9 @@ func (*ApplicationRole) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case applicationrole.FieldCreateAt, applicationrole.FieldUpdateAt, applicationrole.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case applicationrole.FieldAppID, applicationrole.FieldRoleName, applicationrole.FieldAnnotation:
+		case applicationrole.FieldRoleName, applicationrole.FieldAnnotation:
 			values[i] = new(sql.NullString)
-		case applicationrole.FieldID, applicationrole.FieldCreator:
+		case applicationrole.FieldID, applicationrole.FieldAppID, applicationrole.FieldCreator:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type ApplicationRole", columns[i])
@@ -65,10 +65,10 @@ func (ar *ApplicationRole) assignValues(columns []string, values []interface{}) 
 				ar.ID = *value
 			}
 		case applicationrole.FieldAppID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
-			} else if value.Valid {
-				ar.AppID = value.String
+			} else if value != nil {
+				ar.AppID = *value
 			}
 		case applicationrole.FieldRoleName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -135,7 +135,7 @@ func (ar *ApplicationRole) String() string {
 	builder.WriteString("ApplicationRole(")
 	builder.WriteString(fmt.Sprintf("id=%v", ar.ID))
 	builder.WriteString(", app_id=")
-	builder.WriteString(ar.AppID)
+	builder.WriteString(fmt.Sprintf("%v", ar.AppID))
 	builder.WriteString(", role_name=")
 	builder.WriteString(ar.RoleName)
 	builder.WriteString(", creator=")

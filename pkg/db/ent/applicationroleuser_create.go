@@ -21,8 +21,8 @@ type ApplicationRoleUserCreate struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (aruc *ApplicationRoleUserCreate) SetAppID(s string) *ApplicationRoleUserCreate {
-	aruc.mutation.SetAppID(s)
+func (aruc *ApplicationRoleUserCreate) SetAppID(u uuid.UUID) *ApplicationRoleUserCreate {
+	aruc.mutation.SetAppID(u)
 	return aruc
 }
 
@@ -208,7 +208,7 @@ func (aruc *ApplicationRoleUserCreate) createSpec() (*ApplicationRoleUser, *sqlg
 	}
 	if value, ok := aruc.mutation.AppID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationroleuser.FieldAppID,
 		})

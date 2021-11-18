@@ -17,7 +17,7 @@ import (
 func dbRawToApplicationGroupUser(row *ent.ApplicationGroupUser) *npool.GroupUserInfo {
 	return &npool.GroupUserInfo{
 		UserID:     row.UserID.String(),
-		AppID:      row.AppID,
+		AppID:      row.AppID.String(),
 		GroupID:    row.GroupID.String(),
 		Annotation: row.Annotation,
 		CreateAT:   row.CreateAt,
@@ -59,10 +59,15 @@ func genCreate(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *n
 			return nil, xerrors.Errorf("user has already existed in this app group")
 		}
 
+		id, err := uuid.Parse(in.AppID)
+		if err != nil {
+			return nil, xerrors.Errorf("invalid app id: %v", err)
+		}
+
 		info, err := client.
 			ApplicationGroupUser.
 			Create().
-			SetAppID(in.AppID).
+			SetAppID(id).
 			SetUserID(userID).
 			SetGroupID(groupID).
 			Save(ctx)
@@ -98,6 +103,11 @@ func Get(ctx context.Context, in *npool.GetGroupUsersRequest) (*npool.GetGroupUs
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationGroupUser.
 		Query().
@@ -105,7 +115,7 @@ func Get(ctx context.Context, in *npool.GetGroupUsersRequest) (*npool.GetGroupUs
 			applicationgroupuser.And(
 				applicationgroupuser.DeleteAt(0),
 				applicationgroupuser.GroupID(groupID),
-				applicationgroupuser.AppID(in.AppID),
+				applicationgroupuser.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {
@@ -129,6 +139,11 @@ func genDelete(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *n
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
+		id, err := uuid.Parse(in.AppID)
+		if err != nil {
+			return nil, xerrors.Errorf("invalid app id: %v", err)
+		}
+
 		_, err = client.
 			ApplicationGroupUser.
 			Update().
@@ -136,7 +151,7 @@ func genDelete(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *n
 				applicationgroupuser.And(
 					applicationgroupuser.UserID(userID),
 					applicationgroupuser.GroupID(groupID),
-					applicationgroupuser.AppID(in.AppID),
+					applicationgroupuser.AppID(id),
 					applicationgroupuser.DeleteAt(0),
 				),
 			).

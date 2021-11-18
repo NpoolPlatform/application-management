@@ -21,8 +21,8 @@ type ApplicationUserCreate struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (auc *ApplicationUserCreate) SetAppID(s string) *ApplicationUserCreate {
-	auc.mutation.SetAppID(s)
+func (auc *ApplicationUserCreate) SetAppID(u uuid.UUID) *ApplicationUserCreate {
+	auc.mutation.SetAppID(u)
 	return auc
 }
 
@@ -220,7 +220,7 @@ func (auc *ApplicationUserCreate) createSpec() (*ApplicationUser, *sqlgraph.Crea
 	}
 	if value, ok := auc.mutation.AppID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationuser.FieldAppID,
 		})

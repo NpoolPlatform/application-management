@@ -16,7 +16,7 @@ import (
 func dbRowToApplicationRole(row *ent.ApplicationRole) *npool.RoleInfo {
 	return &npool.RoleInfo{
 		ID:         row.ID.String(),
-		AppID:      row.AppID,
+		AppID:      row.AppID.String(),
 		RoleName:   row.RoleName,
 		Creator:    row.Creator.String(),
 		Annotation: row.Annotation,
@@ -39,10 +39,15 @@ func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRole
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
 
+	id, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	info, err := db.Client().
 		ApplicationRole.
 		Create().
-		SetAppID(in.Info.AppID).
+		SetAppID(id).
 		SetRoleName(in.Info.RoleName).
 		SetCreator(creator).
 		SetAnnotation(in.Info.Annotation).
@@ -66,13 +71,18 @@ func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse,
 		return nil, xerrors.Errorf("invalid role id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	info, err := db.Client().
 		ApplicationRole.
 		Query().
 		Where(
 			applicationrole.And(
 				applicationrole.DeleteAt(0),
-				applicationrole.AppID(in.AppID),
+				applicationrole.AppID(id),
 				applicationrole.ID(roleID),
 			),
 		).Only(ctx)
@@ -90,13 +100,18 @@ func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResp
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationRole.
 		Query().
 		Where(
 			applicationrole.And(
 				applicationrole.DeleteAt(0),
-				applicationrole.AppID(in.AppID),
+				applicationrole.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {
@@ -126,13 +141,18 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 		return nil, xerrors.Errorf("role name has already exist in this app")
 	}
 
+	id, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	query, err := db.Client().
 		ApplicationRole.
 		Query().
 		Where(
 			applicationrole.And(
 				applicationrole.ID(roleID),
-				applicationrole.AppID(in.Info.AppID),
+				applicationrole.AppID(id),
 			),
 		).Only(ctx)
 	if err != nil {
@@ -192,12 +212,17 @@ func GetRoleByCreator(ctx context.Context, in *npool.GetRoleByCreatorRequest) (*
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationRole.
 		Query().
 		Where(
 			applicationrole.And(
-				applicationrole.AppID(in.AppID),
+				applicationrole.AppID(id),
 				applicationrole.Creator(creatorID),
 				applicationrole.DeleteAt(0),
 			),

@@ -28,8 +28,8 @@ func (aru *ApplicationResourceUpdate) Where(ps ...predicate.ApplicationResource)
 }
 
 // SetAppID sets the "app_id" field.
-func (aru *ApplicationResourceUpdate) SetAppID(s string) *ApplicationResourceUpdate {
-	aru.mutation.SetAppID(s)
+func (aru *ApplicationResourceUpdate) SetAppID(u uuid.UUID) *ApplicationResourceUpdate {
+	aru.mutation.SetAppID(u)
 	return aru
 }
 
@@ -222,7 +222,7 @@ func (aru *ApplicationResourceUpdate) sqlSave(ctx context.Context) (n int, err e
 	}
 	if value, ok := aru.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationresource.FieldAppID,
 		})
@@ -323,8 +323,8 @@ type ApplicationResourceUpdateOne struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (aruo *ApplicationResourceUpdateOne) SetAppID(s string) *ApplicationResourceUpdateOne {
-	aruo.mutation.SetAppID(s)
+func (aruo *ApplicationResourceUpdateOne) SetAppID(u uuid.UUID) *ApplicationResourceUpdateOne {
+	aruo.mutation.SetAppID(u)
 	return aruo
 }
 
@@ -541,7 +541,7 @@ func (aruo *ApplicationResourceUpdateOne) sqlSave(ctx context.Context) (_node *A
 	}
 	if value, ok := aruo.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationresource.FieldAppID,
 		})

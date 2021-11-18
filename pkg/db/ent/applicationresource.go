@@ -17,7 +17,7 @@ type ApplicationResource struct {
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
 	// AppID holds the value of the "app_id" field.
-	AppID string `json:"app_id,omitempty"`
+	AppID uuid.UUID `json:"app_id,omitempty"`
 	// ResourceName holds the value of the "resource_name" field.
 	ResourceName string `json:"resource_name,omitempty"`
 	// ResourceDescription holds the value of the "resource_description" field.
@@ -41,9 +41,9 @@ func (*ApplicationResource) scanValues(columns []string) ([]interface{}, error) 
 		switch columns[i] {
 		case applicationresource.FieldCreateAt, applicationresource.FieldUpdateAt, applicationresource.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case applicationresource.FieldAppID, applicationresource.FieldResourceName, applicationresource.FieldResourceDescription, applicationresource.FieldType:
+		case applicationresource.FieldResourceName, applicationresource.FieldResourceDescription, applicationresource.FieldType:
 			values[i] = new(sql.NullString)
-		case applicationresource.FieldID, applicationresource.FieldCreator:
+		case applicationresource.FieldID, applicationresource.FieldAppID, applicationresource.FieldCreator:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type ApplicationResource", columns[i])
@@ -67,10 +67,10 @@ func (ar *ApplicationResource) assignValues(columns []string, values []interface
 				ar.ID = *value
 			}
 		case applicationresource.FieldAppID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
-			} else if value.Valid {
-				ar.AppID = value.String
+			} else if value != nil {
+				ar.AppID = *value
 			}
 		case applicationresource.FieldResourceName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -143,7 +143,7 @@ func (ar *ApplicationResource) String() string {
 	builder.WriteString("ApplicationResource(")
 	builder.WriteString(fmt.Sprintf("id=%v", ar.ID))
 	builder.WriteString(", app_id=")
-	builder.WriteString(ar.AppID)
+	builder.WriteString(fmt.Sprintf("%v", ar.AppID))
 	builder.WriteString(", resource_name=")
 	builder.WriteString(ar.ResourceName)
 	builder.WriteString(", resource_description=")

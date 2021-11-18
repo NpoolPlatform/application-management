@@ -27,8 +27,8 @@ func (aguc *ApplicationGroupUserCreate) SetGroupID(u uuid.UUID) *ApplicationGrou
 }
 
 // SetAppID sets the "app_id" field.
-func (aguc *ApplicationGroupUserCreate) SetAppID(s string) *ApplicationGroupUserCreate {
-	aguc.mutation.SetAppID(s)
+func (aguc *ApplicationGroupUserCreate) SetAppID(u uuid.UUID) *ApplicationGroupUserCreate {
+	aguc.mutation.SetAppID(u)
 	return aguc
 }
 
@@ -230,7 +230,7 @@ func (aguc *ApplicationGroupUserCreate) createSpec() (*ApplicationGroupUser, *sq
 	}
 	if value, ok := aguc.mutation.AppID(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationgroupuser.FieldAppID,
 		})

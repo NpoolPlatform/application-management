@@ -20,7 +20,7 @@ func (ApplicationRoleUser) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
 			Unique(),
-		field.String("app_id"),
+		field.UUID("app_id", uuid.UUID{}),
 		field.UUID("role_id", uuid.UUID{}),
 		field.UUID("user_id", uuid.UUID{}),
 		field.Uint32("create_at").

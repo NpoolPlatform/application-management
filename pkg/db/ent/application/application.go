@@ -2,6 +2,10 @@
 
 package application
 
+import (
+	"github.com/google/uuid"
+)
+
 const (
 	// Label holds the string label denoting the application type in the database.
 	Label = "application"
@@ -65,5 +69,5 @@ var (
 	// DefaultDeleteAt holds the default value on creation for the "delete_at" field.
 	DefaultDeleteAt func() uint32
 	// DefaultID holds the default value on creation for the "id" field.
-	DefaultID func() string
+	DefaultID func() uuid.UUID
 )

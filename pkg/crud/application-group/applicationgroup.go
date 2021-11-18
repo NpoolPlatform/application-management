@@ -16,7 +16,7 @@ import (
 func dbRowToApplicationGroup(row *ent.ApplicationGroup) *npool.GroupInfo {
 	return &npool.GroupInfo{
 		ID:         row.ID.String(),
-		AppID:      row.AppID,
+		AppID:      row.AppID.String(),
 		GroupName:  row.GroupName,
 		GroupOwner: row.GroupOwner.String(),
 		GroupLogo:  row.GroupLogo,
@@ -35,6 +35,11 @@ func Create(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGro
 		return nil, xerrors.Errorf("group name has already exist")
 	}
 
+	id, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	groupOwner, err := uuid.Parse(in.Info.GroupOwner)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid group owner id: %v", err)
@@ -43,7 +48,7 @@ func Create(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGro
 	info, err := db.Client().
 		ApplicationGroup.
 		Create().
-		SetAppID(in.Info.AppID).
+		SetAppID(id).
 		SetGroupName(in.Info.GroupName).
 		SetGroupOwner(groupOwner).
 		SetGroupLogo(in.Info.GroupLogo).
@@ -72,13 +77,18 @@ func Update(ctx context.Context, in *npool.UpdateGroupRequest) (*npool.UpdateGro
 		return nil, xerrors.Errorf("invalid group id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.Info.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	query, err := db.Client().
 		ApplicationGroup.
 		Query().
 		Where(
 			applicationgroup.And(
 				applicationgroup.ID(groupID),
-				applicationgroup.AppID(in.Info.AppID),
+				applicationgroup.AppID(id),
 			),
 		).Only(ctx)
 	if err != nil {
@@ -115,13 +125,18 @@ func Get(ctx context.Context, in *npool.GetGroupRequest) (*npool.GetGroupRespons
 		return nil, xerrors.Errorf("invalid group id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	info, err := db.Client().
 		ApplicationGroup.
 		Query().
 		Where(
 			applicationgroup.And(
 				applicationgroup.ID(groupID),
-				applicationgroup.AppID(in.AppID),
+				applicationgroup.AppID(id),
 				applicationgroup.DeleteAt(0),
 			),
 		).Only(ctx)
@@ -144,6 +159,11 @@ func GetGroupByOwner(ctx context.Context, in *npool.GetGroupByOwnerRequest) (*np
 		return nil, xerrors.Errorf("invalid owner id: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationGroup.
 		Query().
@@ -151,7 +171,7 @@ func GetGroupByOwner(ctx context.Context, in *npool.GetGroupByOwnerRequest) (*np
 			applicationgroup.And(
 				applicationgroup.GroupOwner(ownerID),
 				applicationgroup.DeleteAt(0),
-				applicationgroup.AppID(in.AppID),
+				applicationgroup.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {
@@ -176,13 +196,18 @@ func GetAll(ctx context.Context, in *npool.GetAllGroupsRequest) (*npool.GetAllGr
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
+	id, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
 	infos, err := db.Client().
 		ApplicationGroup.
 		Query().
 		Where(
 			applicationgroup.And(
 				applicationgroup.DeleteAt(0),
-				applicationgroup.AppID(in.AppID),
+				applicationgroup.AppID(id),
 			),
 		).All(ctx)
 	if err != nil {

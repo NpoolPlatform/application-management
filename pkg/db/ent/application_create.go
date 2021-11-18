@@ -131,16 +131,8 @@ func (ac *ApplicationCreate) SetNillableDeleteAt(u *uint32) *ApplicationCreate {
 }
 
 // SetID sets the "id" field.
-func (ac *ApplicationCreate) SetID(s string) *ApplicationCreate {
-	ac.mutation.SetID(s)
-	return ac
-}
-
-// SetNillableID sets the "id" field if the given value is not nil.
-func (ac *ApplicationCreate) SetNillableID(s *string) *ApplicationCreate {
-	if s != nil {
-		ac.SetID(*s)
-	}
+func (ac *ApplicationCreate) SetID(u uuid.UUID) *ApplicationCreate {
+	ac.mutation.SetID(u)
 	return ac
 }
 
@@ -269,7 +261,7 @@ func (ac *ApplicationCreate) sqlSave(ctx context.Context) (*Application, error) 
 		return nil, err
 	}
 	if _spec.ID.Value != nil {
-		_node.ID = _spec.ID.Value.(string)
+		_node.ID = _spec.ID.Value.(uuid.UUID)
 	}
 	return _node, nil
 }
@@ -280,7 +272,7 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 		_spec = &sqlgraph.CreateSpec{
 			Table: application.Table,
 			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
+				Type:   field.TypeUUID,
 				Column: application.FieldID,
 			},
 		}

@@ -20,7 +20,7 @@ func (ApplicationResource) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
 			Unique(),
-		field.String("app_id"),
+		field.UUID("app_id", uuid.UUID{}),
 		field.String("resource_name"),
 		field.String("resource_description").Optional(),
 		field.String("type").

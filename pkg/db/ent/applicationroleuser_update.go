@@ -28,8 +28,8 @@ func (aruu *ApplicationRoleUserUpdate) Where(ps ...predicate.ApplicationRoleUser
 }
 
 // SetAppID sets the "app_id" field.
-func (aruu *ApplicationRoleUserUpdate) SetAppID(s string) *ApplicationRoleUserUpdate {
-	aruu.mutation.SetAppID(s)
+func (aruu *ApplicationRoleUserUpdate) SetAppID(u uuid.UUID) *ApplicationRoleUserUpdate {
+	aruu.mutation.SetAppID(u)
 	return aruu
 }
 
@@ -166,7 +166,7 @@ func (aruu *ApplicationRoleUserUpdate) sqlSave(ctx context.Context) (n int, err 
 	}
 	if value, ok := aruu.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationroleuser.FieldAppID,
 		})
@@ -233,8 +233,8 @@ type ApplicationRoleUserUpdateOne struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (aruuo *ApplicationRoleUserUpdateOne) SetAppID(s string) *ApplicationRoleUserUpdateOne {
-	aruuo.mutation.SetAppID(s)
+func (aruuo *ApplicationRoleUserUpdateOne) SetAppID(u uuid.UUID) *ApplicationRoleUserUpdateOne {
+	aruuo.mutation.SetAppID(u)
 	return aruuo
 }
 
@@ -395,7 +395,7 @@ func (aruuo *ApplicationRoleUserUpdateOne) sqlSave(ctx context.Context) (_node *
 	}
 	if value, ok := aruuo.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationroleuser.FieldAppID,
 		})

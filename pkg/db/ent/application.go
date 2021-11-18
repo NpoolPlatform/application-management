@@ -15,7 +15,7 @@ import (
 type Application struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID string `json:"id,omitempty"`
+	ID uuid.UUID `json:"id,omitempty"`
 	// ApplicationName holds the value of the "application_name" field.
 	ApplicationName string `json:"application_name,omitempty"`
 	// ApplicationOwner holds the value of the "application_owner" field.
@@ -43,9 +43,9 @@ func (*Application) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case application.FieldCreateAt, application.FieldUpdateAt, application.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case application.FieldID, application.FieldApplicationName, application.FieldHomepageURL, application.FieldRedirectURL, application.FieldClientSecret, application.FieldApplicationLogo:
+		case application.FieldApplicationName, application.FieldHomepageURL, application.FieldRedirectURL, application.FieldClientSecret, application.FieldApplicationLogo:
 			values[i] = new(sql.NullString)
-		case application.FieldApplicationOwner:
+		case application.FieldID, application.FieldApplicationOwner:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type Application", columns[i])
@@ -63,10 +63,10 @@ func (a *Application) assignValues(columns []string, values []interface{}) error
 	for i := range columns {
 		switch columns[i] {
 		case application.FieldID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
-			} else if value.Valid {
-				a.ID = value.String
+			} else if value != nil {
+				a.ID = *value
 			}
 		case application.FieldApplicationName:
 			if value, ok := values[i].(*sql.NullString); !ok {

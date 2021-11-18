@@ -41,7 +41,7 @@ func init() {
 	// applicationDescID is the schema descriptor for id field.
 	applicationDescID := applicationFields[0].Descriptor()
 	// application.DefaultID holds the default value on creation for the id field.
-	application.DefaultID = applicationDescID.Default.(func() string)
+	application.DefaultID = applicationDescID.Default.(func() uuid.UUID)
 	applicationgroupFields := schema.ApplicationGroup{}.Fields()
 	_ = applicationgroupFields
 	// applicationgroupDescCreateAt is the schema descriptor for create_at field.

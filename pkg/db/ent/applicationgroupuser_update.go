@@ -34,8 +34,8 @@ func (aguu *ApplicationGroupUserUpdate) SetGroupID(u uuid.UUID) *ApplicationGrou
 }
 
 // SetAppID sets the "app_id" field.
-func (aguu *ApplicationGroupUserUpdate) SetAppID(s string) *ApplicationGroupUserUpdate {
-	aguu.mutation.SetAppID(s)
+func (aguu *ApplicationGroupUserUpdate) SetAppID(u uuid.UUID) *ApplicationGroupUserUpdate {
+	aguu.mutation.SetAppID(u)
 	return aguu
 }
 
@@ -193,7 +193,7 @@ func (aguu *ApplicationGroupUserUpdate) sqlSave(ctx context.Context) (n int, err
 	}
 	if value, ok := aguu.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationgroupuser.FieldAppID,
 		})
@@ -272,8 +272,8 @@ func (aguuo *ApplicationGroupUserUpdateOne) SetGroupID(u uuid.UUID) *Application
 }
 
 // SetAppID sets the "app_id" field.
-func (aguuo *ApplicationGroupUserUpdateOne) SetAppID(s string) *ApplicationGroupUserUpdateOne {
-	aguuo.mutation.SetAppID(s)
+func (aguuo *ApplicationGroupUserUpdateOne) SetAppID(u uuid.UUID) *ApplicationGroupUserUpdateOne {
+	aguuo.mutation.SetAppID(u)
 	return aguuo
 }
 
@@ -455,7 +455,7 @@ func (aguuo *ApplicationGroupUserUpdateOne) sqlSave(ctx context.Context) (_node 
 	}
 	if value, ok := aguuo.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationgroupuser.FieldAppID,
 		})

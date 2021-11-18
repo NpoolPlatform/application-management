@@ -254,7 +254,7 @@ func (auq *ApplicationUserQuery) Clone() *ApplicationUserQuery {
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -281,7 +281,7 @@ func (auq *ApplicationUserQuery) GroupBy(field string, fields ...string) *Applic
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //	}
 //
 //	client.ApplicationUser.Query().

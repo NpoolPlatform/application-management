@@ -17,7 +17,7 @@ type ApplicationRoleUser struct {
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
 	// AppID holds the value of the "app_id" field.
-	AppID string `json:"app_id,omitempty"`
+	AppID uuid.UUID `json:"app_id,omitempty"`
 	// RoleID holds the value of the "role_id" field.
 	RoleID uuid.UUID `json:"role_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
@@ -35,9 +35,7 @@ func (*ApplicationRoleUser) scanValues(columns []string) ([]interface{}, error) 
 		switch columns[i] {
 		case applicationroleuser.FieldCreateAt, applicationroleuser.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case applicationroleuser.FieldAppID:
-			values[i] = new(sql.NullString)
-		case applicationroleuser.FieldID, applicationroleuser.FieldRoleID, applicationroleuser.FieldUserID:
+		case applicationroleuser.FieldID, applicationroleuser.FieldAppID, applicationroleuser.FieldRoleID, applicationroleuser.FieldUserID:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type ApplicationRoleUser", columns[i])
@@ -61,10 +59,10 @@ func (aru *ApplicationRoleUser) assignValues(columns []string, values []interfac
 				aru.ID = *value
 			}
 		case applicationroleuser.FieldAppID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
-			} else if value.Valid {
-				aru.AppID = value.String
+			} else if value != nil {
+				aru.AppID = *value
 			}
 		case applicationroleuser.FieldRoleID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -119,7 +117,7 @@ func (aru *ApplicationRoleUser) String() string {
 	builder.WriteString("ApplicationRoleUser(")
 	builder.WriteString(fmt.Sprintf("id=%v", aru.ID))
 	builder.WriteString(", app_id=")
-	builder.WriteString(aru.AppID)
+	builder.WriteString(fmt.Sprintf("%v", aru.AppID))
 	builder.WriteString(", role_id=")
 	builder.WriteString(fmt.Sprintf("%v", aru.RoleID))
 	builder.WriteString(", user_id=")

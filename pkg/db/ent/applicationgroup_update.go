@@ -28,8 +28,8 @@ func (agu *ApplicationGroupUpdate) Where(ps ...predicate.ApplicationGroup) *Appl
 }
 
 // SetAppID sets the "app_id" field.
-func (agu *ApplicationGroupUpdate) SetAppID(s string) *ApplicationGroupUpdate {
-	agu.mutation.SetAppID(s)
+func (agu *ApplicationGroupUpdate) SetAppID(u uuid.UUID) *ApplicationGroupUpdate {
+	agu.mutation.SetAppID(u)
 	return agu
 }
 
@@ -228,7 +228,7 @@ func (agu *ApplicationGroupUpdate) sqlSave(ctx context.Context) (n int, err erro
 	}
 	if value, ok := agu.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationgroup.FieldAppID,
 		})
@@ -335,8 +335,8 @@ type ApplicationGroupUpdateOne struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (aguo *ApplicationGroupUpdateOne) SetAppID(s string) *ApplicationGroupUpdateOne {
-	aguo.mutation.SetAppID(s)
+func (aguo *ApplicationGroupUpdateOne) SetAppID(u uuid.UUID) *ApplicationGroupUpdateOne {
+	aguo.mutation.SetAppID(u)
 	return aguo
 }
 
@@ -559,7 +559,7 @@ func (aguo *ApplicationGroupUpdateOne) sqlSave(ctx context.Context) (_node *Appl
 	}
 	if value, ok := aguo.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationgroup.FieldAppID,
 		})

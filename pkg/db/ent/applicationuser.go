@@ -17,7 +17,7 @@ type ApplicationUser struct {
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
 	// AppID holds the value of the "app_id" field.
-	AppID string `json:"app_id,omitempty"`
+	AppID uuid.UUID `json:"app_id,omitempty"`
 	// UserID holds the value of the "user_id" field.
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// Original holds the value of the "original" field.
@@ -37,9 +37,7 @@ func (*ApplicationUser) scanValues(columns []string) ([]interface{}, error) {
 			values[i] = new(sql.NullBool)
 		case applicationuser.FieldCreateAt, applicationuser.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case applicationuser.FieldAppID:
-			values[i] = new(sql.NullString)
-		case applicationuser.FieldID, applicationuser.FieldUserID:
+		case applicationuser.FieldID, applicationuser.FieldAppID, applicationuser.FieldUserID:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type ApplicationUser", columns[i])
@@ -63,10 +61,10 @@ func (au *ApplicationUser) assignValues(columns []string, values []interface{}) 
 				au.ID = *value
 			}
 		case applicationuser.FieldAppID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
-			} else if value.Valid {
-				au.AppID = value.String
+			} else if value != nil {
+				au.AppID = *value
 			}
 		case applicationuser.FieldUserID:
 			if value, ok := values[i].(*uuid.UUID); !ok {
@@ -121,7 +119,7 @@ func (au *ApplicationUser) String() string {
 	builder.WriteString("ApplicationUser(")
 	builder.WriteString(fmt.Sprintf("id=%v", au.ID))
 	builder.WriteString(", app_id=")
-	builder.WriteString(au.AppID)
+	builder.WriteString(fmt.Sprintf("%v", au.AppID))
 	builder.WriteString(", user_id=")
 	builder.WriteString(fmt.Sprintf("%v", au.UserID))
 	builder.WriteString(", original=")

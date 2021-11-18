@@ -254,7 +254,7 @@ func (aruq *ApplicationRoleUserQuery) Clone() *ApplicationRoleUserQuery {
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -281,7 +281,7 @@ func (aruq *ApplicationRoleUserQuery) GroupBy(field string, fields ...string) *A
 // Example:
 //
 //	var v []struct {
-//		AppID string `json:"app_id,omitempty"`
+//		AppID uuid.UUID `json:"app_id,omitempty"`
 //	}
 //
 //	client.ApplicationRoleUser.Query().

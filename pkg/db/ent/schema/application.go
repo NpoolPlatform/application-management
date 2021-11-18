@@ -17,10 +17,9 @@ type Application struct {
 // Fields of the Empty.
 func (Application) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("id").Unique().
-			DefaultFunc(func() string {
-				return randstr.Hex(10)
-			}),
+		field.UUID("id", uuid.UUID{}).
+			Default(uuid.New).
+			Unique(),
 		field.String("application_name").Unique(),
 		field.UUID("application_owner", uuid.UUID{}),
 		field.String("homepage_url").Optional(),

@@ -17,7 +17,7 @@ type ApplicationGroup struct {
 	// ID of the ent.
 	ID uuid.UUID `json:"id,omitempty"`
 	// AppID holds the value of the "app_id" field.
-	AppID string `json:"app_id,omitempty"`
+	AppID uuid.UUID `json:"app_id,omitempty"`
 	// GroupName holds the value of the "group_name" field.
 	GroupName string `json:"group_name,omitempty"`
 	// GroupLogo holds the value of the "group_logo" field.
@@ -41,9 +41,9 @@ func (*ApplicationGroup) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case applicationgroup.FieldCreateAt, applicationgroup.FieldUpdateAt, applicationgroup.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
-		case applicationgroup.FieldAppID, applicationgroup.FieldGroupName, applicationgroup.FieldGroupLogo, applicationgroup.FieldAnnotation:
+		case applicationgroup.FieldGroupName, applicationgroup.FieldGroupLogo, applicationgroup.FieldAnnotation:
 			values[i] = new(sql.NullString)
-		case applicationgroup.FieldID, applicationgroup.FieldGroupOwner:
+		case applicationgroup.FieldID, applicationgroup.FieldAppID, applicationgroup.FieldGroupOwner:
 			values[i] = new(uuid.UUID)
 		default:
 			return nil, fmt.Errorf("unexpected column %q for type ApplicationGroup", columns[i])
@@ -67,10 +67,10 @@ func (ag *ApplicationGroup) assignValues(columns []string, values []interface{})
 				ag.ID = *value
 			}
 		case applicationgroup.FieldAppID:
-			if value, ok := values[i].(*sql.NullString); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field app_id", values[i])
-			} else if value.Valid {
-				ag.AppID = value.String
+			} else if value != nil {
+				ag.AppID = *value
 			}
 		case applicationgroup.FieldGroupName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -143,7 +143,7 @@ func (ag *ApplicationGroup) String() string {
 	builder.WriteString("ApplicationGroup(")
 	builder.WriteString(fmt.Sprintf("id=%v", ag.ID))
 	builder.WriteString(", app_id=")
-	builder.WriteString(ag.AppID)
+	builder.WriteString(fmt.Sprintf("%v", ag.AppID))
 	builder.WriteString(", group_name=")
 	builder.WriteString(ag.GroupName)
 	builder.WriteString(", group_logo=")

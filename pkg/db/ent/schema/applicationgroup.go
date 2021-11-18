@@ -20,7 +20,7 @@ func (ApplicationGroup) Fields() []ent.Field {
 		field.UUID("id", uuid.UUID{}).
 			Default(uuid.New).
 			Unique(),
-		field.String("app_id"),
+		field.UUID("app_id", uuid.UUID{}),
 		field.String("group_name"),
 		field.String("group_logo").Optional(),
 		field.UUID("group_owner", uuid.UUID{}),

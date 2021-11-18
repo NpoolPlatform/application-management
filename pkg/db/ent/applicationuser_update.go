@@ -28,8 +28,8 @@ func (auu *ApplicationUserUpdate) Where(ps ...predicate.ApplicationUser) *Applic
 }
 
 // SetAppID sets the "app_id" field.
-func (auu *ApplicationUserUpdate) SetAppID(s string) *ApplicationUserUpdate {
-	auu.mutation.SetAppID(s)
+func (auu *ApplicationUserUpdate) SetAppID(u uuid.UUID) *ApplicationUserUpdate {
+	auu.mutation.SetAppID(u)
 	return auu
 }
 
@@ -174,7 +174,7 @@ func (auu *ApplicationUserUpdate) sqlSave(ctx context.Context) (n int, err error
 	}
 	if value, ok := auu.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationuser.FieldAppID,
 		})
@@ -241,8 +241,8 @@ type ApplicationUserUpdateOne struct {
 }
 
 // SetAppID sets the "app_id" field.
-func (auuo *ApplicationUserUpdateOne) SetAppID(s string) *ApplicationUserUpdateOne {
-	auuo.mutation.SetAppID(s)
+func (auuo *ApplicationUserUpdateOne) SetAppID(u uuid.UUID) *ApplicationUserUpdateOne {
+	auuo.mutation.SetAppID(u)
 	return auuo
 }
 
@@ -411,7 +411,7 @@ func (auuo *ApplicationUserUpdateOne) sqlSave(ctx context.Context) (_node *Appli
 	}
 	if value, ok := auuo.mutation.AppID(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
-			Type:   field.TypeString,
+			Type:   field.TypeUUID,
 			Value:  value,
 			Column: applicationuser.FieldAppID,
 		})
