@@ -8,13 +8,6 @@ import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 service ApplicationManagement {
-    // rpc Echo (StringMessage) returns (StringMessage){
-    //     option (google.api.http) = {
-    //         post: "/v1/echo"
-    //         body: "*"
-    //     };
-    // }
-
     // Method Version
     rpc Version (google.protobuf.Empty) returns (VersionResponse){
         option (google.api.http) = {

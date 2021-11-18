@@ -1446,12 +1446,7 @@ request body and response
 <a name="application.management.v1.ApplicationManagement"></a>
 
 ### ApplicationManagement
-rpc Echo (StringMessage) returns (StringMessage){
-    option (google.api.http) = {
-        post: &#34;/v1/echo&#34;
-        body: &#34;*&#34;
-    };
-}
+
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|

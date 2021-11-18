@@ -1,39 +1,57 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: application-management-npool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: application-management
-    k8s.kuboard.cn/workload: application-management
+    k8s.kuboard.cn/displayName: application-management-npool
+    k8s.kuboard.cn/workload: application-management-npool
     kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-application-management-prefix@kubernetescrd
+
 spec:
   rules:
-  - host: api.npool.top
-    http:
-      paths:
-      - path: /application-management
-        backend:
-          serviceName: application-management
-          servicePort: http
+    - host: api.npool.top
+      http:
+        paths:
+          - path: /application-management
+            backend:
+              serviceName: application-management
+              servicePort: 50080
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: application-management-xpool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: application-management
-    k8s.kuboard.cn/workload: application-management
+    k8s.kuboard.cn/displayName: application-management-xpool
+    k8s.kuboard.cn/workload: application-management-xpool
     kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-application-management-prefix@kubernetescrd
+
 spec:
   rules:
-  - host: api.xpool.top
-    http:
-      paths:
-      - path: /application-management
-        backend:
-          serviceName: application-management
-          servicePort: http
+    - host: api.xpool.top
+      http:
+        paths:
+          - path: /application-management
+            backend:
+              serviceName: application-management
+              servicePort: 50080
+
+---
+
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: strip-application-management-prefix
+  namespace: kube-system
+spec:
+  stripPrefix:
+    prefixes:
+      - /application-management
