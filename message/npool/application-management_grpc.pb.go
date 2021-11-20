@@ -126,6 +126,14 @@ type ApplicationManagementClient interface {
 	//
 	//Delete resource from app.
 	DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*DeleteResourceResponse, error)
+	// set ga login option
+	SetGALogin(ctx context.Context, in *SetGALoginRequest, opts ...grpc.CallOption) (*SetGALoginResponse, error)
+	// add user login times
+	AddUserLoginTime(ctx context.Context, in *AddUserLoginTimeRequest, opts ...grpc.CallOption) (*AddUserLoginTimeResponse, error)
+	// update user google authentication status.
+	UpdateUserGAStatus(ctx context.Context, in *UpdateUserGAStatusRequest, opts ...grpc.CallOption) (*UpdateUserGAStatusResponse, error)
+	// update user kyc status.
+	UpdateUserKYCStatus(ctx context.Context, in *UpdateUserKYCStatusRequest, opts ...grpc.CallOption) (*UpdateUserKYCStatusResponse, error)
 }
 
 type applicationManagementClient struct {
@@ -460,6 +468,42 @@ func (c *applicationManagementClient) DeleteResource(ctx context.Context, in *De
 	return out, nil
 }
 
+func (c *applicationManagementClient) SetGALogin(ctx context.Context, in *SetGALoginRequest, opts ...grpc.CallOption) (*SetGALoginResponse, error) {
+	out := new(SetGALoginResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/SetGALogin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) AddUserLoginTime(ctx context.Context, in *AddUserLoginTimeRequest, opts ...grpc.CallOption) (*AddUserLoginTimeResponse, error) {
+	out := new(AddUserLoginTimeResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/AddUserLoginTime", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) UpdateUserGAStatus(ctx context.Context, in *UpdateUserGAStatusRequest, opts ...grpc.CallOption) (*UpdateUserGAStatusResponse, error) {
+	out := new(UpdateUserGAStatusResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UpdateUserGAStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) UpdateUserKYCStatus(ctx context.Context, in *UpdateUserKYCStatusRequest, opts ...grpc.CallOption) (*UpdateUserKYCStatusResponse, error) {
+	out := new(UpdateUserKYCStatusResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/UpdateUserKYCStatus", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationManagementServer is the server API for ApplicationManagement service.
 // All implementations must embed UnimplementedApplicationManagementServer
 // for forward compatibility
@@ -571,6 +615,14 @@ type ApplicationManagementServer interface {
 	//
 	//Delete resource from app.
 	DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceResponse, error)
+	// set ga login option
+	SetGALogin(context.Context, *SetGALoginRequest) (*SetGALoginResponse, error)
+	// add user login times
+	AddUserLoginTime(context.Context, *AddUserLoginTimeRequest) (*AddUserLoginTimeResponse, error)
+	// update user google authentication status.
+	UpdateUserGAStatus(context.Context, *UpdateUserGAStatusRequest) (*UpdateUserGAStatusResponse, error)
+	// update user kyc status.
+	UpdateUserKYCStatus(context.Context, *UpdateUserKYCStatusRequest) (*UpdateUserKYCStatusResponse, error)
 	mustEmbedUnimplementedApplicationManagementServer()
 }
 
@@ -685,6 +737,18 @@ func (UnimplementedApplicationManagementServer) GetResources(context.Context, *G
 }
 func (UnimplementedApplicationManagementServer) DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteResource not implemented")
+}
+func (UnimplementedApplicationManagementServer) SetGALogin(context.Context, *SetGALoginRequest) (*SetGALoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetGALogin not implemented")
+}
+func (UnimplementedApplicationManagementServer) AddUserLoginTime(context.Context, *AddUserLoginTimeRequest) (*AddUserLoginTimeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUserLoginTime not implemented")
+}
+func (UnimplementedApplicationManagementServer) UpdateUserGAStatus(context.Context, *UpdateUserGAStatusRequest) (*UpdateUserGAStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserGAStatus not implemented")
+}
+func (UnimplementedApplicationManagementServer) UpdateUserKYCStatus(context.Context, *UpdateUserKYCStatusRequest) (*UpdateUserKYCStatusResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserKYCStatus not implemented")
 }
 func (UnimplementedApplicationManagementServer) mustEmbedUnimplementedApplicationManagementServer() {}
 
@@ -1347,6 +1411,78 @@ func _ApplicationManagement_DeleteResource_Handler(srv interface{}, ctx context.
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_SetGALogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetGALoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).SetGALogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/SetGALogin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).SetGALogin(ctx, req.(*SetGALoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_AddUserLoginTime_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUserLoginTimeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).AddUserLoginTime(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/AddUserLoginTime",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).AddUserLoginTime(ctx, req.(*AddUserLoginTimeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_UpdateUserGAStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserGAStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).UpdateUserGAStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/UpdateUserGAStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).UpdateUserGAStatus(ctx, req.(*UpdateUserGAStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_UpdateUserKYCStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserKYCStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).UpdateUserKYCStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/UpdateUserKYCStatus",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).UpdateUserKYCStatus(ctx, req.(*UpdateUserKYCStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationManagement_ServiceDesc is the grpc.ServiceDesc for ApplicationManagement service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1497,6 +1633,22 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteResource",
 			Handler:    _ApplicationManagement_DeleteResource_Handler,
+		},
+		{
+			MethodName: "SetGALogin",
+			Handler:    _ApplicationManagement_SetGALogin_Handler,
+		},
+		{
+			MethodName: "AddUserLoginTime",
+			Handler:    _ApplicationManagement_AddUserLoginTime_Handler,
+		},
+		{
+			MethodName: "UpdateUserGAStatus",
+			Handler:    _ApplicationManagement_UpdateUserGAStatus_Handler,
+		},
+		{
+			MethodName: "UpdateUserKYCStatus",
+			Handler:    _ApplicationManagement_UpdateUserKYCStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

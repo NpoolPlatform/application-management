@@ -46,6 +46,62 @@ func (auc *ApplicationUserCreate) SetNillableOriginal(b *bool) *ApplicationUserC
 	return auc
 }
 
+// SetKycVerify sets the "kyc_verify" field.
+func (auc *ApplicationUserCreate) SetKycVerify(b bool) *ApplicationUserCreate {
+	auc.mutation.SetKycVerify(b)
+	return auc
+}
+
+// SetNillableKycVerify sets the "kyc_verify" field if the given value is not nil.
+func (auc *ApplicationUserCreate) SetNillableKycVerify(b *bool) *ApplicationUserCreate {
+	if b != nil {
+		auc.SetKycVerify(*b)
+	}
+	return auc
+}
+
+// SetGaVerify sets the "ga_verify" field.
+func (auc *ApplicationUserCreate) SetGaVerify(b bool) *ApplicationUserCreate {
+	auc.mutation.SetGaVerify(b)
+	return auc
+}
+
+// SetNillableGaVerify sets the "ga_verify" field if the given value is not nil.
+func (auc *ApplicationUserCreate) SetNillableGaVerify(b *bool) *ApplicationUserCreate {
+	if b != nil {
+		auc.SetGaVerify(*b)
+	}
+	return auc
+}
+
+// SetGaLogin sets the "ga_login" field.
+func (auc *ApplicationUserCreate) SetGaLogin(b bool) *ApplicationUserCreate {
+	auc.mutation.SetGaLogin(b)
+	return auc
+}
+
+// SetNillableGaLogin sets the "ga_login" field if the given value is not nil.
+func (auc *ApplicationUserCreate) SetNillableGaLogin(b *bool) *ApplicationUserCreate {
+	if b != nil {
+		auc.SetGaLogin(*b)
+	}
+	return auc
+}
+
+// SetLoginNumber sets the "Login_number" field.
+func (auc *ApplicationUserCreate) SetLoginNumber(u uint32) *ApplicationUserCreate {
+	auc.mutation.SetLoginNumber(u)
+	return auc
+}
+
+// SetNillableLoginNumber sets the "Login_number" field if the given value is not nil.
+func (auc *ApplicationUserCreate) SetNillableLoginNumber(u *uint32) *ApplicationUserCreate {
+	if u != nil {
+		auc.SetLoginNumber(*u)
+	}
+	return auc
+}
+
 // SetCreateAt sets the "create_at" field.
 func (auc *ApplicationUserCreate) SetCreateAt(u uint32) *ApplicationUserCreate {
 	auc.mutation.SetCreateAt(u)
@@ -155,6 +211,22 @@ func (auc *ApplicationUserCreate) defaults() {
 		v := applicationuser.DefaultOriginal
 		auc.mutation.SetOriginal(v)
 	}
+	if _, ok := auc.mutation.KycVerify(); !ok {
+		v := applicationuser.DefaultKycVerify
+		auc.mutation.SetKycVerify(v)
+	}
+	if _, ok := auc.mutation.GaVerify(); !ok {
+		v := applicationuser.DefaultGaVerify
+		auc.mutation.SetGaVerify(v)
+	}
+	if _, ok := auc.mutation.GaLogin(); !ok {
+		v := applicationuser.DefaultGaLogin
+		auc.mutation.SetGaLogin(v)
+	}
+	if _, ok := auc.mutation.LoginNumber(); !ok {
+		v := applicationuser.DefaultLoginNumber
+		auc.mutation.SetLoginNumber(v)
+	}
 	if _, ok := auc.mutation.CreateAt(); !ok {
 		v := applicationuser.DefaultCreateAt()
 		auc.mutation.SetCreateAt(v)
@@ -179,6 +251,18 @@ func (auc *ApplicationUserCreate) check() error {
 	}
 	if _, ok := auc.mutation.Original(); !ok {
 		return &ValidationError{Name: "original", err: errors.New(`ent: missing required field "original"`)}
+	}
+	if _, ok := auc.mutation.KycVerify(); !ok {
+		return &ValidationError{Name: "kyc_verify", err: errors.New(`ent: missing required field "kyc_verify"`)}
+	}
+	if _, ok := auc.mutation.GaVerify(); !ok {
+		return &ValidationError{Name: "ga_verify", err: errors.New(`ent: missing required field "ga_verify"`)}
+	}
+	if _, ok := auc.mutation.GaLogin(); !ok {
+		return &ValidationError{Name: "ga_login", err: errors.New(`ent: missing required field "ga_login"`)}
+	}
+	if _, ok := auc.mutation.LoginNumber(); !ok {
+		return &ValidationError{Name: "Login_number", err: errors.New(`ent: missing required field "Login_number"`)}
 	}
 	if _, ok := auc.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
@@ -241,6 +325,38 @@ func (auc *ApplicationUserCreate) createSpec() (*ApplicationUser, *sqlgraph.Crea
 			Column: applicationuser.FieldOriginal,
 		})
 		_node.Original = value
+	}
+	if value, ok := auc.mutation.KycVerify(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldKycVerify,
+		})
+		_node.KycVerify = value
+	}
+	if value, ok := auc.mutation.GaVerify(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldGaVerify,
+		})
+		_node.GaVerify = value
+	}
+	if value, ok := auc.mutation.GaLogin(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldGaLogin,
+		})
+		_node.GaLogin = value
+	}
+	if value, ok := auc.mutation.LoginNumber(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: applicationuser.FieldLoginNumber,
+		})
+		_node.LoginNumber = value
 	}
 	if value, ok := auc.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

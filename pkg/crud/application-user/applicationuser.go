@@ -187,3 +187,153 @@ func Delete(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*
 		Info: "remove users from application successfully",
 	}, nil
 }
+
+func SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGALoginResponse, error) {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	_, err = db.Client().
+		ApplicationUser.
+		Update().
+		Where(
+			applicationuser.And(
+				applicationuser.AppID(appID),
+				applicationuser.UserID(userID),
+				applicationuser.DeleteAt(0),
+			),
+		).
+		SetGaLogin(in.Set).
+		Save(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to set user ga login: %v", err)
+	}
+	return &npool.SetGALoginResponse{
+		Info: "successfully set user ga login",
+	}, nil
+}
+
+func AddUserLoginTime(ctx context.Context, in *npool.AddUserLoginTimeRequest) (*npool.AddUserLoginTimeResponse, error) {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	info, err := db.Client().
+		ApplicationUser.
+		Query().
+		Where(
+			applicationuser.And(
+				applicationuser.UserID(userID),
+				applicationuser.AppID(appID),
+				applicationuser.DeleteAt(0),
+			),
+		).Only(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to query app user: %v", err)
+	}
+
+	_, err = db.Client().
+		ApplicationUser.
+		UpdateOneID(info.ID).
+		SetLoginNumber(info.LoginNumber + 1).
+		Save(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to add user login numbers: %v", err)
+	}
+
+	return &npool.AddUserLoginTimeResponse{
+		Info: info.LoginNumber + 1,
+	}, nil
+}
+
+func UpdateUserGAStatus(ctx context.Context, in *npool.UpdateUserGAStatusRequest) (*npool.UpdateUserGAStatusResponse, error) { // nolint
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	_, err = db.Client().
+		ApplicationUser.
+		Update().
+		Where(
+			applicationuser.And(
+				applicationuser.DeleteAt(0),
+				applicationuser.UserID(userID),
+				applicationuser.AppID(appID),
+			),
+		).
+		SetGaVerify(in.Status).
+		Save(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to update user ga status: %v", err)
+	}
+
+	return &npool.UpdateUserGAStatusResponse{
+		Info: "successfully update user ga status: %v",
+	}, nil
+}
+
+func UpdateUserKYCStatus(ctx context.Context, in *npool.UpdateUserKYCStatusRequest) (*npool.UpdateUserKYCStatusResponse, error) { // nolint
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	_, err = db.Client().
+		ApplicationUser.
+		Update().
+		Where(
+			applicationuser.And(
+				applicationuser.DeleteAt(0),
+				applicationuser.UserID(userID),
+				applicationuser.AppID(appID),
+			),
+		).
+		SetGaVerify(in.Status).
+		Save(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to update user kyc status: %v", err)
+	}
+
+	return &npool.UpdateUserKYCStatusResponse{
+		Info: "successfully update user kyc status: %v",
+	}, nil
+}

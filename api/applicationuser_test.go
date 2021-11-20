@@ -94,6 +94,49 @@ func TestApplicationUserAPI(t *testing.T) {
 		assert.Nil(t, err)
 	}
 
+	resp4, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.SetGALoginRequest{
+			AppID:  appUser.AppID,
+			UserID: appUser.UserID,
+			Set:    true,
+		}).Post("http://localhost:50080/v1/set/ga/login")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp4.StatusCode())
+	}
+
+	resp5, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.AddUserLoginTimeRequest{
+			AppID:  appUser.AppID,
+			UserID: appUser.UserID,
+		}).Post("http://localhost:50080/v1/add/user/login/time")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp5.StatusCode())
+	}
+
+	resp6, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.UpdateUserGAStatusRequest{
+			AppID:  appUser.AppID,
+			UserID: appUser.UserID,
+			Status: true,
+		}).Post("http://localhost:50080/v1/update/user/ga/status")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp6.StatusCode())
+	}
+
+	resp7, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.UpdateUserKYCStatusRequest{
+			AppID:  appUser.AppID,
+			UserID: appUser.UserID,
+			Status: true,
+		}).Post("http://localhost:50080/v1/update/user/kyc/status")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp7.StatusCode())
+	}
+
 	resp3, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.RemoveUsersFromApplicationRequest{

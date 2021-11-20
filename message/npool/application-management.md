@@ -6,6 +6,8 @@
 - [npool/application-management.proto](#npool/application-management.proto)
     - [AddGroupUsersRequest](#application.management.v1.AddGroupUsersRequest)
     - [AddGroupUsersResponse](#application.management.v1.AddGroupUsersResponse)
+    - [AddUserLoginTimeRequest](#application.management.v1.AddUserLoginTimeRequest)
+    - [AddUserLoginTimeResponse](#application.management.v1.AddUserLoginTimeResponse)
     - [AddUsersToApplicationRequest](#application.management.v1.AddUsersToApplicationRequest)
     - [AddUsersToApplicationResponse](#application.management.v1.AddUsersToApplicationResponse)
     - [ApplicationInfo](#application.management.v1.ApplicationInfo)
@@ -74,6 +76,8 @@
     - [ResourceInfo](#application.management.v1.ResourceInfo)
     - [RoleInfo](#application.management.v1.RoleInfo)
     - [RoleUserInfo](#application.management.v1.RoleUserInfo)
+    - [SetGALoginRequest](#application.management.v1.SetGALoginRequest)
+    - [SetGALoginResponse](#application.management.v1.SetGALoginResponse)
     - [SetUserRoleRequest](#application.management.v1.SetUserRoleRequest)
     - [SetUserRoleResponse](#application.management.v1.SetUserRoleResponse)
     - [UnSetUserRoleRequest](#application.management.v1.UnSetUserRoleRequest)
@@ -86,6 +90,10 @@
     - [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse)
     - [UpdateRoleRequest](#application.management.v1.UpdateRoleRequest)
     - [UpdateRoleResponse](#application.management.v1.UpdateRoleResponse)
+    - [UpdateUserGAStatusRequest](#application.management.v1.UpdateUserGAStatusRequest)
+    - [UpdateUserGAStatusResponse](#application.management.v1.UpdateUserGAStatusResponse)
+    - [UpdateUserKYCStatusRequest](#application.management.v1.UpdateUserKYCStatusRequest)
+    - [UpdateUserKYCStatusResponse](#application.management.v1.UpdateUserKYCStatusResponse)
     - [UserRole](#application.management.v1.UserRole)
     - [VersionResponse](#application.management.v1.VersionResponse)
   
@@ -128,6 +136,37 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Infos | [GroupUserInfo](#application.management.v1.GroupUserInfo) | repeated |  |
+
+
+
+
+
+
+<a name="application.management.v1.AddUserLoginTimeRequest"></a>
+
+### AddUserLoginTimeRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.AddUserLoginTimeResponse"></a>
+
+### AddUserLoginTimeResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [uint32](#uint32) |  |  |
 
 
 
@@ -201,6 +240,10 @@
 | AppID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
 | Original | [bool](#bool) |  |  |
+| KycVerify | [bool](#bool) |  |  |
+| GAVerify | [bool](#bool) |  |  |
+| GALogin | [bool](#bool) |  |  |
+| LoginNumber | [uint32](#uint32) |  |  |
 | CreateAT | [uint32](#uint32) |  |  |
 
 
@@ -1221,6 +1264,38 @@
 
 
 
+<a name="application.management.v1.SetGALoginRequest"></a>
+
+### SetGALoginRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| set | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.SetGALoginResponse"></a>
+
+### SetGALoginResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="application.management.v1.SetUserRoleRequest"></a>
 
 ### SetUserRoleRequest
@@ -1405,6 +1480,70 @@
 
 
 
+<a name="application.management.v1.UpdateUserGAStatusRequest"></a>
+
+### UpdateUserGAStatusRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+| Status | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.UpdateUserGAStatusResponse"></a>
+
+### UpdateUserGAStatusResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.UpdateUserKYCStatusRequest"></a>
+
+### UpdateUserKYCStatusRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserID | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+| Status | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.UpdateUserKYCStatusResponse"></a>
+
+### UpdateUserKYCStatusResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
+
+
+
+
+
+
 <a name="application.management.v1.UserRole"></a>
 
 ### UserRole
@@ -1486,6 +1625,10 @@ request body and response
 | GetResourceByCreator | [GetResourceByCreatorRequest](#application.management.v1.GetResourceByCreatorRequest) | [GetResourceByCreatorResponse](#application.management.v1.GetResourceByCreatorResponse) | Get resource by creator. |
 | GetResources | [GetResourcesRequest](#application.management.v1.GetResourcesRequest) | [GetResourcesResponse](#application.management.v1.GetResourcesResponse) | Get all resources from app. |
 | DeleteResource | [DeleteResourceRequest](#application.management.v1.DeleteResourceRequest) | [DeleteResourceResponse](#application.management.v1.DeleteResourceResponse) | Delete resource from app. |
+| SetGALogin | [SetGALoginRequest](#application.management.v1.SetGALoginRequest) | [SetGALoginResponse](#application.management.v1.SetGALoginResponse) | set ga login option |
+| AddUserLoginTime | [AddUserLoginTimeRequest](#application.management.v1.AddUserLoginTimeRequest) | [AddUserLoginTimeResponse](#application.management.v1.AddUserLoginTimeResponse) | add user login times |
+| UpdateUserGAStatus | [UpdateUserGAStatusRequest](#application.management.v1.UpdateUserGAStatusRequest) | [UpdateUserGAStatusResponse](#application.management.v1.UpdateUserGAStatusResponse) | update user google authentication status. |
+| UpdateUserKYCStatus | [UpdateUserKYCStatusRequest](#application.management.v1.UpdateUserKYCStatusRequest) | [UpdateUserKYCStatusResponse](#application.management.v1.UpdateUserKYCStatusResponse) | update user kyc status. |
 
  
 

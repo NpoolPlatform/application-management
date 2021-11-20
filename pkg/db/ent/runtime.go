@@ -140,12 +140,28 @@ func init() {
 	applicationuserDescOriginal := applicationuserFields[3].Descriptor()
 	// applicationuser.DefaultOriginal holds the default value on creation for the original field.
 	applicationuser.DefaultOriginal = applicationuserDescOriginal.Default.(bool)
+	// applicationuserDescKycVerify is the schema descriptor for kyc_verify field.
+	applicationuserDescKycVerify := applicationuserFields[4].Descriptor()
+	// applicationuser.DefaultKycVerify holds the default value on creation for the kyc_verify field.
+	applicationuser.DefaultKycVerify = applicationuserDescKycVerify.Default.(bool)
+	// applicationuserDescGaVerify is the schema descriptor for ga_verify field.
+	applicationuserDescGaVerify := applicationuserFields[5].Descriptor()
+	// applicationuser.DefaultGaVerify holds the default value on creation for the ga_verify field.
+	applicationuser.DefaultGaVerify = applicationuserDescGaVerify.Default.(bool)
+	// applicationuserDescGaLogin is the schema descriptor for ga_login field.
+	applicationuserDescGaLogin := applicationuserFields[6].Descriptor()
+	// applicationuser.DefaultGaLogin holds the default value on creation for the ga_login field.
+	applicationuser.DefaultGaLogin = applicationuserDescGaLogin.Default.(bool)
+	// applicationuserDescLoginNumber is the schema descriptor for Login_number field.
+	applicationuserDescLoginNumber := applicationuserFields[7].Descriptor()
+	// applicationuser.DefaultLoginNumber holds the default value on creation for the Login_number field.
+	applicationuser.DefaultLoginNumber = applicationuserDescLoginNumber.Default.(uint32)
 	// applicationuserDescCreateAt is the schema descriptor for create_at field.
-	applicationuserDescCreateAt := applicationuserFields[4].Descriptor()
+	applicationuserDescCreateAt := applicationuserFields[8].Descriptor()
 	// applicationuser.DefaultCreateAt holds the default value on creation for the create_at field.
 	applicationuser.DefaultCreateAt = applicationuserDescCreateAt.Default.(func() uint32)
 	// applicationuserDescDeleteAt is the schema descriptor for delete_at field.
-	applicationuserDescDeleteAt := applicationuserFields[5].Descriptor()
+	applicationuserDescDeleteAt := applicationuserFields[9].Descriptor()
 	// applicationuser.DefaultDeleteAt holds the default value on creation for the delete_at field.
 	applicationuser.DefaultDeleteAt = applicationuserDescDeleteAt.Default.(func() uint32)
 	// applicationuserDescID is the schema descriptor for id field.

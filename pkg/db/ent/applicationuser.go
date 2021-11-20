@@ -22,6 +22,14 @@ type ApplicationUser struct {
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// Original holds the value of the "original" field.
 	Original bool `json:"original,omitempty"`
+	// KycVerify holds the value of the "kyc_verify" field.
+	KycVerify bool `json:"kyc_verify,omitempty"`
+	// GaVerify holds the value of the "ga_verify" field.
+	GaVerify bool `json:"ga_verify,omitempty"`
+	// GaLogin holds the value of the "ga_login" field.
+	GaLogin bool `json:"ga_login,omitempty"`
+	// LoginNumber holds the value of the "Login_number" field.
+	LoginNumber uint32 `json:"Login_number,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// DeleteAt holds the value of the "delete_at" field.
@@ -33,9 +41,9 @@ func (*ApplicationUser) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case applicationuser.FieldOriginal:
+		case applicationuser.FieldOriginal, applicationuser.FieldKycVerify, applicationuser.FieldGaVerify, applicationuser.FieldGaLogin:
 			values[i] = new(sql.NullBool)
-		case applicationuser.FieldCreateAt, applicationuser.FieldDeleteAt:
+		case applicationuser.FieldLoginNumber, applicationuser.FieldCreateAt, applicationuser.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
 		case applicationuser.FieldID, applicationuser.FieldAppID, applicationuser.FieldUserID:
 			values[i] = new(uuid.UUID)
@@ -77,6 +85,30 @@ func (au *ApplicationUser) assignValues(columns []string, values []interface{}) 
 				return fmt.Errorf("unexpected type %T for field original", values[i])
 			} else if value.Valid {
 				au.Original = value.Bool
+			}
+		case applicationuser.FieldKycVerify:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field kyc_verify", values[i])
+			} else if value.Valid {
+				au.KycVerify = value.Bool
+			}
+		case applicationuser.FieldGaVerify:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field ga_verify", values[i])
+			} else if value.Valid {
+				au.GaVerify = value.Bool
+			}
+		case applicationuser.FieldGaLogin:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field ga_login", values[i])
+			} else if value.Valid {
+				au.GaLogin = value.Bool
+			}
+		case applicationuser.FieldLoginNumber:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field Login_number", values[i])
+			} else if value.Valid {
+				au.LoginNumber = uint32(value.Int64)
 			}
 		case applicationuser.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -124,6 +156,14 @@ func (au *ApplicationUser) String() string {
 	builder.WriteString(fmt.Sprintf("%v", au.UserID))
 	builder.WriteString(", original=")
 	builder.WriteString(fmt.Sprintf("%v", au.Original))
+	builder.WriteString(", kyc_verify=")
+	builder.WriteString(fmt.Sprintf("%v", au.KycVerify))
+	builder.WriteString(", ga_verify=")
+	builder.WriteString(fmt.Sprintf("%v", au.GaVerify))
+	builder.WriteString(", ga_login=")
+	builder.WriteString(fmt.Sprintf("%v", au.GaLogin))
+	builder.WriteString(", Login_number=")
+	builder.WriteString(fmt.Sprintf("%v", au.LoginNumber))
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", au.CreateAt))
 	builder.WriteString(", delete_at=")

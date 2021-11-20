@@ -17,6 +17,14 @@ const (
 	FieldUserID = "user_id"
 	// FieldOriginal holds the string denoting the original field in the database.
 	FieldOriginal = "original"
+	// FieldKycVerify holds the string denoting the kyc_verify field in the database.
+	FieldKycVerify = "kyc_verify"
+	// FieldGaVerify holds the string denoting the ga_verify field in the database.
+	FieldGaVerify = "ga_verify"
+	// FieldGaLogin holds the string denoting the ga_login field in the database.
+	FieldGaLogin = "ga_login"
+	// FieldLoginNumber holds the string denoting the login_number field in the database.
+	FieldLoginNumber = "login_number"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
 	FieldCreateAt = "create_at"
 	// FieldDeleteAt holds the string denoting the delete_at field in the database.
@@ -31,6 +39,10 @@ var Columns = []string{
 	FieldAppID,
 	FieldUserID,
 	FieldOriginal,
+	FieldKycVerify,
+	FieldGaVerify,
+	FieldGaLogin,
+	FieldLoginNumber,
 	FieldCreateAt,
 	FieldDeleteAt,
 }
@@ -48,6 +60,14 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultOriginal holds the default value on creation for the "original" field.
 	DefaultOriginal bool
+	// DefaultKycVerify holds the default value on creation for the "kyc_verify" field.
+	DefaultKycVerify bool
+	// DefaultGaVerify holds the default value on creation for the "ga_verify" field.
+	DefaultGaVerify bool
+	// DefaultGaLogin holds the default value on creation for the "ga_login" field.
+	DefaultGaLogin bool
+	// DefaultLoginNumber holds the default value on creation for the "Login_number" field.
+	DefaultLoginNumber uint32
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.
 	DefaultCreateAt func() uint32
 	// DefaultDeleteAt holds the default value on creation for the "delete_at" field.

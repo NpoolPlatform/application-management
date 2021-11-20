@@ -53,6 +53,69 @@ func (auu *ApplicationUserUpdate) SetNillableOriginal(b *bool) *ApplicationUserU
 	return auu
 }
 
+// SetKycVerify sets the "kyc_verify" field.
+func (auu *ApplicationUserUpdate) SetKycVerify(b bool) *ApplicationUserUpdate {
+	auu.mutation.SetKycVerify(b)
+	return auu
+}
+
+// SetNillableKycVerify sets the "kyc_verify" field if the given value is not nil.
+func (auu *ApplicationUserUpdate) SetNillableKycVerify(b *bool) *ApplicationUserUpdate {
+	if b != nil {
+		auu.SetKycVerify(*b)
+	}
+	return auu
+}
+
+// SetGaVerify sets the "ga_verify" field.
+func (auu *ApplicationUserUpdate) SetGaVerify(b bool) *ApplicationUserUpdate {
+	auu.mutation.SetGaVerify(b)
+	return auu
+}
+
+// SetNillableGaVerify sets the "ga_verify" field if the given value is not nil.
+func (auu *ApplicationUserUpdate) SetNillableGaVerify(b *bool) *ApplicationUserUpdate {
+	if b != nil {
+		auu.SetGaVerify(*b)
+	}
+	return auu
+}
+
+// SetGaLogin sets the "ga_login" field.
+func (auu *ApplicationUserUpdate) SetGaLogin(b bool) *ApplicationUserUpdate {
+	auu.mutation.SetGaLogin(b)
+	return auu
+}
+
+// SetNillableGaLogin sets the "ga_login" field if the given value is not nil.
+func (auu *ApplicationUserUpdate) SetNillableGaLogin(b *bool) *ApplicationUserUpdate {
+	if b != nil {
+		auu.SetGaLogin(*b)
+	}
+	return auu
+}
+
+// SetLoginNumber sets the "Login_number" field.
+func (auu *ApplicationUserUpdate) SetLoginNumber(u uint32) *ApplicationUserUpdate {
+	auu.mutation.ResetLoginNumber()
+	auu.mutation.SetLoginNumber(u)
+	return auu
+}
+
+// SetNillableLoginNumber sets the "Login_number" field if the given value is not nil.
+func (auu *ApplicationUserUpdate) SetNillableLoginNumber(u *uint32) *ApplicationUserUpdate {
+	if u != nil {
+		auu.SetLoginNumber(*u)
+	}
+	return auu
+}
+
+// AddLoginNumber adds u to the "Login_number" field.
+func (auu *ApplicationUserUpdate) AddLoginNumber(u uint32) *ApplicationUserUpdate {
+	auu.mutation.AddLoginNumber(u)
+	return auu
+}
+
 // SetCreateAt sets the "create_at" field.
 func (auu *ApplicationUserUpdate) SetCreateAt(u uint32) *ApplicationUserUpdate {
 	auu.mutation.ResetCreateAt()
@@ -193,6 +256,41 @@ func (auu *ApplicationUserUpdate) sqlSave(ctx context.Context) (n int, err error
 			Column: applicationuser.FieldOriginal,
 		})
 	}
+	if value, ok := auu.mutation.KycVerify(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldKycVerify,
+		})
+	}
+	if value, ok := auu.mutation.GaVerify(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldGaVerify,
+		})
+	}
+	if value, ok := auu.mutation.GaLogin(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldGaLogin,
+		})
+	}
+	if value, ok := auu.mutation.LoginNumber(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: applicationuser.FieldLoginNumber,
+		})
+	}
+	if value, ok := auu.mutation.AddedLoginNumber(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: applicationuser.FieldLoginNumber,
+		})
+	}
 	if value, ok := auu.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -263,6 +361,69 @@ func (auuo *ApplicationUserUpdateOne) SetNillableOriginal(b *bool) *ApplicationU
 	if b != nil {
 		auuo.SetOriginal(*b)
 	}
+	return auuo
+}
+
+// SetKycVerify sets the "kyc_verify" field.
+func (auuo *ApplicationUserUpdateOne) SetKycVerify(b bool) *ApplicationUserUpdateOne {
+	auuo.mutation.SetKycVerify(b)
+	return auuo
+}
+
+// SetNillableKycVerify sets the "kyc_verify" field if the given value is not nil.
+func (auuo *ApplicationUserUpdateOne) SetNillableKycVerify(b *bool) *ApplicationUserUpdateOne {
+	if b != nil {
+		auuo.SetKycVerify(*b)
+	}
+	return auuo
+}
+
+// SetGaVerify sets the "ga_verify" field.
+func (auuo *ApplicationUserUpdateOne) SetGaVerify(b bool) *ApplicationUserUpdateOne {
+	auuo.mutation.SetGaVerify(b)
+	return auuo
+}
+
+// SetNillableGaVerify sets the "ga_verify" field if the given value is not nil.
+func (auuo *ApplicationUserUpdateOne) SetNillableGaVerify(b *bool) *ApplicationUserUpdateOne {
+	if b != nil {
+		auuo.SetGaVerify(*b)
+	}
+	return auuo
+}
+
+// SetGaLogin sets the "ga_login" field.
+func (auuo *ApplicationUserUpdateOne) SetGaLogin(b bool) *ApplicationUserUpdateOne {
+	auuo.mutation.SetGaLogin(b)
+	return auuo
+}
+
+// SetNillableGaLogin sets the "ga_login" field if the given value is not nil.
+func (auuo *ApplicationUserUpdateOne) SetNillableGaLogin(b *bool) *ApplicationUserUpdateOne {
+	if b != nil {
+		auuo.SetGaLogin(*b)
+	}
+	return auuo
+}
+
+// SetLoginNumber sets the "Login_number" field.
+func (auuo *ApplicationUserUpdateOne) SetLoginNumber(u uint32) *ApplicationUserUpdateOne {
+	auuo.mutation.ResetLoginNumber()
+	auuo.mutation.SetLoginNumber(u)
+	return auuo
+}
+
+// SetNillableLoginNumber sets the "Login_number" field if the given value is not nil.
+func (auuo *ApplicationUserUpdateOne) SetNillableLoginNumber(u *uint32) *ApplicationUserUpdateOne {
+	if u != nil {
+		auuo.SetLoginNumber(*u)
+	}
+	return auuo
+}
+
+// AddLoginNumber adds u to the "Login_number" field.
+func (auuo *ApplicationUserUpdateOne) AddLoginNumber(u uint32) *ApplicationUserUpdateOne {
+	auuo.mutation.AddLoginNumber(u)
 	return auuo
 }
 
@@ -428,6 +589,41 @@ func (auuo *ApplicationUserUpdateOne) sqlSave(ctx context.Context) (_node *Appli
 			Type:   field.TypeBool,
 			Value:  value,
 			Column: applicationuser.FieldOriginal,
+		})
+	}
+	if value, ok := auuo.mutation.KycVerify(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldKycVerify,
+		})
+	}
+	if value, ok := auuo.mutation.GaVerify(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldGaVerify,
+		})
+	}
+	if value, ok := auuo.mutation.GaLogin(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldGaLogin,
+		})
+	}
+	if value, ok := auuo.mutation.LoginNumber(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: applicationuser.FieldLoginNumber,
+		})
+	}
+	if value, ok := auuo.mutation.AddedLoginNumber(); ok {
+		_spec.Fields.Add = append(_spec.Fields.Add, &sqlgraph.FieldSpec{
+			Type:   field.TypeUint32,
+			Value:  value,
+			Column: applicationuser.FieldLoginNumber,
 		})
 	}
 	if value, ok := auuo.mutation.CreateAt(); ok {

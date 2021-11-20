@@ -4540,20 +4540,25 @@ func (m *ApplicationRoleUserMutation) ResetEdge(name string) error {
 // ApplicationUserMutation represents an operation that mutates the ApplicationUser nodes in the graph.
 type ApplicationUserMutation struct {
 	config
-	op            Op
-	typ           string
-	id            *uuid.UUID
-	app_id        *uuid.UUID
-	user_id       *uuid.UUID
-	original      *bool
-	create_at     *uint32
-	addcreate_at  *uint32
-	delete_at     *uint32
-	adddelete_at  *uint32
-	clearedFields map[string]struct{}
-	done          bool
-	oldValue      func(context.Context) (*ApplicationUser, error)
-	predicates    []predicate.ApplicationUser
+	op               Op
+	typ              string
+	id               *uuid.UUID
+	app_id           *uuid.UUID
+	user_id          *uuid.UUID
+	original         *bool
+	kyc_verify       *bool
+	ga_verify        *bool
+	ga_login         *bool
+	_Login_number    *uint32
+	add_Login_number *uint32
+	create_at        *uint32
+	addcreate_at     *uint32
+	delete_at        *uint32
+	adddelete_at     *uint32
+	clearedFields    map[string]struct{}
+	done             bool
+	oldValue         func(context.Context) (*ApplicationUser, error)
+	predicates       []predicate.ApplicationUser
 }
 
 var _ ent.Mutation = (*ApplicationUserMutation)(nil)
@@ -4749,6 +4754,170 @@ func (m *ApplicationUserMutation) ResetOriginal() {
 	m.original = nil
 }
 
+// SetKycVerify sets the "kyc_verify" field.
+func (m *ApplicationUserMutation) SetKycVerify(b bool) {
+	m.kyc_verify = &b
+}
+
+// KycVerify returns the value of the "kyc_verify" field in the mutation.
+func (m *ApplicationUserMutation) KycVerify() (r bool, exists bool) {
+	v := m.kyc_verify
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldKycVerify returns the old "kyc_verify" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldKycVerify(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldKycVerify is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldKycVerify requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldKycVerify: %w", err)
+	}
+	return oldValue.KycVerify, nil
+}
+
+// ResetKycVerify resets all changes to the "kyc_verify" field.
+func (m *ApplicationUserMutation) ResetKycVerify() {
+	m.kyc_verify = nil
+}
+
+// SetGaVerify sets the "ga_verify" field.
+func (m *ApplicationUserMutation) SetGaVerify(b bool) {
+	m.ga_verify = &b
+}
+
+// GaVerify returns the value of the "ga_verify" field in the mutation.
+func (m *ApplicationUserMutation) GaVerify() (r bool, exists bool) {
+	v := m.ga_verify
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGaVerify returns the old "ga_verify" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldGaVerify(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldGaVerify is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldGaVerify requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGaVerify: %w", err)
+	}
+	return oldValue.GaVerify, nil
+}
+
+// ResetGaVerify resets all changes to the "ga_verify" field.
+func (m *ApplicationUserMutation) ResetGaVerify() {
+	m.ga_verify = nil
+}
+
+// SetGaLogin sets the "ga_login" field.
+func (m *ApplicationUserMutation) SetGaLogin(b bool) {
+	m.ga_login = &b
+}
+
+// GaLogin returns the value of the "ga_login" field in the mutation.
+func (m *ApplicationUserMutation) GaLogin() (r bool, exists bool) {
+	v := m.ga_login
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGaLogin returns the old "ga_login" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldGaLogin(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldGaLogin is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldGaLogin requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGaLogin: %w", err)
+	}
+	return oldValue.GaLogin, nil
+}
+
+// ResetGaLogin resets all changes to the "ga_login" field.
+func (m *ApplicationUserMutation) ResetGaLogin() {
+	m.ga_login = nil
+}
+
+// SetLoginNumber sets the "Login_number" field.
+func (m *ApplicationUserMutation) SetLoginNumber(u uint32) {
+	m._Login_number = &u
+	m.add_Login_number = nil
+}
+
+// LoginNumber returns the value of the "Login_number" field in the mutation.
+func (m *ApplicationUserMutation) LoginNumber() (r uint32, exists bool) {
+	v := m._Login_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLoginNumber returns the old "Login_number" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldLoginNumber(ctx context.Context) (v uint32, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldLoginNumber is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldLoginNumber requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLoginNumber: %w", err)
+	}
+	return oldValue.LoginNumber, nil
+}
+
+// AddLoginNumber adds u to the "Login_number" field.
+func (m *ApplicationUserMutation) AddLoginNumber(u uint32) {
+	if m.add_Login_number != nil {
+		*m.add_Login_number += u
+	} else {
+		m.add_Login_number = &u
+	}
+}
+
+// AddedLoginNumber returns the value that was added to the "Login_number" field in this mutation.
+func (m *ApplicationUserMutation) AddedLoginNumber() (r uint32, exists bool) {
+	v := m.add_Login_number
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetLoginNumber resets all changes to the "Login_number" field.
+func (m *ApplicationUserMutation) ResetLoginNumber() {
+	m._Login_number = nil
+	m.add_Login_number = nil
+}
+
 // SetCreateAt sets the "create_at" field.
 func (m *ApplicationUserMutation) SetCreateAt(u uint32) {
 	m.create_at = &u
@@ -4880,7 +5049,7 @@ func (m *ApplicationUserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ApplicationUserMutation) Fields() []string {
-	fields := make([]string, 0, 5)
+	fields := make([]string, 0, 9)
 	if m.app_id != nil {
 		fields = append(fields, applicationuser.FieldAppID)
 	}
@@ -4889,6 +5058,18 @@ func (m *ApplicationUserMutation) Fields() []string {
 	}
 	if m.original != nil {
 		fields = append(fields, applicationuser.FieldOriginal)
+	}
+	if m.kyc_verify != nil {
+		fields = append(fields, applicationuser.FieldKycVerify)
+	}
+	if m.ga_verify != nil {
+		fields = append(fields, applicationuser.FieldGaVerify)
+	}
+	if m.ga_login != nil {
+		fields = append(fields, applicationuser.FieldGaLogin)
+	}
+	if m._Login_number != nil {
+		fields = append(fields, applicationuser.FieldLoginNumber)
 	}
 	if m.create_at != nil {
 		fields = append(fields, applicationuser.FieldCreateAt)
@@ -4910,6 +5091,14 @@ func (m *ApplicationUserMutation) Field(name string) (ent.Value, bool) {
 		return m.UserID()
 	case applicationuser.FieldOriginal:
 		return m.Original()
+	case applicationuser.FieldKycVerify:
+		return m.KycVerify()
+	case applicationuser.FieldGaVerify:
+		return m.GaVerify()
+	case applicationuser.FieldGaLogin:
+		return m.GaLogin()
+	case applicationuser.FieldLoginNumber:
+		return m.LoginNumber()
 	case applicationuser.FieldCreateAt:
 		return m.CreateAt()
 	case applicationuser.FieldDeleteAt:
@@ -4929,6 +5118,14 @@ func (m *ApplicationUserMutation) OldField(ctx context.Context, name string) (en
 		return m.OldUserID(ctx)
 	case applicationuser.FieldOriginal:
 		return m.OldOriginal(ctx)
+	case applicationuser.FieldKycVerify:
+		return m.OldKycVerify(ctx)
+	case applicationuser.FieldGaVerify:
+		return m.OldGaVerify(ctx)
+	case applicationuser.FieldGaLogin:
+		return m.OldGaLogin(ctx)
+	case applicationuser.FieldLoginNumber:
+		return m.OldLoginNumber(ctx)
 	case applicationuser.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case applicationuser.FieldDeleteAt:
@@ -4963,6 +5160,34 @@ func (m *ApplicationUserMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetOriginal(v)
 		return nil
+	case applicationuser.FieldKycVerify:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetKycVerify(v)
+		return nil
+	case applicationuser.FieldGaVerify:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGaVerify(v)
+		return nil
+	case applicationuser.FieldGaLogin:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGaLogin(v)
+		return nil
+	case applicationuser.FieldLoginNumber:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLoginNumber(v)
+		return nil
 	case applicationuser.FieldCreateAt:
 		v, ok := value.(uint32)
 		if !ok {
@@ -4985,6 +5210,9 @@ func (m *ApplicationUserMutation) SetField(name string, value ent.Value) error {
 // this mutation.
 func (m *ApplicationUserMutation) AddedFields() []string {
 	var fields []string
+	if m.add_Login_number != nil {
+		fields = append(fields, applicationuser.FieldLoginNumber)
+	}
 	if m.addcreate_at != nil {
 		fields = append(fields, applicationuser.FieldCreateAt)
 	}
@@ -4999,6 +5227,8 @@ func (m *ApplicationUserMutation) AddedFields() []string {
 // was not set, or was not defined in the schema.
 func (m *ApplicationUserMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
+	case applicationuser.FieldLoginNumber:
+		return m.AddedLoginNumber()
 	case applicationuser.FieldCreateAt:
 		return m.AddedCreateAt()
 	case applicationuser.FieldDeleteAt:
@@ -5012,6 +5242,13 @@ func (m *ApplicationUserMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ApplicationUserMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case applicationuser.FieldLoginNumber:
+		v, ok := value.(uint32)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddLoginNumber(v)
+		return nil
 	case applicationuser.FieldCreateAt:
 		v, ok := value.(uint32)
 		if !ok {
@@ -5061,6 +5298,18 @@ func (m *ApplicationUserMutation) ResetField(name string) error {
 		return nil
 	case applicationuser.FieldOriginal:
 		m.ResetOriginal()
+		return nil
+	case applicationuser.FieldKycVerify:
+		m.ResetKycVerify()
+		return nil
+	case applicationuser.FieldGaVerify:
+		m.ResetGaVerify()
+		return nil
+	case applicationuser.FieldGaLogin:
+		m.ResetGaLogin()
+		return nil
+	case applicationuser.FieldLoginNumber:
+		m.ResetLoginNumber()
 		return nil
 	case applicationuser.FieldCreateAt:
 		m.ResetCreateAt()

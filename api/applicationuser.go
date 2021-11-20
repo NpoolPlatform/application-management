@@ -47,3 +47,39 @@ func (s *Server) RemoveUsersFromApplication(ctx context.Context, in *npool.Remov
 	}
 	return resp, nil
 }
+
+func (s *Server) SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGALoginResponse, error) {
+	resp, err := applicationuser.SetGALogin(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("set users user ga login: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}
+
+func (s *Server) AddUserLoginTime(ctx context.Context, in *npool.AddUserLoginTimeRequest) (*npool.AddUserLoginTimeResponse, error) {
+	resp, err := applicationuser.AddUserLoginTime(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("add user login number error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}
+
+func (s *Server) UpdateUserGAStatus(ctx context.Context, in *npool.UpdateUserGAStatusRequest) (*npool.UpdateUserGAStatusResponse, error) {
+	resp, err := applicationuser.UpdateUserGAStatus(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("update user ga status error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}
+
+func (s *Server) UpdateUserKYCStatus(ctx context.Context, in *npool.UpdateUserKYCStatusRequest) (*npool.UpdateUserKYCStatusResponse, error) {
+	resp, err := applicationuser.UpdateUserKYCStatus(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("update user kyc status error: %v", err)
+		return nil, status.Error(codes.Internal, "internal server error")
+	}
+	return resp, nil
+}

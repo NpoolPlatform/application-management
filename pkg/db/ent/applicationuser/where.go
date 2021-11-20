@@ -112,6 +112,34 @@ func Original(v bool) predicate.ApplicationUser {
 	})
 }
 
+// KycVerify applies equality check predicate on the "kyc_verify" field. It's identical to KycVerifyEQ.
+func KycVerify(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldKycVerify), v))
+	})
+}
+
+// GaVerify applies equality check predicate on the "ga_verify" field. It's identical to GaVerifyEQ.
+func GaVerify(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGaVerify), v))
+	})
+}
+
+// GaLogin applies equality check predicate on the "ga_login" field. It's identical to GaLoginEQ.
+func GaLogin(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGaLogin), v))
+	})
+}
+
+// LoginNumber applies equality check predicate on the "Login_number" field. It's identical to LoginNumberEQ.
+func LoginNumber(v uint32) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldLoginNumber), v))
+	})
+}
+
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
 func CreateAt(v uint32) predicate.ApplicationUser {
 	return predicate.ApplicationUser(func(s *sql.Selector) {
@@ -289,6 +317,124 @@ func OriginalEQ(v bool) predicate.ApplicationUser {
 func OriginalNEQ(v bool) predicate.ApplicationUser {
 	return predicate.ApplicationUser(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldOriginal), v))
+	})
+}
+
+// KycVerifyEQ applies the EQ predicate on the "kyc_verify" field.
+func KycVerifyEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldKycVerify), v))
+	})
+}
+
+// KycVerifyNEQ applies the NEQ predicate on the "kyc_verify" field.
+func KycVerifyNEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldKycVerify), v))
+	})
+}
+
+// GaVerifyEQ applies the EQ predicate on the "ga_verify" field.
+func GaVerifyEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGaVerify), v))
+	})
+}
+
+// GaVerifyNEQ applies the NEQ predicate on the "ga_verify" field.
+func GaVerifyNEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldGaVerify), v))
+	})
+}
+
+// GaLoginEQ applies the EQ predicate on the "ga_login" field.
+func GaLoginEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGaLogin), v))
+	})
+}
+
+// GaLoginNEQ applies the NEQ predicate on the "ga_login" field.
+func GaLoginNEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldGaLogin), v))
+	})
+}
+
+// LoginNumberEQ applies the EQ predicate on the "Login_number" field.
+func LoginNumberEQ(v uint32) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldLoginNumber), v))
+	})
+}
+
+// LoginNumberNEQ applies the NEQ predicate on the "Login_number" field.
+func LoginNumberNEQ(v uint32) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldLoginNumber), v))
+	})
+}
+
+// LoginNumberIn applies the In predicate on the "Login_number" field.
+func LoginNumberIn(vs ...uint32) predicate.ApplicationUser {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldLoginNumber), v...))
+	})
+}
+
+// LoginNumberNotIn applies the NotIn predicate on the "Login_number" field.
+func LoginNumberNotIn(vs ...uint32) predicate.ApplicationUser {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(v) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldLoginNumber), v...))
+	})
+}
+
+// LoginNumberGT applies the GT predicate on the "Login_number" field.
+func LoginNumberGT(v uint32) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldLoginNumber), v))
+	})
+}
+
+// LoginNumberGTE applies the GTE predicate on the "Login_number" field.
+func LoginNumberGTE(v uint32) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldLoginNumber), v))
+	})
+}
+
+// LoginNumberLT applies the LT predicate on the "Login_number" field.
+func LoginNumberLT(v uint32) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldLoginNumber), v))
+	})
+}
+
+// LoginNumberLTE applies the LTE predicate on the "Login_number" field.
+func LoginNumberLTE(v uint32) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldLoginNumber), v))
 	})
 }
 

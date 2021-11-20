@@ -79,6 +79,41 @@ func TestApplicationUserCRUD(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
+	resp2, err := SetGALogin(context.Background(), &npool.SetGALoginRequest{
+		AppID:  applicationUser.AppID,
+		UserID: applicationUser.UserID,
+		Set:    true,
+	})
+	if assert.Nil(t, err) {
+		assert.NotNil(t, resp2)
+	}
+
+	resp3, err := AddUserLoginTime(context.Background(), &npool.AddUserLoginTimeRequest{
+		UserID: applicationUser.UserID,
+		AppID:  applicationUser.AppID,
+	})
+	if assert.Nil(t, err) {
+		assert.NotNil(t, resp3)
+	}
+
+	resp4, err := UpdateUserGAStatus(context.Background(), &npool.UpdateUserGAStatusRequest{
+		UserID: applicationUser.UserID,
+		AppID:  applicationUser.AppID,
+		Status: true,
+	})
+	if assert.Nil(t, err) {
+		assert.NotNil(t, resp4)
+	}
+
+	resp5, err := UpdateUserKYCStatus(context.Background(), &npool.UpdateUserKYCStatusRequest{
+		UserID: applicationUser.UserID,
+		AppID:  applicationUser.AppID,
+		Status: true,
+	})
+	if assert.Nil(t, err) {
+		assert.NotNil(t, resp5)
+	}
+
 	_, err = Delete(context.Background(), &npool.RemoveUsersFromApplicationRequest{
 		UserIDs: []string{applicationUser.UserID},
 		AppID:   applicationUser.AppID,

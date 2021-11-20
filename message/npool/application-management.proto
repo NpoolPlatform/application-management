@@ -331,6 +331,34 @@ service ApplicationManagement {
             body: "*"
         };
     };
+    // set ga login option
+    rpc SetGALogin (SetGALoginRequest) returns (SetGALoginResponse) {
+        option (google.api.http) = {
+            post: "/v1/set/ga/login"
+            body: "*"
+        };
+    };
+    // add user login times
+    rpc AddUserLoginTime (AddUserLoginTimeRequest) returns (AddUserLoginTimeResponse) {
+        option (google.api.http) = {
+            post: "/v1/add/user/login/time"
+            body: "*"
+        };
+    };
+    // update user google authentication status.
+    rpc UpdateUserGAStatus (UpdateUserGAStatusRequest) returns (UpdateUserGAStatusResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/user/ga/status"
+            body: "*"
+        };
+    };
+    // update user kyc status.
+    rpc UpdateUserKYCStatus (UpdateUserKYCStatusRequest) returns (UpdateUserKYCStatusResponse) {
+        option (google.api.http) = {
+            post: "/v1/update/user/kyc/status"
+            body: "*"
+        };
+    };
 }
 
 // request body and response
@@ -532,6 +560,10 @@ message ApplicationUserInfo {
     string AppID = 2;
     string UserID = 3;
     bool Original = 4;
+    bool KycVerify = 6;
+    bool GAVerify = 7;
+    bool GALogin = 8;
+    uint32 LoginNumber = 9;
     uint32 CreateAT = 5;
 }
 
@@ -742,5 +774,44 @@ message DeleteResourceRequest {
 }
 
 message DeleteResourceResponse {
+    string Info = 1;
+}
+
+message SetGALoginRequest {
+    string AppID = 1;
+    string UserID = 2;
+    bool set = 3;
+}
+
+message SetGALoginResponse {
+    string Info = 1;
+}
+
+message AddUserLoginTimeRequest {
+    string UserID = 1;
+    string AppID = 2;
+}
+
+message AddUserLoginTimeResponse {
+    uint32 Info = 1;
+}
+
+message UpdateUserGAStatusRequest {
+    string UserID = 1;
+    string AppID = 2;
+    bool Status = 3;
+}
+
+message UpdateUserGAStatusResponse {
+    string Info = 1;
+}
+
+message UpdateUserKYCStatusRequest {
+    string UserID = 1;
+    string AppID = 2;
+    bool Status = 3;
+}
+
+message UpdateUserKYCStatusResponse {
     string Info = 1;
 }
