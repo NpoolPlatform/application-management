@@ -16,7 +16,7 @@ func (s *Server) CreateResource(ctx context.Context, in *npool.CreateResourceReq
 	resp, err := applicationresource.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create resource error: %v", err)
-		return &npool.CreateResourceResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.CreateResourceResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -25,7 +25,7 @@ func (s *Server) GetResource(ctx context.Context, in *npool.GetResourceRequest) 
 	resp, err := applicationresource.Get(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get resource error: %v", err)
-		return &npool.GetResourceResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetResourceResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -34,7 +34,7 @@ func (s *Server) GetResources(ctx context.Context, in *npool.GetResourcesRequest
 	resp, err := applicationresource.GetAll(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get resources error: %v", err)
-		return &npool.GetResourcesResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetResourcesResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -43,7 +43,7 @@ func (s *Server) UpdateResource(ctx context.Context, in *npool.UpdateResourceReq
 	resp, err := applicationresource.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update resource error: %v", err)
-		return &npool.UpdateResourceResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.UpdateResourceResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -52,7 +52,7 @@ func (s *Server) DeleteResource(ctx context.Context, in *npool.DeleteResourceReq
 	resp, err := applicationresource.Delete(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("delete resource error: %v", err)
-		return &npool.DeleteResourceResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.DeleteResourceResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -61,7 +61,7 @@ func (s *Server) GetResourceByCreator(ctx context.Context, in *npool.GetResource
 	resp, err := applicationresource.GetResourceByCreator(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get resource by creator error: %v", err)
-		return &npool.GetResourceByCreatorResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetResourceByCreatorResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }

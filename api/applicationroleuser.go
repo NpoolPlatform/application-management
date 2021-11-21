@@ -18,7 +18,7 @@ func (s *Server) SetUserRole(ctx context.Context, in *npool.SetUserRoleRequest) 
 	resp, err := applicationroleuser.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("set user role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -27,7 +27,7 @@ func (s *Server) UnsetUserRole(ctx context.Context, in *npool.UnSetUserRoleReque
 	resp, err := applicationroleuser.Delete(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("unset user role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -36,7 +36,7 @@ func (s *Server) GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest
 	resp, err := applicationroleuser.GetRoleUsers(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get role users error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -45,7 +45,7 @@ func (s *Server) GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) 
 	resp, err := roleuser.GetUserRole(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get user's role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -54,7 +54,7 @@ func (s *Server) UnSetUserRole(ctx context.Context, in *npool.UnSetUserRoleReque
 	resp, err := applicationroleuser.Delete(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("unset user role error: %v", err)
-		return nil, status.Error(codes.Internal, "internal server error")
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }

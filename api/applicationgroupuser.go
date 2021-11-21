@@ -16,7 +16,7 @@ func (s *Server) AddGroupUsers(ctx context.Context, in *npool.AddGroupUsersReque
 	resp, err := applicationgroupuser.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create group error: %v", err)
-		return &npool.AddGroupUsersResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.AddGroupUsersResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -25,7 +25,7 @@ func (s *Server) GetGroupUsers(ctx context.Context, in *npool.GetGroupUsersReque
 	resp, err := applicationgroupuser.Get(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get group users error: %v", err)
-		return &npool.GetGroupUsersResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetGroupUsersResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -34,7 +34,7 @@ func (s *Server) RemoveGroupUsers(ctx context.Context, in *npool.RemoveGroupUser
 	resp, err := applicationgroupuser.Delete(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("remove group users error: %v", err)
-		return &npool.RemoveGroupUsersResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.RemoveGroupUsersResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }

@@ -16,7 +16,7 @@ func (s *Server) CreateGroup(ctx context.Context, in *npool.CreateGroupRequest) 
 	resp, err := applicationgroup.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create group error: %v", err)
-		return &npool.CreateGroupResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.CreateGroupResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -25,7 +25,7 @@ func (s *Server) GetGroup(ctx context.Context, in *npool.GetGroupRequest) (*npoo
 	resp, err := applicationgroup.Get(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get group error: %v", err)
-		return &npool.GetGroupResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetGroupResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -34,7 +34,7 @@ func (s *Server) GetAllGroups(ctx context.Context, in *npool.GetAllGroupsRequest
 	resp, err := applicationgroup.GetAll(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get all groups error: %v", err)
-		return &npool.GetAllGroupsResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetAllGroupsResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -43,7 +43,7 @@ func (s *Server) UpdateGroup(ctx context.Context, in *npool.UpdateGroupRequest) 
 	resp, err := applicationgroup.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update group error: %v", err)
-		return &npool.UpdateGroupResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.UpdateGroupResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -52,7 +52,7 @@ func (s *Server) DeleteGroup(ctx context.Context, in *npool.DeleteGroupRequest) 
 	resp, err := applicationgroup.Delete(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("delete group error: %v", err)
-		return &npool.DeleteGroupResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.DeleteGroupResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -61,7 +61,7 @@ func (s *Server) GetGroupByOwner(ctx context.Context, in *npool.GetGroupByOwnerR
 	resp, err := applicationgroup.GetGroupByOwner(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get group by owner error: %v", err)
-		return &npool.GetGroupByOwnerResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetGroupByOwnerResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }

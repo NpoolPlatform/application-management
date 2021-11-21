@@ -16,7 +16,7 @@ func (s *Server) CreateApplication(ctx context.Context, in *npool.CreateApplicat
 	resp, err := application.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create application error: %v", err)
-		return &npool.CreateApplicationResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.CreateApplicationResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -25,7 +25,7 @@ func (s *Server) UpdateApplication(ctx context.Context, in *npool.UpdateApplicat
 	resp, err := application.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update application error: %v", err)
-		return &npool.UpdateApplicationResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.UpdateApplicationResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -34,7 +34,7 @@ func (s *Server) GetApplication(ctx context.Context, in *npool.GetApplicationReq
 	resp, err := application.Get(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get application error: %v", err)
-		return &npool.GetApplicationResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetApplicationResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -43,7 +43,7 @@ func (s *Server) GetApplications(ctx context.Context, in *npool.GetApplicationsR
 	resp, err := application.GetAll(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get applications error: %v", err)
-		return &npool.GetApplicationsResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetApplicationsResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -52,7 +52,7 @@ func (s *Server) DeleteApplication(ctx context.Context, in *npool.DeleteApplicat
 	resp, err := application.Delete(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update application error: %v", err)
-		return &npool.DeleteApplicationResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.DeleteApplicationResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
@@ -61,7 +61,7 @@ func (s *Server) GetApplicationByOwner(ctx context.Context, in *npool.GetApplica
 	resp, err := application.GetApplicationByOwner(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("get application by owner error: %v", err)
-		return &npool.GetApplicationByOwnerResponse{}, status.Error(codes.Internal, "internal server error")
+		return &npool.GetApplicationByOwnerResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil
 }
