@@ -113,6 +113,34 @@ func (au *ApplicationUpdate) ClearApplicationLogo() *ApplicationUpdate {
 	return au
 }
 
+// SetSmsLogin sets the "sms_login" field.
+func (au *ApplicationUpdate) SetSmsLogin(b bool) *ApplicationUpdate {
+	au.mutation.SetSmsLogin(b)
+	return au
+}
+
+// SetNillableSmsLogin sets the "sms_login" field if the given value is not nil.
+func (au *ApplicationUpdate) SetNillableSmsLogin(b *bool) *ApplicationUpdate {
+	if b != nil {
+		au.SetSmsLogin(*b)
+	}
+	return au
+}
+
+// SetGoogleRecaptcha sets the "google_recaptcha" field.
+func (au *ApplicationUpdate) SetGoogleRecaptcha(b bool) *ApplicationUpdate {
+	au.mutation.SetGoogleRecaptcha(b)
+	return au
+}
+
+// SetNillableGoogleRecaptcha sets the "google_recaptcha" field if the given value is not nil.
+func (au *ApplicationUpdate) SetNillableGoogleRecaptcha(b *bool) *ApplicationUpdate {
+	if b != nil {
+		au.SetGoogleRecaptcha(*b)
+	}
+	return au
+}
+
 // SetCreateAt sets the "create_at" field.
 func (au *ApplicationUpdate) SetCreateAt(u uint32) *ApplicationUpdate {
 	au.mutation.ResetCreateAt()
@@ -314,6 +342,20 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: application.FieldApplicationLogo,
 		})
 	}
+	if value, ok := au.mutation.SmsLogin(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldSmsLogin,
+		})
+	}
+	if value, ok := au.mutation.GoogleRecaptcha(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldGoogleRecaptcha,
+		})
+	}
 	if value, ok := au.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -458,6 +500,34 @@ func (auo *ApplicationUpdateOne) SetNillableApplicationLogo(s *string) *Applicat
 // ClearApplicationLogo clears the value of the "application_logo" field.
 func (auo *ApplicationUpdateOne) ClearApplicationLogo() *ApplicationUpdateOne {
 	auo.mutation.ClearApplicationLogo()
+	return auo
+}
+
+// SetSmsLogin sets the "sms_login" field.
+func (auo *ApplicationUpdateOne) SetSmsLogin(b bool) *ApplicationUpdateOne {
+	auo.mutation.SetSmsLogin(b)
+	return auo
+}
+
+// SetNillableSmsLogin sets the "sms_login" field if the given value is not nil.
+func (auo *ApplicationUpdateOne) SetNillableSmsLogin(b *bool) *ApplicationUpdateOne {
+	if b != nil {
+		auo.SetSmsLogin(*b)
+	}
+	return auo
+}
+
+// SetGoogleRecaptcha sets the "google_recaptcha" field.
+func (auo *ApplicationUpdateOne) SetGoogleRecaptcha(b bool) *ApplicationUpdateOne {
+	auo.mutation.SetGoogleRecaptcha(b)
+	return auo
+}
+
+// SetNillableGoogleRecaptcha sets the "google_recaptcha" field if the given value is not nil.
+func (auo *ApplicationUpdateOne) SetNillableGoogleRecaptcha(b *bool) *ApplicationUpdateOne {
+	if b != nil {
+		auo.SetGoogleRecaptcha(*b)
+	}
 	return auo
 }
 
@@ -684,6 +754,20 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 		_spec.Fields.Clear = append(_spec.Fields.Clear, &sqlgraph.FieldSpec{
 			Type:   field.TypeString,
 			Column: application.FieldApplicationLogo,
+		})
+	}
+	if value, ok := auo.mutation.SmsLogin(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldSmsLogin,
+		})
+	}
+	if value, ok := auo.mutation.GoogleRecaptcha(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldGoogleRecaptcha,
 		})
 	}
 	if value, ok := auo.mutation.CreateAt(); ok {

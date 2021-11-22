@@ -23,6 +23,10 @@ const (
 	FieldClientSecret = "client_secret"
 	// FieldApplicationLogo holds the string denoting the application_logo field in the database.
 	FieldApplicationLogo = "application_logo"
+	// FieldSmsLogin holds the string denoting the sms_login field in the database.
+	FieldSmsLogin = "sms_login"
+	// FieldGoogleRecaptcha holds the string denoting the google_recaptcha field in the database.
+	FieldGoogleRecaptcha = "google_recaptcha"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
 	FieldCreateAt = "create_at"
 	// FieldUpdateAt holds the string denoting the update_at field in the database.
@@ -42,6 +46,8 @@ var Columns = []string{
 	FieldRedirectURL,
 	FieldClientSecret,
 	FieldApplicationLogo,
+	FieldSmsLogin,
+	FieldGoogleRecaptcha,
 	FieldCreateAt,
 	FieldUpdateAt,
 	FieldDeleteAt,
@@ -60,6 +66,10 @@ func ValidColumn(column string) bool {
 var (
 	// DefaultClientSecret holds the default value on creation for the "client_secret" field.
 	DefaultClientSecret func() string
+	// DefaultSmsLogin holds the default value on creation for the "sms_login" field.
+	DefaultSmsLogin bool
+	// DefaultGoogleRecaptcha holds the default value on creation for the "google_recaptcha" field.
+	DefaultGoogleRecaptcha bool
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.
 	DefaultCreateAt func() uint32
 	// DefaultUpdateAt holds the default value on creation for the "update_at" field.

@@ -28,6 +28,10 @@ type Application struct {
 	ClientSecret string `json:"-"`
 	// ApplicationLogo holds the value of the "application_logo" field.
 	ApplicationLogo string `json:"application_logo,omitempty"`
+	// SmsLogin holds the value of the "sms_login" field.
+	SmsLogin bool `json:"sms_login,omitempty"`
+	// GoogleRecaptcha holds the value of the "google_recaptcha" field.
+	GoogleRecaptcha bool `json:"google_recaptcha,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
@@ -41,6 +45,8 @@ func (*Application) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case application.FieldSmsLogin, application.FieldGoogleRecaptcha:
+			values[i] = new(sql.NullBool)
 		case application.FieldCreateAt, application.FieldUpdateAt, application.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
 		case application.FieldApplicationName, application.FieldHomepageURL, application.FieldRedirectURL, application.FieldClientSecret, application.FieldApplicationLogo:
@@ -104,6 +110,18 @@ func (a *Application) assignValues(columns []string, values []interface{}) error
 			} else if value.Valid {
 				a.ApplicationLogo = value.String
 			}
+		case application.FieldSmsLogin:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sms_login", values[i])
+			} else if value.Valid {
+				a.SmsLogin = value.Bool
+			}
+		case application.FieldGoogleRecaptcha:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field google_recaptcha", values[i])
+			} else if value.Valid {
+				a.GoogleRecaptcha = value.Bool
+			}
 		case application.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field create_at", values[i])
@@ -161,6 +179,10 @@ func (a *Application) String() string {
 	builder.WriteString(", client_secret=<sensitive>")
 	builder.WriteString(", application_logo=")
 	builder.WriteString(a.ApplicationLogo)
+	builder.WriteString(", sms_login=")
+	builder.WriteString(fmt.Sprintf("%v", a.SmsLogin))
+	builder.WriteString(", google_recaptcha=")
+	builder.WriteString(fmt.Sprintf("%v", a.GoogleRecaptcha))
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", a.CreateAt))
 	builder.WriteString(", update_at=")

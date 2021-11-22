@@ -7,13 +7,14 @@ import (
 
 	"github.com/NpoolPlatform/application-management/message/npool"
 	"github.com/NpoolPlatform/application-management/pkg/crud/application"
+	middleware "github.com/NpoolPlatform/application-management/pkg/middleware/application"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
 func (s *Server) CreateApplication(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.CreateApplicationResponse, error) {
-	resp, err := application.Create(ctx, in)
+	resp, err := middleware.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create application error: %v", err)
 		return &npool.CreateApplicationResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())

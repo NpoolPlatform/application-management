@@ -50,6 +50,8 @@ type ApplicationMutation struct {
 	redirect_url      *string
 	client_secret     *string
 	application_logo  *string
+	sms_login         *bool
+	google_recaptcha  *bool
 	create_at         *uint32
 	addcreate_at      *uint32
 	update_at         *uint32
@@ -402,6 +404,78 @@ func (m *ApplicationMutation) ResetApplicationLogo() {
 	delete(m.clearedFields, application.FieldApplicationLogo)
 }
 
+// SetSmsLogin sets the "sms_login" field.
+func (m *ApplicationMutation) SetSmsLogin(b bool) {
+	m.sms_login = &b
+}
+
+// SmsLogin returns the value of the "sms_login" field in the mutation.
+func (m *ApplicationMutation) SmsLogin() (r bool, exists bool) {
+	v := m.sms_login
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSmsLogin returns the old "sms_login" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldSmsLogin(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldSmsLogin is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldSmsLogin requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSmsLogin: %w", err)
+	}
+	return oldValue.SmsLogin, nil
+}
+
+// ResetSmsLogin resets all changes to the "sms_login" field.
+func (m *ApplicationMutation) ResetSmsLogin() {
+	m.sms_login = nil
+}
+
+// SetGoogleRecaptcha sets the "google_recaptcha" field.
+func (m *ApplicationMutation) SetGoogleRecaptcha(b bool) {
+	m.google_recaptcha = &b
+}
+
+// GoogleRecaptcha returns the value of the "google_recaptcha" field in the mutation.
+func (m *ApplicationMutation) GoogleRecaptcha() (r bool, exists bool) {
+	v := m.google_recaptcha
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldGoogleRecaptcha returns the old "google_recaptcha" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldGoogleRecaptcha(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldGoogleRecaptcha is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldGoogleRecaptcha requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldGoogleRecaptcha: %w", err)
+	}
+	return oldValue.GoogleRecaptcha, nil
+}
+
+// ResetGoogleRecaptcha resets all changes to the "google_recaptcha" field.
+func (m *ApplicationMutation) ResetGoogleRecaptcha() {
+	m.google_recaptcha = nil
+}
+
 // SetCreateAt sets the "create_at" field.
 func (m *ApplicationMutation) SetCreateAt(u uint32) {
 	m.create_at = &u
@@ -589,7 +663,7 @@ func (m *ApplicationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ApplicationMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 11)
 	if m.application_name != nil {
 		fields = append(fields, application.FieldApplicationName)
 	}
@@ -607,6 +681,12 @@ func (m *ApplicationMutation) Fields() []string {
 	}
 	if m.application_logo != nil {
 		fields = append(fields, application.FieldApplicationLogo)
+	}
+	if m.sms_login != nil {
+		fields = append(fields, application.FieldSmsLogin)
+	}
+	if m.google_recaptcha != nil {
+		fields = append(fields, application.FieldGoogleRecaptcha)
 	}
 	if m.create_at != nil {
 		fields = append(fields, application.FieldCreateAt)
@@ -637,6 +717,10 @@ func (m *ApplicationMutation) Field(name string) (ent.Value, bool) {
 		return m.ClientSecret()
 	case application.FieldApplicationLogo:
 		return m.ApplicationLogo()
+	case application.FieldSmsLogin:
+		return m.SmsLogin()
+	case application.FieldGoogleRecaptcha:
+		return m.GoogleRecaptcha()
 	case application.FieldCreateAt:
 		return m.CreateAt()
 	case application.FieldUpdateAt:
@@ -664,6 +748,10 @@ func (m *ApplicationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldClientSecret(ctx)
 	case application.FieldApplicationLogo:
 		return m.OldApplicationLogo(ctx)
+	case application.FieldSmsLogin:
+		return m.OldSmsLogin(ctx)
+	case application.FieldGoogleRecaptcha:
+		return m.OldGoogleRecaptcha(ctx)
 	case application.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case application.FieldUpdateAt:
@@ -720,6 +808,20 @@ func (m *ApplicationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetApplicationLogo(v)
+		return nil
+	case application.FieldSmsLogin:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSmsLogin(v)
+		return nil
+	case application.FieldGoogleRecaptcha:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetGoogleRecaptcha(v)
 		return nil
 	case application.FieldCreateAt:
 		v, ok := value.(uint32)
@@ -868,6 +970,12 @@ func (m *ApplicationMutation) ResetField(name string) error {
 		return nil
 	case application.FieldApplicationLogo:
 		m.ResetApplicationLogo()
+		return nil
+	case application.FieldSmsLogin:
+		m.ResetSmsLogin()
+		return nil
+	case application.FieldGoogleRecaptcha:
+		m.ResetGoogleRecaptcha()
 		return nil
 	case application.FieldCreateAt:
 		m.ResetCreateAt()

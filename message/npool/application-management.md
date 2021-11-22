@@ -11,6 +11,7 @@
     - [AddUsersToApplicationRequest](#application.management.v1.AddUsersToApplicationRequest)
     - [AddUsersToApplicationResponse](#application.management.v1.AddUsersToApplicationResponse)
     - [ApplicationInfo](#application.management.v1.ApplicationInfo)
+    - [ApplicationUserDetail](#application.management.v1.ApplicationUserDetail)
     - [ApplicationUserInfo](#application.management.v1.ApplicationUserInfo)
     - [CreateApplicationRequest](#application.management.v1.CreateApplicationRequest)
     - [CreateApplicationResponse](#application.management.v1.CreateApplicationResponse)
@@ -36,6 +37,8 @@
     - [GetApplicationByOwnerResponse](#application.management.v1.GetApplicationByOwnerResponse)
     - [GetApplicationRequest](#application.management.v1.GetApplicationRequest)
     - [GetApplicationResponse](#application.management.v1.GetApplicationResponse)
+    - [GetApplicationUserDetailRequest](#application.management.v1.GetApplicationUserDetailRequest)
+    - [GetApplicationUserDetailResponse](#application.management.v1.GetApplicationUserDetailResponse)
     - [GetApplicationsRequest](#application.management.v1.GetApplicationsRequest)
     - [GetApplicationsResponse](#application.management.v1.GetApplicationsResponse)
     - [GetGroupByOwnerRequest](#application.management.v1.GetGroupByOwnerRequest)
@@ -60,6 +63,8 @@
     - [GetRolesResponse](#application.management.v1.GetRolesResponse)
     - [GetUserFromApplicationRequest](#application.management.v1.GetUserFromApplicationRequest)
     - [GetUserFromApplicationResponse](#application.management.v1.GetUserFromApplicationResponse)
+    - [GetUserGroupRequest](#application.management.v1.GetUserGroupRequest)
+    - [GetUserGroupResponse](#application.management.v1.GetUserGroupResponse)
     - [GetUserRoleRequest](#application.management.v1.GetUserRoleRequest)
     - [GetUserRoleResponse](#application.management.v1.GetUserRoleResponse)
     - [GetUsersFromApplicationRequest](#application.management.v1.GetUsersFromApplicationRequest)
@@ -222,6 +227,25 @@
 | CreateAT | [uint32](#uint32) |  |  |
 | UpdateAT | [uint32](#uint32) |  |  |
 | ClientSecret | [string](#string) |  |  |
+| GoogleRecaptcha | [bool](#bool) |  |  |
+| SmsLogin | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.ApplicationUserDetail"></a>
+
+### ApplicationUserDetail
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserApplicationInfo | [ApplicationUserInfo](#application.management.v1.ApplicationUserInfo) |  |  |
+| UserGroupInfos | [GroupUserInfo](#application.management.v1.GroupUserInfo) | repeated |  |
+| UserRoleInfo | [UserRole](#application.management.v1.UserRole) |  |  |
 
 
 
@@ -618,6 +642,37 @@
 
 
 
+<a name="application.management.v1.GetApplicationUserDetailRequest"></a>
+
+### GetApplicationUserDetailRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetApplicationUserDetailResponse"></a>
+
+### GetApplicationUserDetailResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [ApplicationUserDetail](#application.management.v1.ApplicationUserDetail) |  |  |
+
+
+
+
+
+
 <a name="application.management.v1.GetApplicationsRequest"></a>
 
 ### GetApplicationsRequest
@@ -981,6 +1036,37 @@
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | Info | [ApplicationUserInfo](#application.management.v1.ApplicationUserInfo) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetUserGroupRequest"></a>
+
+### GetUserGroupRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetUserGroupResponse"></a>
+
+### GetUserGroupResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [GroupUserInfo](#application.management.v1.GroupUserInfo) | repeated |  |
 
 
 
@@ -1618,6 +1704,7 @@ request body and response
 | DeleteGroup | [DeleteGroupRequest](#application.management.v1.DeleteGroupRequest) | [DeleteGroupResponse](#application.management.v1.DeleteGroupResponse) | Delete group. |
 | AddGroupUsers | [AddGroupUsersRequest](#application.management.v1.AddGroupUsersRequest) | [AddGroupUsersResponse](#application.management.v1.AddGroupUsersResponse) | Add users into group. |
 | GetGroupUsers | [GetGroupUsersRequest](#application.management.v1.GetGroupUsersRequest) | [GetGroupUsersResponse](#application.management.v1.GetGroupUsersResponse) | Get group users. |
+| GetUserGroup | [GetUserGroupRequest](#application.management.v1.GetUserGroupRequest) | [GetUserGroupResponse](#application.management.v1.GetUserGroupResponse) | get user group info |
 | RemoveGroupUsers | [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest) | [RemoveGroupUsersResponse](#application.management.v1.RemoveGroupUsersResponse) | Remove users from group. |
 | CreateResource | [CreateResourceRequest](#application.management.v1.CreateResourceRequest) | [CreateResourceResponse](#application.management.v1.CreateResourceResponse) | Create resource for app. |
 | UpdateResource | [UpdateResourceRequest](#application.management.v1.UpdateResourceRequest) | [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse) | Update resource of app. |
@@ -1629,6 +1716,7 @@ request body and response
 | AddUserLoginTime | [AddUserLoginTimeRequest](#application.management.v1.AddUserLoginTimeRequest) | [AddUserLoginTimeResponse](#application.management.v1.AddUserLoginTimeResponse) | add user login times |
 | UpdateUserGAStatus | [UpdateUserGAStatusRequest](#application.management.v1.UpdateUserGAStatusRequest) | [UpdateUserGAStatusResponse](#application.management.v1.UpdateUserGAStatusResponse) | update user google authentication status. |
 | UpdateUserKYCStatus | [UpdateUserKYCStatusRequest](#application.management.v1.UpdateUserKYCStatusRequest) | [UpdateUserKYCStatusResponse](#application.management.v1.UpdateUserKYCStatusResponse) | update user kyc status. |
+| GetApplicationUserDetail | [GetApplicationUserDetailRequest](#application.management.v1.GetApplicationUserDetailRequest) | [GetApplicationUserDetailResponse](#application.management.v1.GetApplicationUserDetailResponse) | get application user detail info. |
 
  
 

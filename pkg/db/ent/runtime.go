@@ -24,18 +24,26 @@ func init() {
 	applicationDescClientSecret := applicationFields[5].Descriptor()
 	// application.DefaultClientSecret holds the default value on creation for the client_secret field.
 	application.DefaultClientSecret = applicationDescClientSecret.Default.(func() string)
+	// applicationDescSmsLogin is the schema descriptor for sms_login field.
+	applicationDescSmsLogin := applicationFields[7].Descriptor()
+	// application.DefaultSmsLogin holds the default value on creation for the sms_login field.
+	application.DefaultSmsLogin = applicationDescSmsLogin.Default.(bool)
+	// applicationDescGoogleRecaptcha is the schema descriptor for google_recaptcha field.
+	applicationDescGoogleRecaptcha := applicationFields[8].Descriptor()
+	// application.DefaultGoogleRecaptcha holds the default value on creation for the google_recaptcha field.
+	application.DefaultGoogleRecaptcha = applicationDescGoogleRecaptcha.Default.(bool)
 	// applicationDescCreateAt is the schema descriptor for create_at field.
-	applicationDescCreateAt := applicationFields[7].Descriptor()
+	applicationDescCreateAt := applicationFields[9].Descriptor()
 	// application.DefaultCreateAt holds the default value on creation for the create_at field.
 	application.DefaultCreateAt = applicationDescCreateAt.Default.(func() uint32)
 	// applicationDescUpdateAt is the schema descriptor for update_at field.
-	applicationDescUpdateAt := applicationFields[8].Descriptor()
+	applicationDescUpdateAt := applicationFields[10].Descriptor()
 	// application.DefaultUpdateAt holds the default value on creation for the update_at field.
 	application.DefaultUpdateAt = applicationDescUpdateAt.Default.(func() uint32)
 	// application.UpdateDefaultUpdateAt holds the default value on update for the update_at field.
 	application.UpdateDefaultUpdateAt = applicationDescUpdateAt.UpdateDefault.(func() uint32)
 	// applicationDescDeleteAt is the schema descriptor for delete_at field.
-	applicationDescDeleteAt := applicationFields[9].Descriptor()
+	applicationDescDeleteAt := applicationFields[11].Descriptor()
 	// application.DefaultDeleteAt holds the default value on creation for the delete_at field.
 	application.DefaultDeleteAt = applicationDescDeleteAt.Default.(func() uint32)
 	// applicationDescID is the schema descriptor for id field.

@@ -137,6 +137,17 @@ func TestApplicationUserAPI(t *testing.T) {
 		assert.Equal(t, 200, resp7.StatusCode())
 	}
 
+	resp8, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.UpdateUserKYCStatusRequest{
+			AppID:  appUser.AppID,
+			UserID: appUser.UserID,
+			Status: true,
+		}).Post("http://localhost:50080/v1/get/app/user/detail")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp8.StatusCode())
+	}
+
 	resp3, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.RemoveUsersFromApplicationRequest{

@@ -17,6 +17,8 @@ var (
 		{Name: "redirect_url", Type: field.TypeString, Nullable: true},
 		{Name: "client_secret", Type: field.TypeString, Unique: true},
 		{Name: "application_logo", Type: field.TypeString, Nullable: true},
+		{Name: "sms_login", Type: field.TypeBool, Default: false},
+		{Name: "google_recaptcha", Type: field.TypeBool, Default: false},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "update_at", Type: field.TypeUint32},
 		{Name: "delete_at", Type: field.TypeUint32},

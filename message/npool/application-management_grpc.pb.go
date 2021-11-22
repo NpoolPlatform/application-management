@@ -105,6 +105,8 @@ type ApplicationManagementClient interface {
 	//
 	//Get group users.
 	GetGroupUsers(ctx context.Context, in *GetGroupUsersRequest, opts ...grpc.CallOption) (*GetGroupUsersResponse, error)
+	// get user group info
+	GetUserGroup(ctx context.Context, in *GetUserGroupRequest, opts ...grpc.CallOption) (*GetUserGroupResponse, error)
 	//
 	//Remove users from group.
 	RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersResponse, error)
@@ -134,6 +136,8 @@ type ApplicationManagementClient interface {
 	UpdateUserGAStatus(ctx context.Context, in *UpdateUserGAStatusRequest, opts ...grpc.CallOption) (*UpdateUserGAStatusResponse, error)
 	// update user kyc status.
 	UpdateUserKYCStatus(ctx context.Context, in *UpdateUserKYCStatusRequest, opts ...grpc.CallOption) (*UpdateUserKYCStatusResponse, error)
+	// get application user detail info.
+	GetApplicationUserDetail(ctx context.Context, in *GetApplicationUserDetailRequest, opts ...grpc.CallOption) (*GetApplicationUserDetailResponse, error)
 }
 
 type applicationManagementClient struct {
@@ -405,6 +409,15 @@ func (c *applicationManagementClient) GetGroupUsers(ctx context.Context, in *Get
 	return out, nil
 }
 
+func (c *applicationManagementClient) GetUserGroup(ctx context.Context, in *GetUserGroupRequest, opts ...grpc.CallOption) (*GetUserGroupResponse, error) {
+	out := new(GetUserGroupResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUserGroup", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationManagementClient) RemoveGroupUsers(ctx context.Context, in *RemoveGroupUsersRequest, opts ...grpc.CallOption) (*RemoveGroupUsersResponse, error) {
 	out := new(RemoveGroupUsersResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/RemoveGroupUsers", in, out, opts...)
@@ -504,6 +517,15 @@ func (c *applicationManagementClient) UpdateUserKYCStatus(ctx context.Context, i
 	return out, nil
 }
 
+func (c *applicationManagementClient) GetApplicationUserDetail(ctx context.Context, in *GetApplicationUserDetailRequest, opts ...grpc.CallOption) (*GetApplicationUserDetailResponse, error) {
+	out := new(GetApplicationUserDetailResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetApplicationUserDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ApplicationManagementServer is the server API for ApplicationManagement service.
 // All implementations must embed UnimplementedApplicationManagementServer
 // for forward compatibility
@@ -594,6 +616,8 @@ type ApplicationManagementServer interface {
 	//
 	//Get group users.
 	GetGroupUsers(context.Context, *GetGroupUsersRequest) (*GetGroupUsersResponse, error)
+	// get user group info
+	GetUserGroup(context.Context, *GetUserGroupRequest) (*GetUserGroupResponse, error)
 	//
 	//Remove users from group.
 	RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersResponse, error)
@@ -623,6 +647,8 @@ type ApplicationManagementServer interface {
 	UpdateUserGAStatus(context.Context, *UpdateUserGAStatusRequest) (*UpdateUserGAStatusResponse, error)
 	// update user kyc status.
 	UpdateUserKYCStatus(context.Context, *UpdateUserKYCStatusRequest) (*UpdateUserKYCStatusResponse, error)
+	// get application user detail info.
+	GetApplicationUserDetail(context.Context, *GetApplicationUserDetailRequest) (*GetApplicationUserDetailResponse, error)
 	mustEmbedUnimplementedApplicationManagementServer()
 }
 
@@ -717,6 +743,9 @@ func (UnimplementedApplicationManagementServer) AddGroupUsers(context.Context, *
 func (UnimplementedApplicationManagementServer) GetGroupUsers(context.Context, *GetGroupUsersRequest) (*GetGroupUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetGroupUsers not implemented")
 }
+func (UnimplementedApplicationManagementServer) GetUserGroup(context.Context, *GetUserGroupRequest) (*GetUserGroupResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserGroup not implemented")
+}
 func (UnimplementedApplicationManagementServer) RemoveGroupUsers(context.Context, *RemoveGroupUsersRequest) (*RemoveGroupUsersResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveGroupUsers not implemented")
 }
@@ -749,6 +778,9 @@ func (UnimplementedApplicationManagementServer) UpdateUserGAStatus(context.Conte
 }
 func (UnimplementedApplicationManagementServer) UpdateUserKYCStatus(context.Context, *UpdateUserKYCStatusRequest) (*UpdateUserKYCStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserKYCStatus not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetApplicationUserDetail(context.Context, *GetApplicationUserDetailRequest) (*GetApplicationUserDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetApplicationUserDetail not implemented")
 }
 func (UnimplementedApplicationManagementServer) mustEmbedUnimplementedApplicationManagementServer() {}
 
@@ -1285,6 +1317,24 @@ func _ApplicationManagement_GetGroupUsers_Handler(srv interface{}, ctx context.C
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetUserGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserGroupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetUserGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetUserGroup",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetUserGroup(ctx, req.(*GetUserGroupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationManagement_RemoveGroupUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RemoveGroupUsersRequest)
 	if err := dec(in); err != nil {
@@ -1483,6 +1533,24 @@ func _ApplicationManagement_UpdateUserKYCStatus_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetApplicationUserDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetApplicationUserDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetApplicationUserDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetApplicationUserDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetApplicationUserDetail(ctx, req.(*GetApplicationUserDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ApplicationManagement_ServiceDesc is the grpc.ServiceDesc for ApplicationManagement service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1607,6 +1675,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_GetGroupUsers_Handler,
 		},
 		{
+			MethodName: "GetUserGroup",
+			Handler:    _ApplicationManagement_GetUserGroup_Handler,
+		},
+		{
 			MethodName: "RemoveGroupUsers",
 			Handler:    _ApplicationManagement_RemoveGroupUsers_Handler,
 		},
@@ -1649,6 +1721,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUserKYCStatus",
 			Handler:    _ApplicationManagement_UpdateUserKYCStatus_Handler,
+		},
+		{
+			MethodName: "GetApplicationUserDetail",
+			Handler:    _ApplicationManagement_GetApplicationUserDetail_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -180,3 +180,38 @@ func Delete(ctx context.Context, in *npool.RemoveGroupUsersRequest) (*npool.Remo
 		Info: "remove users from group successfully",
 	}, nil
 }
+
+func GetUserGroup(ctx context.Context, in *npool.GetUserGroupRequest) (*npool.GetUserGroupResponse, error) {
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	infos, err := db.Client().
+		ApplicationGroupUser.
+		Query().
+		Where(
+			applicationgroupuser.And(
+				applicationgroupuser.DeleteAt(0),
+				applicationgroupuser.UserID(userID),
+				applicationgroupuser.AppID(appID),
+			),
+		).All(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("get application user group error: %v", err)
+	}
+
+	response := []*npool.GroupUserInfo{}
+	for _, info := range infos {
+		response = append(response, dbRawToApplicationGroupUser(info))
+	}
+
+	return &npool.GetUserGroupResponse{
+		Infos: response,
+	}, nil
+}

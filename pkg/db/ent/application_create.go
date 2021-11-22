@@ -88,6 +88,34 @@ func (ac *ApplicationCreate) SetNillableApplicationLogo(s *string) *ApplicationC
 	return ac
 }
 
+// SetSmsLogin sets the "sms_login" field.
+func (ac *ApplicationCreate) SetSmsLogin(b bool) *ApplicationCreate {
+	ac.mutation.SetSmsLogin(b)
+	return ac
+}
+
+// SetNillableSmsLogin sets the "sms_login" field if the given value is not nil.
+func (ac *ApplicationCreate) SetNillableSmsLogin(b *bool) *ApplicationCreate {
+	if b != nil {
+		ac.SetSmsLogin(*b)
+	}
+	return ac
+}
+
+// SetGoogleRecaptcha sets the "google_recaptcha" field.
+func (ac *ApplicationCreate) SetGoogleRecaptcha(b bool) *ApplicationCreate {
+	ac.mutation.SetGoogleRecaptcha(b)
+	return ac
+}
+
+// SetNillableGoogleRecaptcha sets the "google_recaptcha" field if the given value is not nil.
+func (ac *ApplicationCreate) SetNillableGoogleRecaptcha(b *bool) *ApplicationCreate {
+	if b != nil {
+		ac.SetGoogleRecaptcha(*b)
+	}
+	return ac
+}
+
 // SetCreateAt sets the "create_at" field.
 func (ac *ApplicationCreate) SetCreateAt(u uint32) *ApplicationCreate {
 	ac.mutation.SetCreateAt(u)
@@ -211,6 +239,14 @@ func (ac *ApplicationCreate) defaults() {
 		v := application.DefaultClientSecret()
 		ac.mutation.SetClientSecret(v)
 	}
+	if _, ok := ac.mutation.SmsLogin(); !ok {
+		v := application.DefaultSmsLogin
+		ac.mutation.SetSmsLogin(v)
+	}
+	if _, ok := ac.mutation.GoogleRecaptcha(); !ok {
+		v := application.DefaultGoogleRecaptcha
+		ac.mutation.SetGoogleRecaptcha(v)
+	}
 	if _, ok := ac.mutation.CreateAt(); !ok {
 		v := application.DefaultCreateAt()
 		ac.mutation.SetCreateAt(v)
@@ -239,6 +275,12 @@ func (ac *ApplicationCreate) check() error {
 	}
 	if _, ok := ac.mutation.ClientSecret(); !ok {
 		return &ValidationError{Name: "client_secret", err: errors.New(`ent: missing required field "client_secret"`)}
+	}
+	if _, ok := ac.mutation.SmsLogin(); !ok {
+		return &ValidationError{Name: "sms_login", err: errors.New(`ent: missing required field "sms_login"`)}
+	}
+	if _, ok := ac.mutation.GoogleRecaptcha(); !ok {
+		return &ValidationError{Name: "google_recaptcha", err: errors.New(`ent: missing required field "google_recaptcha"`)}
 	}
 	if _, ok := ac.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
@@ -328,6 +370,22 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 			Column: application.FieldApplicationLogo,
 		})
 		_node.ApplicationLogo = value
+	}
+	if value, ok := ac.mutation.SmsLogin(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldSmsLogin,
+		})
+		_node.SmsLogin = value
+	}
+	if value, ok := ac.mutation.GoogleRecaptcha(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldGoogleRecaptcha,
+		})
+		_node.GoogleRecaptcha = value
 	}
 	if value, ok := ac.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

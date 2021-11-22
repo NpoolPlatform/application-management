@@ -7,6 +7,7 @@ import (
 
 	"github.com/NpoolPlatform/application-management/message/npool"
 	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
+	appuser "github.com/NpoolPlatform/application-management/pkg/middleware/app-user"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -79,6 +80,15 @@ func (s *Server) UpdateUserKYCStatus(ctx context.Context, in *npool.UpdateUserKY
 	resp, err := applicationuser.UpdateUserKYCStatus(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update user kyc status error: %v", err)
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
+	}
+	return resp, nil
+}
+
+func (s *Server) GetApplicationUserDetail(ctx context.Context, in *npool.GetApplicationUserDetailRequest) (*npool.GetApplicationUserDetailResponse, error) {
+	resp, err := appuser.GetApplicationUserDetail(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get applcation user detail error: %v", err)
 		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil

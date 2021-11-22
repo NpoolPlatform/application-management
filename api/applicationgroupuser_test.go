@@ -132,6 +132,16 @@ func TestApplicationGroupUserAPI(t *testing.T) { // nolint
 		}
 	}
 
+	resp6, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetUserGroupRequest{
+			AppID:  groupInfo.AppID,
+			UserID: groupUserInfo.UserID,
+		}).Post("http://localhost:50080/v1/get/user/group")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp6.StatusCode())
+	}
+
 	resp5, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.RemoveGroupUsersRequest{

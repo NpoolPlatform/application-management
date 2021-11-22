@@ -38,3 +38,12 @@ func (s *Server) RemoveGroupUsers(ctx context.Context, in *npool.RemoveGroupUser
 	}
 	return resp, nil
 }
+
+func (s *Server) GetUserGroup(ctx context.Context, in *npool.GetUserGroupRequest) (*npool.GetUserGroupResponse, error) {
+	resp, err := applicationgroupuser.GetUserGroup(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get user group info error: %v", err)
+		return &npool.GetUserGroupResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
+	}
+	return resp, nil
+}

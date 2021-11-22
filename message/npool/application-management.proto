@@ -268,6 +268,13 @@ service ApplicationManagement {
             body: "*"
         };
     };
+    // get user group info
+    rpc GetUserGroup (GetUserGroupRequest) returns (GetUserGroupResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/user/group"
+            body: "*"
+        };
+    };
     /*
     Remove users from group.
     */
@@ -359,6 +366,13 @@ service ApplicationManagement {
             body: "*"
         };
     };
+    // get application user detail info.
+    rpc GetApplicationUserDetail (GetApplicationUserDetailRequest) returns (GetApplicationUserDetailResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/app/user/detail"
+            body: "*"
+        };
+    };
 }
 
 // request body and response
@@ -381,6 +395,8 @@ message ApplicationInfo {
     uint32 CreateAT = 7;
     uint32 UpdateAT = 8;
     string ClientSecret = 9;
+    bool GoogleRecaptcha = 10;
+    bool SmsLogin = 11;
 }
 
 message CreateApplicationRequest {
@@ -565,6 +581,21 @@ message ApplicationUserInfo {
     bool GALogin = 8;
     uint32 LoginNumber = 9;
     uint32 CreateAT = 5;
+}
+
+message ApplicationUserDetail {
+    ApplicationUserInfo UserApplicationInfo = 1;
+    repeated GroupUserInfo UserGroupInfos = 2;
+    UserRole UserRoleInfo = 3;
+}
+
+message GetApplicationUserDetailRequest {
+    string AppID = 1;
+    string UserID = 2;
+}
+
+message GetApplicationUserDetailResponse {
+    ApplicationUserDetail Info = 1;
 }
 
 message AddUsersToApplicationRequest {
@@ -814,4 +845,13 @@ message UpdateUserKYCStatusRequest {
 
 message UpdateUserKYCStatusResponse {
     string Info = 1;
+}
+
+message GetUserGroupRequest {
+    string AppID = 1;
+    string UserID = 2;
+}
+
+message GetUserGroupResponse {
+    repeated GroupUserInfo Infos = 1;
 }

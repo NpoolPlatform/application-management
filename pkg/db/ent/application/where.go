@@ -133,6 +133,20 @@ func ApplicationLogo(v string) predicate.Application {
 	})
 }
 
+// SmsLogin applies equality check predicate on the "sms_login" field. It's identical to SmsLoginEQ.
+func SmsLogin(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSmsLogin), v))
+	})
+}
+
+// GoogleRecaptcha applies equality check predicate on the "google_recaptcha" field. It's identical to GoogleRecaptchaEQ.
+func GoogleRecaptcha(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGoogleRecaptcha), v))
+	})
+}
+
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
 func CreateAt(v uint32) predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
@@ -824,6 +838,34 @@ func ApplicationLogoEqualFold(v string) predicate.Application {
 func ApplicationLogoContainsFold(v string) predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldApplicationLogo), v))
+	})
+}
+
+// SmsLoginEQ applies the EQ predicate on the "sms_login" field.
+func SmsLoginEQ(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSmsLogin), v))
+	})
+}
+
+// SmsLoginNEQ applies the NEQ predicate on the "sms_login" field.
+func SmsLoginNEQ(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSmsLogin), v))
+	})
+}
+
+// GoogleRecaptchaEQ applies the EQ predicate on the "google_recaptcha" field.
+func GoogleRecaptchaEQ(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldGoogleRecaptcha), v))
+	})
+}
+
+// GoogleRecaptchaNEQ applies the NEQ predicate on the "google_recaptcha" field.
+func GoogleRecaptchaNEQ(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldGoogleRecaptcha), v))
 	})
 }
 

@@ -23,6 +23,8 @@ func dbRowToApplication(row *ent.Application) *npool.ApplicationInfo {
 		CreateAT:         row.CreateAt,
 		UpdateAT:         row.UpdateAt,
 		ClientSecret:     row.ClientSecret,
+		SmsLogin:         row.SmsLogin,
+		GoogleRecaptcha:  row.GoogleRecaptcha,
 	}
 }
 
@@ -39,6 +41,8 @@ func Create(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.Cre
 		SetApplicationLogo(in.Info.ApplicationLogo).
 		SetHomepageURL(in.Info.HomepageUrl).
 		SetRedirectURL(in.Info.RedirectUrl).
+		SetGoogleRecaptcha(in.Info.GoogleRecaptcha).
+		SetSmsLogin(in.Info.SmsLogin).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create application: %v", err)
@@ -116,6 +120,8 @@ func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.Upd
 		SetApplicationLogo(in.Info.ApplicationLogo).
 		SetHomepageURL(in.Info.HomepageUrl).
 		SetRedirectURL(in.Info.RedirectUrl).
+		SetGoogleRecaptcha(in.Info.GoogleRecaptcha).
+		SetSmsLogin(in.Info.SmsLogin).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update application: %v", err)
