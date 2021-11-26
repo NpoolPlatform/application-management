@@ -15,7 +15,7 @@ spec:
     - host: api.npool.top
       http:
         paths:
-          - path: /application-management
+          - path: /api/application-management
             backend:
               serviceName: application-management
               servicePort: 50080
@@ -39,7 +39,7 @@ spec:
     - host: api.xpool.top
       http:
         paths:
-          - path: /application-management
+          - path: /api/application-management
             backend:
               serviceName: application-management
               servicePort: 50080
@@ -54,4 +54,4 @@ metadata:
 spec:
   stripPrefix:
     prefixes:
-      - /application-management
+      - /api/application-management
