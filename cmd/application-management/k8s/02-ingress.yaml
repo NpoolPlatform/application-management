@@ -4,45 +4,27 @@ metadata:
   name: application-management-npool-top-ingress
   namespace: kube-system
   annotations:
-    k8s.kuboard.cn/displayName: application-management-npool
-    k8s.kuboard.cn/workload: application-management-npool
+    k8s.kuboard.cn/displayName: application-management
+    k8s.kuboard.cn/workload: application-management
     kubernetes.io/ingress.class: "traefik-internet"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-application-management-prefix@kubernetescrd
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-application-management-prefix@kubernetescrd,kube-system-common-headers@kubernetescrd
 
 spec:
   rules:
     - host: api.npool.top
-      http:
+      http: &http_rules
         paths:
           - path: /api/application-management
             backend:
               serviceName: application-management
               servicePort: 50080
-
----
-
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: application-management-xpool-top-ingress
-  namespace: kube-system
-  annotations:
-    k8s.kuboard.cn/displayName: application-management-xpool
-    k8s.kuboard.cn/workload: application-management-xpool
-    kubernetes.io/ingress.class: "traefik-internet"
-    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
-    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-application-management-prefix@kubernetescrd
-
-spec:
-  rules:
     - host: api.xpool.top
-      http:
-        paths:
-          - path: /api/application-management
-            backend:
-              serviceName: application-management
-              servicePort: 50080
+      http: *http_rules
+    - host: www.npool.top
+      http: *http_rules
+    - host: www.xpool.top
+      http: *http_rules
 
 ---
 
