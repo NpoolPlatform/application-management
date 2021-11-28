@@ -16,11 +16,15 @@ import (
 
 func dbRowToApplicationUser(row *ent.ApplicationUser) *npool.ApplicationUserInfo {
 	return &npool.ApplicationUserInfo{
-		ID:       row.ID.String(),
-		AppID:    row.AppID.String(),
-		UserID:   row.UserID.String(),
-		Original: row.Original,
-		CreateAT: row.CreateAt,
+		ID:          row.ID.String(),
+		AppID:       row.AppID.String(),
+		UserID:      row.UserID.String(),
+		KycVerify:   row.KycVerify,
+		GAVerify:    row.GaVerify,
+		GALogin:     row.GaLogin,
+		LoginNumber: row.LoginNumber,
+		Original:    row.Original,
+		CreateAT:    row.CreateAt,
 	}
 }
 
