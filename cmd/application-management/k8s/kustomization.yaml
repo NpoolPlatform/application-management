@@ -1,6 +1,7 @@
 commonLabels:
-  # app: application-management
+# app: application-management
 
 resources:
-- 01-application-management.yaml
-- 02-ingress.yaml
+  - 01-application-management.yaml
+  - 02-traefik-ingress.yaml
+  - 03-nginx-ingress.yaml
