@@ -1,6 +1,44 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
+  name: application-management-appid-userid-ingress
+  namespace: kube-system
+  annotations:
+    k8s.kuboard.cn/displayName: application-management-appid-userid
+    k8s.kuboard.cn/workload: application-management-appid-userid
+    kubernetes.io/ingress.class: "traefik-internet"
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: kube-system-strip-application-management-prefix@kubernetescrd,kube-system-cookies-appid-to-body@kubernetescrd,kube-system-cookies-userid-to-body@kubernetescrd,kube-system-common-headers@kubernetescrd
+
+spec:
+  tls:
+    - secretName: procyon-vip-tls
+  rules:
+    - host: api.npool.top
+      http: &http_appid_userid_rules
+        paths:
+          - path: /api/application-management/v1/set/ga/login
+            backend:
+              serviceName: application-management
+              servicePort: 50080
+          - path: /api/application-management/v1/update/user/ga/status
+            backend:
+              serviceName: application-management
+              servicePort: 50080
+    - host: api.xpool.top
+      http: *http_appid_userid_rules
+    - host: www.npool.top
+      http: *http_appid_userid_rules
+    - host: www.xpool.top
+      http: *http_appid_userid_rules
+    - host: www.procyon.vip
+      http: *http_appid_userid_rules
+
+---
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
   name: application-management-traefik-ingress
   namespace: kube-system
   annotations:
