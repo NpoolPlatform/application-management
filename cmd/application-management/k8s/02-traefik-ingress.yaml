@@ -33,6 +33,8 @@ spec:
       http: *http_appid_userid_rules
     - host: www.procyon.vip
       http: *http_appid_userid_rules
+    - host: procyon.vip
+      http: *http_appid_userid_rules
 
 ---
 
