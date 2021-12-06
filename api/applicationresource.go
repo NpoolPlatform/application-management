@@ -13,6 +13,10 @@ import (
 )
 
 func (s *Server) CreateResource(ctx context.Context, in *npool.CreateResourceRequest) (*npool.CreateResourceResponse, error) {
+	if in.Info == nil {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.CreateResourceResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
 	resp, err := applicationresource.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create resource error: %v", err)
@@ -40,6 +44,10 @@ func (s *Server) GetResources(ctx context.Context, in *npool.GetResourcesRequest
 }
 
 func (s *Server) UpdateResource(ctx context.Context, in *npool.UpdateResourceRequest) (*npool.UpdateResourceResponse, error) {
+	if in.Info == nil {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.UpdateResourceResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
 	resp, err := applicationresource.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update resource error: %v", err)

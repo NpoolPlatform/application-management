@@ -14,6 +14,11 @@ import (
 )
 
 func (s *Server) CreateApplication(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.CreateApplicationResponse, error) {
+	if in.Info == nil || in.Info.ApplicationName == "" || in.Info.ApplicationOwner == "" {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.CreateApplicationResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
+
 	resp, err := middleware.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create application error: %v", err)
@@ -23,6 +28,10 @@ func (s *Server) CreateApplication(ctx context.Context, in *npool.CreateApplicat
 }
 
 func (s *Server) UpdateApplication(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.UpdateApplicationResponse, error) {
+	if in.Info == nil {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.UpdateApplicationResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
 	resp, err := application.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update application error: %v", err)

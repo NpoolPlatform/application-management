@@ -13,6 +13,10 @@ import (
 )
 
 func (s *Server) CreateRole(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRoleResponse, error) {
+	if in.Info == nil {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.CreateRoleResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
 	resp, err := applicationrole.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create role error: %v", err)
@@ -22,6 +26,10 @@ func (s *Server) CreateRole(ctx context.Context, in *npool.CreateRoleRequest) (*
 }
 
 func (s *Server) UpdateRole(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRoleResponse, error) {
+	if in.Info == nil {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.UpdateRoleResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
 	resp, err := applicationrole.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update role error: %v", err)

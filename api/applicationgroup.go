@@ -13,6 +13,10 @@ import (
 )
 
 func (s *Server) CreateGroup(ctx context.Context, in *npool.CreateGroupRequest) (*npool.CreateGroupResponse, error) {
+	if in.Info == nil {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.CreateGroupResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
 	resp, err := applicationgroup.Create(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("create group error: %v", err)
@@ -40,6 +44,10 @@ func (s *Server) GetAllGroups(ctx context.Context, in *npool.GetAllGroupsRequest
 }
 
 func (s *Server) UpdateGroup(ctx context.Context, in *npool.UpdateGroupRequest) (*npool.UpdateGroupResponse, error) {
+	if in.Info == nil {
+		logger.Sugar().Errorf("invalid input params")
+		return &npool.UpdateGroupResponse{}, status.Errorf(codes.InvalidArgument, "invalid input params")
+	}
 	resp, err := applicationgroup.Update(ctx, in)
 	if err != nil {
 		logger.Sugar().Errorf("update group error: %v", err)
