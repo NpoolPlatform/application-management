@@ -291,7 +291,7 @@ pipeline {
 
           patch=$(( $patch - $patch % 2 ))
           tag=$major.$minor.$patch
-`
+
           set +e
           docker images | grep application-management | grep $tag
           rc=$?
