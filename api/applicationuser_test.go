@@ -12,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestApplicationUserAPI(t *testing.T) {
+func TestApplicationUserAPI(t *testing.T) { // nolint
 	if runByGithubAction, err := strconv.ParseBool(os.Getenv("RUN_BY_GITHUB_ACTION")); err == nil && runByGithubAction {
 		return
 	}
@@ -91,6 +91,18 @@ func TestApplicationUserAPI(t *testing.T) {
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp2.StatusCode())
 		err := json.Unmarshal(resp2.Body(), &response2)
+		assert.Nil(t, err)
+	}
+
+	response9 := npool.GetUserAppIDResponse{}
+	resp10, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetUserAppIDRequest{
+			UserID: appUser.UserID,
+		}).Post("http://localhost:50080/v1/get/user/appid")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp10.StatusCode())
+		err := json.Unmarshal(resp10.Body(), &response9)
 		assert.Nil(t, err)
 	}
 

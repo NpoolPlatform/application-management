@@ -187,6 +187,13 @@ service ApplicationManagement {
             body: "*"
         };
     };
+    // Get user's appid.
+    rpc GetUserAppID (GetUserAppIDRequest) returns (GetUserAppIDResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/user/appid"
+            body: "*"
+        };
+    };
     /*
     Remove users from app.
     */
@@ -888,4 +895,12 @@ message GetResourceByNameRequest {
 
 message GetResourceByNameResponse {
     ResourceInfo Info = 1;
+}
+
+message GetUserAppIDRequest {
+    string UserID = 1;
+}
+
+message GetUserAppIDResponse {
+    repeated string Infos = 1;
 }

@@ -74,6 +74,13 @@ func TestApplicationUserCRUD(t *testing.T) {
 		assert.Equal(t, resp1.Info.Original, applicationUser.Original)
 	}
 
+	resp7, err := GetUserAppID(context.Background(), &npool.GetUserAppIDRequest{
+		UserID: applicationUser.UserID,
+	})
+	if assert.Nil(t, err) {
+		assert.Equal(t, applicationUser.AppID, resp7.Infos[0])
+	}
+
 	_, err = GetAll(context.Background(), &npool.GetUsersFromApplicationRequest{
 		AppID: applicationUser.AppID,
 	})

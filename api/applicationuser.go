@@ -102,3 +102,12 @@ func (s *Server) GetApplicationUserDetail(ctx context.Context, in *npool.GetAppl
 	}
 	return resp, nil
 }
+
+func (s *Server) GetUserAppID(ctx context.Context, in *npool.GetUserAppIDRequest) (*npool.GetUserAppIDResponse, error) {
+	resp, err := applicationuser.GetUserAppID(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get user app id error: %v", err)
+		return nil, status.Errorf(codes.FailedPrecondition, "fail to get user app id: %v", err.Error())
+	}
+	return resp, nil
+}

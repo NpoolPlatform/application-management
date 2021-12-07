@@ -78,6 +78,8 @@ type ApplicationManagementClient interface {
 	//
 	//Get users from app.
 	GetUsersFromApplication(ctx context.Context, in *GetUsersFromApplicationRequest, opts ...grpc.CallOption) (*GetUsersFromApplicationResponse, error)
+	// Get user's appid.
+	GetUserAppID(ctx context.Context, in *GetUserAppIDRequest, opts ...grpc.CallOption) (*GetUserAppIDResponse, error)
 	//
 	//Remove users from app.
 	RemoveUsersFromApplication(ctx context.Context, in *RemoveUsersFromApplicationRequest, opts ...grpc.CallOption) (*RemoveUsersFromApplicationResponse, error)
@@ -326,6 +328,15 @@ func (c *applicationManagementClient) GetUserFromApplication(ctx context.Context
 func (c *applicationManagementClient) GetUsersFromApplication(ctx context.Context, in *GetUsersFromApplicationRequest, opts ...grpc.CallOption) (*GetUsersFromApplicationResponse, error) {
 	out := new(GetUsersFromApplicationResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUsersFromApplication", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) GetUserAppID(ctx context.Context, in *GetUserAppIDRequest, opts ...grpc.CallOption) (*GetUserAppIDResponse, error) {
+	out := new(GetUserAppIDResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetUserAppID", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -611,6 +622,8 @@ type ApplicationManagementServer interface {
 	//
 	//Get users from app.
 	GetUsersFromApplication(context.Context, *GetUsersFromApplicationRequest) (*GetUsersFromApplicationResponse, error)
+	// Get user's appid.
+	GetUserAppID(context.Context, *GetUserAppIDRequest) (*GetUserAppIDResponse, error)
 	//
 	//Remove users from app.
 	RemoveUsersFromApplication(context.Context, *RemoveUsersFromApplicationRequest) (*RemoveUsersFromApplicationResponse, error)
@@ -741,6 +754,9 @@ func (UnimplementedApplicationManagementServer) GetUserFromApplication(context.C
 }
 func (UnimplementedApplicationManagementServer) GetUsersFromApplication(context.Context, *GetUsersFromApplicationRequest) (*GetUsersFromApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUsersFromApplication not implemented")
+}
+func (UnimplementedApplicationManagementServer) GetUserAppID(context.Context, *GetUserAppIDRequest) (*GetUserAppIDResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserAppID not implemented")
 }
 func (UnimplementedApplicationManagementServer) RemoveUsersFromApplication(context.Context, *RemoveUsersFromApplicationRequest) (*RemoveUsersFromApplicationResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveUsersFromApplication not implemented")
@@ -1183,6 +1199,24 @@ func _ApplicationManagement_GetUsersFromApplication_Handler(srv interface{}, ctx
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ApplicationManagementServer).GetUsersFromApplication(ctx, req.(*GetUsersFromApplicationRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_GetUserAppID_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserAppIDRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetUserAppID(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetUserAppID",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetUserAppID(ctx, req.(*GetUserAppIDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1705,6 +1739,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUsersFromApplication",
 			Handler:    _ApplicationManagement_GetUsersFromApplication_Handler,
+		},
+		{
+			MethodName: "GetUserAppID",
+			Handler:    _ApplicationManagement_GetUserAppID_Handler,
 		},
 		{
 			MethodName: "RemoveUsersFromApplication",
