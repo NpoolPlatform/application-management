@@ -89,9 +89,9 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 	response6 := npool.GetResourceResponse{}
 	resp6, err := cli.R().
 		SetHeader("Content-Type", "application/json").
-		SetBody(npool.GetResourceRequest{
-			ResourceID: resourceInfo.ID,
-			AppID:      resourceInfo.AppID,
+		SetBody(npool.GetResourceByNameRequest{
+			ResourceName: resourceInfo.ResourceName,
+			AppID:        resourceInfo.AppID,
 		}).Post("http://localhost:50080/v1/get/resource/by/name")
 	if assert.Nil(t, err) {
 		assert.Equal(t, 200, resp6.StatusCode())
