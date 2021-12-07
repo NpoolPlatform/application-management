@@ -187,6 +187,7 @@ var (
 		{Name: "kyc_verify", Type: field.TypeBool, Default: false},
 		{Name: "ga_verify", Type: field.TypeBool, Default: false},
 		{Name: "ga_login", Type: field.TypeBool, Default: false},
+		{Name: "sms_login", Type: field.TypeBool, Default: false},
 		{Name: "login_number", Type: field.TypeUint32, Default: 0},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "delete_at", Type: field.TypeUint32},

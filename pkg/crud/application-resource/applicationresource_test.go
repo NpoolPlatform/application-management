@@ -72,6 +72,17 @@ func TestApplicationResourceCRUD(t *testing.T) { // nolint
 		assert.Equal(t, resp1.Info.Creator, resource.Creator)
 	}
 
+	resp5, err := GetResourceByName(context.Background(), &npool.GetResourceByNameRequest{
+		ResourceName: resource.ResourceName,
+		AppID:        resource.AppID,
+	})
+	if assert.Nil(t, err) {
+		assert.Equal(t, resp5.Info.ID, resource.ID)
+		assert.Equal(t, resp5.Info.AppID, resource.AppID)
+		assert.Equal(t, resp5.Info.ResourceName, resource.ResourceName)
+		assert.Equal(t, resp5.Info.Creator, resource.Creator)
+	}
+
 	resp2, err := GetAll(context.Background(), &npool.GetResourcesRequest{
 		AppID: resource.AppID,
 	})

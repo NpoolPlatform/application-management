@@ -117,8 +117,10 @@ type ApplicationManagementClient interface {
 	//Update resource of app.
 	UpdateResource(ctx context.Context, in *UpdateResourceRequest, opts ...grpc.CallOption) (*UpdateResourceResponse, error)
 	//
-	//Get resource.
+	//Get resource by ID.
 	GetResource(ctx context.Context, in *GetResourceRequest, opts ...grpc.CallOption) (*GetResourceResponse, error)
+	// get resource by name.
+	GetResourceByName(ctx context.Context, in *GetResourceByNameRequest, opts ...grpc.CallOption) (*GetResourceByNameResponse, error)
 	//
 	//Get resource by creator.
 	GetResourceByCreator(ctx context.Context, in *GetResourceByCreatorRequest, opts ...grpc.CallOption) (*GetResourceByCreatorResponse, error)
@@ -128,8 +130,10 @@ type ApplicationManagementClient interface {
 	//
 	//Delete resource from app.
 	DeleteResource(ctx context.Context, in *DeleteResourceRequest, opts ...grpc.CallOption) (*DeleteResourceResponse, error)
-	// set ga login option
+	// set ga login verify option
 	SetGALogin(ctx context.Context, in *SetGALoginRequest, opts ...grpc.CallOption) (*SetGALoginResponse, error)
+	// set sms login verify option
+	SetSMSLogin(ctx context.Context, in *SetSMSLoginRequest, opts ...grpc.CallOption) (*SetSMSLoginResponse, error)
 	// add user login times
 	AddUserLoginTime(ctx context.Context, in *AddUserLoginTimeRequest, opts ...grpc.CallOption) (*AddUserLoginTimeResponse, error)
 	// update user google authentication status.
@@ -454,6 +458,15 @@ func (c *applicationManagementClient) GetResource(ctx context.Context, in *GetRe
 	return out, nil
 }
 
+func (c *applicationManagementClient) GetResourceByName(ctx context.Context, in *GetResourceByNameRequest, opts ...grpc.CallOption) (*GetResourceByNameResponse, error) {
+	out := new(GetResourceByNameResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetResourceByName", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *applicationManagementClient) GetResourceByCreator(ctx context.Context, in *GetResourceByCreatorRequest, opts ...grpc.CallOption) (*GetResourceByCreatorResponse, error) {
 	out := new(GetResourceByCreatorResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/GetResourceByCreator", in, out, opts...)
@@ -484,6 +497,15 @@ func (c *applicationManagementClient) DeleteResource(ctx context.Context, in *De
 func (c *applicationManagementClient) SetGALogin(ctx context.Context, in *SetGALoginRequest, opts ...grpc.CallOption) (*SetGALoginResponse, error) {
 	out := new(SetGALoginResponse)
 	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/SetGALogin", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *applicationManagementClient) SetSMSLogin(ctx context.Context, in *SetSMSLoginRequest, opts ...grpc.CallOption) (*SetSMSLoginResponse, error) {
+	out := new(SetSMSLoginResponse)
+	err := c.cc.Invoke(ctx, "/application.management.v1.ApplicationManagement/SetSMSLogin", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -628,8 +650,10 @@ type ApplicationManagementServer interface {
 	//Update resource of app.
 	UpdateResource(context.Context, *UpdateResourceRequest) (*UpdateResourceResponse, error)
 	//
-	//Get resource.
+	//Get resource by ID.
 	GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error)
+	// get resource by name.
+	GetResourceByName(context.Context, *GetResourceByNameRequest) (*GetResourceByNameResponse, error)
 	//
 	//Get resource by creator.
 	GetResourceByCreator(context.Context, *GetResourceByCreatorRequest) (*GetResourceByCreatorResponse, error)
@@ -639,8 +663,10 @@ type ApplicationManagementServer interface {
 	//
 	//Delete resource from app.
 	DeleteResource(context.Context, *DeleteResourceRequest) (*DeleteResourceResponse, error)
-	// set ga login option
+	// set ga login verify option
 	SetGALogin(context.Context, *SetGALoginRequest) (*SetGALoginResponse, error)
+	// set sms login verify option
+	SetSMSLogin(context.Context, *SetSMSLoginRequest) (*SetSMSLoginResponse, error)
 	// add user login times
 	AddUserLoginTime(context.Context, *AddUserLoginTimeRequest) (*AddUserLoginTimeResponse, error)
 	// update user google authentication status.
@@ -758,6 +784,9 @@ func (UnimplementedApplicationManagementServer) UpdateResource(context.Context, 
 func (UnimplementedApplicationManagementServer) GetResource(context.Context, *GetResourceRequest) (*GetResourceResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetResource not implemented")
 }
+func (UnimplementedApplicationManagementServer) GetResourceByName(context.Context, *GetResourceByNameRequest) (*GetResourceByNameResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetResourceByName not implemented")
+}
 func (UnimplementedApplicationManagementServer) GetResourceByCreator(context.Context, *GetResourceByCreatorRequest) (*GetResourceByCreatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetResourceByCreator not implemented")
 }
@@ -769,6 +798,9 @@ func (UnimplementedApplicationManagementServer) DeleteResource(context.Context, 
 }
 func (UnimplementedApplicationManagementServer) SetGALogin(context.Context, *SetGALoginRequest) (*SetGALoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetGALogin not implemented")
+}
+func (UnimplementedApplicationManagementServer) SetSMSLogin(context.Context, *SetSMSLoginRequest) (*SetSMSLoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetSMSLogin not implemented")
 }
 func (UnimplementedApplicationManagementServer) AddUserLoginTime(context.Context, *AddUserLoginTimeRequest) (*AddUserLoginTimeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddUserLoginTime not implemented")
@@ -1407,6 +1439,24 @@ func _ApplicationManagement_GetResource_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ApplicationManagement_GetResourceByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetResourceByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).GetResourceByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/GetResourceByName",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).GetResourceByName(ctx, req.(*GetResourceByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _ApplicationManagement_GetResourceByCreator_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetResourceByCreatorRequest)
 	if err := dec(in); err != nil {
@@ -1475,6 +1525,24 @@ func _ApplicationManagement_SetGALogin_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ApplicationManagementServer).SetGALogin(ctx, req.(*SetGALoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ApplicationManagement_SetSMSLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetSMSLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ApplicationManagementServer).SetSMSLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/application.management.v1.ApplicationManagement/SetSMSLogin",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ApplicationManagementServer).SetSMSLogin(ctx, req.(*SetSMSLoginRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1695,6 +1763,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _ApplicationManagement_GetResource_Handler,
 		},
 		{
+			MethodName: "GetResourceByName",
+			Handler:    _ApplicationManagement_GetResourceByName_Handler,
+		},
+		{
 			MethodName: "GetResourceByCreator",
 			Handler:    _ApplicationManagement_GetResourceByCreator_Handler,
 		},
@@ -1709,6 +1781,10 @@ var ApplicationManagement_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SetGALogin",
 			Handler:    _ApplicationManagement_SetGALogin_Handler,
+		},
+		{
+			MethodName: "SetSMSLogin",
+			Handler:    _ApplicationManagement_SetSMSLogin_Handler,
 		},
 		{
 			MethodName: "AddUserLoginTime",

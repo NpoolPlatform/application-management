@@ -22,6 +22,7 @@ func dbRowToApplicationUser(row *ent.ApplicationUser) *npool.ApplicationUserInfo
 		KycVerify:   row.KycVerify,
 		GAVerify:    row.GaVerify,
 		GALogin:     row.GaLogin,
+		SMSLogin:    row.SmsLogin,
 		LoginNumber: row.LoginNumber,
 		Original:    row.Original,
 		CreateAT:    row.CreateAt,
@@ -192,6 +193,41 @@ func Delete(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*
 	}, nil
 }
 
+func SetSMSLogin(ctx context.Context, in *npool.SetSMSLoginRequest) (*npool.SetSMSLoginResponse, error) {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	_, err = db.Client().
+		ApplicationUser.
+		Update().
+		Where(
+			applicationuser.And(
+				applicationuser.AppID(appID),
+				applicationuser.UserID(userID),
+				applicationuser.DeleteAt(0),
+			),
+		).
+		SetSmsLogin(in.Set).
+		Save(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to set user sms login verify: %v", err)
+	}
+	return &npool.SetSMSLoginResponse{
+		Info: "successfully set user sms login verify",
+	}, nil
+}
+
 func SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGALoginResponse, error) {
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
@@ -223,7 +259,7 @@ func SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGAL
 		return nil, xerrors.Errorf("fail to set user ga login: %v", err)
 	}
 	return &npool.SetGALoginResponse{
-		Info: "successfully set user ga login",
+		Info: "successfully set user ga login verify",
 	}, nil
 }
 

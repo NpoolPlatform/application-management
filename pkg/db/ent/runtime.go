@@ -160,16 +160,20 @@ func init() {
 	applicationuserDescGaLogin := applicationuserFields[6].Descriptor()
 	// applicationuser.DefaultGaLogin holds the default value on creation for the ga_login field.
 	applicationuser.DefaultGaLogin = applicationuserDescGaLogin.Default.(bool)
+	// applicationuserDescSmsLogin is the schema descriptor for sms_login field.
+	applicationuserDescSmsLogin := applicationuserFields[7].Descriptor()
+	// applicationuser.DefaultSmsLogin holds the default value on creation for the sms_login field.
+	applicationuser.DefaultSmsLogin = applicationuserDescSmsLogin.Default.(bool)
 	// applicationuserDescLoginNumber is the schema descriptor for Login_number field.
-	applicationuserDescLoginNumber := applicationuserFields[7].Descriptor()
+	applicationuserDescLoginNumber := applicationuserFields[8].Descriptor()
 	// applicationuser.DefaultLoginNumber holds the default value on creation for the Login_number field.
 	applicationuser.DefaultLoginNumber = applicationuserDescLoginNumber.Default.(uint32)
 	// applicationuserDescCreateAt is the schema descriptor for create_at field.
-	applicationuserDescCreateAt := applicationuserFields[8].Descriptor()
+	applicationuserDescCreateAt := applicationuserFields[9].Descriptor()
 	// applicationuser.DefaultCreateAt holds the default value on creation for the create_at field.
 	applicationuser.DefaultCreateAt = applicationuserDescCreateAt.Default.(func() uint32)
 	// applicationuserDescDeleteAt is the schema descriptor for delete_at field.
-	applicationuserDescDeleteAt := applicationuserFields[9].Descriptor()
+	applicationuserDescDeleteAt := applicationuserFields[10].Descriptor()
 	// applicationuser.DefaultDeleteAt holds the default value on creation for the delete_at field.
 	applicationuser.DefaultDeleteAt = applicationuserDescDeleteAt.Default.(func() uint32)
 	// applicationuserDescID is the schema descriptor for id field.

@@ -73,3 +73,12 @@ func (s *Server) GetResourceByCreator(ctx context.Context, in *npool.GetResource
 	}
 	return resp, nil
 }
+
+func (s *Server) GetResourceByName(ctx context.Context, in *npool.GetResourceByNameRequest) (*npool.GetResourceByNameResponse, error) {
+	resp, err := applicationresource.GetResourceByName(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("get resource by resource name error: %v", err)
+		return &npool.GetResourceByNameResponse{}, status.Errorf(codes.FailedPrecondition, "internal server error: %v", err.Error())
+	}
+	return resp, nil
+}

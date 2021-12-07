@@ -4657,6 +4657,7 @@ type ApplicationUserMutation struct {
 	kyc_verify       *bool
 	ga_verify        *bool
 	ga_login         *bool
+	sms_login        *bool
 	_Login_number    *uint32
 	add_Login_number *uint32
 	create_at        *uint32
@@ -4970,6 +4971,42 @@ func (m *ApplicationUserMutation) ResetGaLogin() {
 	m.ga_login = nil
 }
 
+// SetSmsLogin sets the "sms_login" field.
+func (m *ApplicationUserMutation) SetSmsLogin(b bool) {
+	m.sms_login = &b
+}
+
+// SmsLogin returns the value of the "sms_login" field in the mutation.
+func (m *ApplicationUserMutation) SmsLogin() (r bool, exists bool) {
+	v := m.sms_login
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSmsLogin returns the old "sms_login" field's value of the ApplicationUser entity.
+// If the ApplicationUser object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationUserMutation) OldSmsLogin(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldSmsLogin is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldSmsLogin requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSmsLogin: %w", err)
+	}
+	return oldValue.SmsLogin, nil
+}
+
+// ResetSmsLogin resets all changes to the "sms_login" field.
+func (m *ApplicationUserMutation) ResetSmsLogin() {
+	m.sms_login = nil
+}
+
 // SetLoginNumber sets the "Login_number" field.
 func (m *ApplicationUserMutation) SetLoginNumber(u uint32) {
 	m._Login_number = &u
@@ -5157,7 +5194,7 @@ func (m *ApplicationUserMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ApplicationUserMutation) Fields() []string {
-	fields := make([]string, 0, 9)
+	fields := make([]string, 0, 10)
 	if m.app_id != nil {
 		fields = append(fields, applicationuser.FieldAppID)
 	}
@@ -5175,6 +5212,9 @@ func (m *ApplicationUserMutation) Fields() []string {
 	}
 	if m.ga_login != nil {
 		fields = append(fields, applicationuser.FieldGaLogin)
+	}
+	if m.sms_login != nil {
+		fields = append(fields, applicationuser.FieldSmsLogin)
 	}
 	if m._Login_number != nil {
 		fields = append(fields, applicationuser.FieldLoginNumber)
@@ -5205,6 +5245,8 @@ func (m *ApplicationUserMutation) Field(name string) (ent.Value, bool) {
 		return m.GaVerify()
 	case applicationuser.FieldGaLogin:
 		return m.GaLogin()
+	case applicationuser.FieldSmsLogin:
+		return m.SmsLogin()
 	case applicationuser.FieldLoginNumber:
 		return m.LoginNumber()
 	case applicationuser.FieldCreateAt:
@@ -5232,6 +5274,8 @@ func (m *ApplicationUserMutation) OldField(ctx context.Context, name string) (en
 		return m.OldGaVerify(ctx)
 	case applicationuser.FieldGaLogin:
 		return m.OldGaLogin(ctx)
+	case applicationuser.FieldSmsLogin:
+		return m.OldSmsLogin(ctx)
 	case applicationuser.FieldLoginNumber:
 		return m.OldLoginNumber(ctx)
 	case applicationuser.FieldCreateAt:
@@ -5288,6 +5332,13 @@ func (m *ApplicationUserMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetGaLogin(v)
+		return nil
+	case applicationuser.FieldSmsLogin:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSmsLogin(v)
 		return nil
 	case applicationuser.FieldLoginNumber:
 		v, ok := value.(uint32)
@@ -5415,6 +5466,9 @@ func (m *ApplicationUserMutation) ResetField(name string) error {
 		return nil
 	case applicationuser.FieldGaLogin:
 		m.ResetGaLogin()
+		return nil
+	case applicationuser.FieldSmsLogin:
+		m.ResetSmsLogin()
 		return nil
 	case applicationuser.FieldLoginNumber:
 		m.ResetLoginNumber()

@@ -23,6 +23,8 @@ const (
 	FieldGaVerify = "ga_verify"
 	// FieldGaLogin holds the string denoting the ga_login field in the database.
 	FieldGaLogin = "ga_login"
+	// FieldSmsLogin holds the string denoting the sms_login field in the database.
+	FieldSmsLogin = "sms_login"
 	// FieldLoginNumber holds the string denoting the login_number field in the database.
 	FieldLoginNumber = "login_number"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
@@ -42,6 +44,7 @@ var Columns = []string{
 	FieldKycVerify,
 	FieldGaVerify,
 	FieldGaLogin,
+	FieldSmsLogin,
 	FieldLoginNumber,
 	FieldCreateAt,
 	FieldDeleteAt,
@@ -66,6 +69,8 @@ var (
 	DefaultGaVerify bool
 	// DefaultGaLogin holds the default value on creation for the "ga_login" field.
 	DefaultGaLogin bool
+	// DefaultSmsLogin holds the default value on creation for the "sms_login" field.
+	DefaultSmsLogin bool
 	// DefaultLoginNumber holds the default value on creation for the "Login_number" field.
 	DefaultLoginNumber uint32
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.

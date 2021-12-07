@@ -88,6 +88,15 @@ func TestApplicationUserCRUD(t *testing.T) {
 		assert.NotNil(t, resp2)
 	}
 
+	resp6, err := SetSMSLogin(context.Background(), &npool.SetSMSLoginRequest{
+		AppID:  applicationUser.AppID,
+		UserID: applicationUser.UserID,
+		Set:    true,
+	})
+	if assert.Nil(t, err) {
+		assert.NotNil(t, resp6)
+	}
+
 	resp3, err := AddUserLoginTime(context.Background(), &npool.AddUserLoginTimeRequest{
 		UserID: applicationUser.UserID,
 		AppID:  applicationUser.AppID,

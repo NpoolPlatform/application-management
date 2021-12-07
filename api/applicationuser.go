@@ -52,7 +52,16 @@ func (s *Server) RemoveUsersFromApplication(ctx context.Context, in *npool.Remov
 func (s *Server) SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGALoginResponse, error) {
 	resp, err := applicationuser.SetGALogin(ctx, in)
 	if err != nil {
-		logger.Sugar().Errorf("set users user ga login: %v", err)
+		logger.Sugar().Errorf("set users user ga login verify: %v", err)
+		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
+	}
+	return resp, nil
+}
+
+func (s *Server) SetSMSLogin(ctx context.Context, in *npool.SetSMSLoginRequest) (*npool.SetSMSLoginResponse, error) {
+	resp, err := applicationuser.SetSMSLogin(ctx, in)
+	if err != nil {
+		logger.Sugar().Errorf("set users user sms login verify: %v", err)
 		return nil, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil

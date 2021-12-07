@@ -49,6 +49,8 @@
     - [GetGroupUsersResponse](#application.management.v1.GetGroupUsersResponse)
     - [GetResourceByCreatorRequest](#application.management.v1.GetResourceByCreatorRequest)
     - [GetResourceByCreatorResponse](#application.management.v1.GetResourceByCreatorResponse)
+    - [GetResourceByNameRequest](#application.management.v1.GetResourceByNameRequest)
+    - [GetResourceByNameResponse](#application.management.v1.GetResourceByNameResponse)
     - [GetResourceRequest](#application.management.v1.GetResourceRequest)
     - [GetResourceResponse](#application.management.v1.GetResourceResponse)
     - [GetResourcesRequest](#application.management.v1.GetResourcesRequest)
@@ -83,6 +85,8 @@
     - [RoleUserInfo](#application.management.v1.RoleUserInfo)
     - [SetGALoginRequest](#application.management.v1.SetGALoginRequest)
     - [SetGALoginResponse](#application.management.v1.SetGALoginResponse)
+    - [SetSMSLoginRequest](#application.management.v1.SetSMSLoginRequest)
+    - [SetSMSLoginResponse](#application.management.v1.SetSMSLoginResponse)
     - [SetUserRoleRequest](#application.management.v1.SetUserRoleRequest)
     - [SetUserRoleResponse](#application.management.v1.SetUserRoleResponse)
     - [UnSetUserRoleRequest](#application.management.v1.UnSetUserRoleRequest)
@@ -267,6 +271,7 @@
 | KycVerify | [bool](#bool) |  |  |
 | GAVerify | [bool](#bool) |  |  |
 | GALogin | [bool](#bool) |  |  |
+| SMSLogin | [bool](#bool) |  |  |
 | LoginNumber | [uint32](#uint32) |  |  |
 | CreateAT | [uint32](#uint32) |  |  |
 
@@ -827,6 +832,37 @@
 
 
 
+<a name="application.management.v1.GetResourceByNameRequest"></a>
+
+### GetResourceByNameRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| ResourceName | [string](#string) |  |  |
+| AppID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetResourceByNameResponse"></a>
+
+### GetResourceByNameResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [ResourceInfo](#application.management.v1.ResourceInfo) |  |  |
+
+
+
+
+
+
 <a name="application.management.v1.GetResourceRequest"></a>
 
 ### GetResourceRequest
@@ -1360,7 +1396,7 @@
 | ----- | ---- | ----- | ----------- |
 | AppID | [string](#string) |  |  |
 | UserID | [string](#string) |  |  |
-| set | [bool](#bool) |  |  |
+| Set | [bool](#bool) |  |  |
 
 
 
@@ -1370,6 +1406,38 @@
 <a name="application.management.v1.SetGALoginResponse"></a>
 
 ### SetGALoginResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Info | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.SetSMSLoginRequest"></a>
+
+### SetSMSLoginRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| AppID | [string](#string) |  |  |
+| UserID | [string](#string) |  |  |
+| Set | [bool](#bool) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.SetSMSLoginResponse"></a>
+
+### SetSMSLoginResponse
 
 
 
@@ -1708,11 +1776,13 @@ request body and response
 | RemoveGroupUsers | [RemoveGroupUsersRequest](#application.management.v1.RemoveGroupUsersRequest) | [RemoveGroupUsersResponse](#application.management.v1.RemoveGroupUsersResponse) | Remove users from group. |
 | CreateResource | [CreateResourceRequest](#application.management.v1.CreateResourceRequest) | [CreateResourceResponse](#application.management.v1.CreateResourceResponse) | Create resource for app. |
 | UpdateResource | [UpdateResourceRequest](#application.management.v1.UpdateResourceRequest) | [UpdateResourceResponse](#application.management.v1.UpdateResourceResponse) | Update resource of app. |
-| GetResource | [GetResourceRequest](#application.management.v1.GetResourceRequest) | [GetResourceResponse](#application.management.v1.GetResourceResponse) | Get resource. |
+| GetResource | [GetResourceRequest](#application.management.v1.GetResourceRequest) | [GetResourceResponse](#application.management.v1.GetResourceResponse) | Get resource by ID. |
+| GetResourceByName | [GetResourceByNameRequest](#application.management.v1.GetResourceByNameRequest) | [GetResourceByNameResponse](#application.management.v1.GetResourceByNameResponse) | get resource by name. |
 | GetResourceByCreator | [GetResourceByCreatorRequest](#application.management.v1.GetResourceByCreatorRequest) | [GetResourceByCreatorResponse](#application.management.v1.GetResourceByCreatorResponse) | Get resource by creator. |
 | GetResources | [GetResourcesRequest](#application.management.v1.GetResourcesRequest) | [GetResourcesResponse](#application.management.v1.GetResourcesResponse) | Get all resources from app. |
 | DeleteResource | [DeleteResourceRequest](#application.management.v1.DeleteResourceRequest) | [DeleteResourceResponse](#application.management.v1.DeleteResourceResponse) | Delete resource from app. |
-| SetGALogin | [SetGALoginRequest](#application.management.v1.SetGALoginRequest) | [SetGALoginResponse](#application.management.v1.SetGALoginResponse) | set ga login option |
+| SetGALogin | [SetGALoginRequest](#application.management.v1.SetGALoginRequest) | [SetGALoginResponse](#application.management.v1.SetGALoginResponse) | set ga login verify option |
+| SetSMSLogin | [SetSMSLoginRequest](#application.management.v1.SetSMSLoginRequest) | [SetSMSLoginResponse](#application.management.v1.SetSMSLoginResponse) | set sms login verify option |
 | AddUserLoginTime | [AddUserLoginTimeRequest](#application.management.v1.AddUserLoginTimeRequest) | [AddUserLoginTimeResponse](#application.management.v1.AddUserLoginTimeResponse) | add user login times |
 | UpdateUserGAStatus | [UpdateUserGAStatusRequest](#application.management.v1.UpdateUserGAStatusRequest) | [UpdateUserGAStatusResponse](#application.management.v1.UpdateUserGAStatusResponse) | update user google authentication status. |
 | UpdateUserKYCStatus | [UpdateUserKYCStatusRequest](#application.management.v1.UpdateUserKYCStatusRequest) | [UpdateUserKYCStatusResponse](#application.management.v1.UpdateUserKYCStatusResponse) | update user kyc status. |

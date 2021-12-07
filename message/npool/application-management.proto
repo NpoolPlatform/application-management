@@ -303,11 +303,18 @@ service ApplicationManagement {
         };
     };
     /*
-    Get resource.
+    Get resource by ID.
     */
     rpc GetResource (GetResourceRequest) returns (GetResourceResponse) {
         option (google.api.http) = {
             post: "/v1/get/resource"
+            body: "*"
+        };
+    };
+    // get resource by name.
+    rpc GetResourceByName (GetResourceByNameRequest) returns (GetResourceByNameResponse) {
+        option (google.api.http) = {
+            post: "/v1/get/resource/by/name"
             body: "*"
         };
     };
@@ -338,10 +345,17 @@ service ApplicationManagement {
             body: "*"
         };
     };
-    // set ga login option
+    // set ga login verify option
     rpc SetGALogin (SetGALoginRequest) returns (SetGALoginResponse) {
         option (google.api.http) = {
             post: "/v1/set/ga/login"
+            body: "*"
+        };
+    };
+    // set sms login verify option
+    rpc SetSMSLogin (SetSMSLoginRequest) returns (SetSMSLoginResponse) {
+        option (google.api.http) = {
+            post: "/v1/set/sms/login"
             body: "*"
         };
     };
@@ -576,11 +590,12 @@ message ApplicationUserInfo {
     string AppID = 2;
     string UserID = 3;
     bool Original = 4;
-    bool KycVerify = 6;
-    bool GAVerify = 7;
-    bool GALogin = 8;
+    bool KycVerify = 5;
+    bool GAVerify = 6;
+    bool GALogin = 7;
+    bool SMSLogin = 8;
     uint32 LoginNumber = 9;
-    uint32 CreateAT = 5;
+    uint32 CreateAT = 10;
 }
 
 message ApplicationUserDetail {
@@ -811,7 +826,7 @@ message DeleteResourceResponse {
 message SetGALoginRequest {
     string AppID = 1;
     string UserID = 2;
-    bool set = 3;
+    bool Set = 3;
 }
 
 message SetGALoginResponse {
@@ -854,4 +869,23 @@ message GetUserGroupRequest {
 
 message GetUserGroupResponse {
     repeated GroupUserInfo Infos = 1;
+}
+
+message SetSMSLoginRequest {
+    string AppID = 1;
+    string UserID = 2;
+    bool Set = 3;
+}
+
+message SetSMSLoginResponse {
+    string Info = 1;
+}
+
+message GetResourceByNameRequest {
+    string ResourceName = 1;
+    string AppID = 2;
+}
+
+message GetResourceByNameResponse {
+    ResourceInfo Info = 1;
 }

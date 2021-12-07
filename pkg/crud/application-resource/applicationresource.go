@@ -243,3 +243,32 @@ func Delete(ctx context.Context, in *npool.DeleteResourceRequest) (*npool.Delete
 		Info: "delete resource successfully",
 	}, nil
 }
+
+func GetResourceByName(ctx context.Context, in *npool.GetResourceByNameRequest) (*npool.GetResourceByNameResponse, error) {
+	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
+		return nil, xerrors.Errorf("application does not exist: %v", err)
+	}
+
+	appID, err := uuid.Parse(in.AppID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid app id: %v", err)
+	}
+
+	info, err := db.Client().
+		ApplicationResource.
+		Query().
+		Where(
+			applicationresource.And(
+				applicationresource.AppID(appID),
+				applicationresource.DeleteAt(0),
+				applicationresource.ResourceName(in.ResourceName),
+			),
+		).Only(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to get resource by resource name: %v", err)
+	}
+
+	return &npool.GetResourceByNameResponse{
+		Info: dbRowToApplicationResource(info),
+	}, nil
+}

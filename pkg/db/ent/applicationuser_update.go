@@ -95,6 +95,20 @@ func (auu *ApplicationUserUpdate) SetNillableGaLogin(b *bool) *ApplicationUserUp
 	return auu
 }
 
+// SetSmsLogin sets the "sms_login" field.
+func (auu *ApplicationUserUpdate) SetSmsLogin(b bool) *ApplicationUserUpdate {
+	auu.mutation.SetSmsLogin(b)
+	return auu
+}
+
+// SetNillableSmsLogin sets the "sms_login" field if the given value is not nil.
+func (auu *ApplicationUserUpdate) SetNillableSmsLogin(b *bool) *ApplicationUserUpdate {
+	if b != nil {
+		auu.SetSmsLogin(*b)
+	}
+	return auu
+}
+
 // SetLoginNumber sets the "Login_number" field.
 func (auu *ApplicationUserUpdate) SetLoginNumber(u uint32) *ApplicationUserUpdate {
 	auu.mutation.ResetLoginNumber()
@@ -277,6 +291,13 @@ func (auu *ApplicationUserUpdate) sqlSave(ctx context.Context) (n int, err error
 			Column: applicationuser.FieldGaLogin,
 		})
 	}
+	if value, ok := auu.mutation.SmsLogin(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldSmsLogin,
+		})
+	}
 	if value, ok := auu.mutation.LoginNumber(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -402,6 +423,20 @@ func (auuo *ApplicationUserUpdateOne) SetGaLogin(b bool) *ApplicationUserUpdateO
 func (auuo *ApplicationUserUpdateOne) SetNillableGaLogin(b *bool) *ApplicationUserUpdateOne {
 	if b != nil {
 		auuo.SetGaLogin(*b)
+	}
+	return auuo
+}
+
+// SetSmsLogin sets the "sms_login" field.
+func (auuo *ApplicationUserUpdateOne) SetSmsLogin(b bool) *ApplicationUserUpdateOne {
+	auuo.mutation.SetSmsLogin(b)
+	return auuo
+}
+
+// SetNillableSmsLogin sets the "sms_login" field if the given value is not nil.
+func (auuo *ApplicationUserUpdateOne) SetNillableSmsLogin(b *bool) *ApplicationUserUpdateOne {
+	if b != nil {
+		auuo.SetSmsLogin(*b)
 	}
 	return auuo
 }
@@ -610,6 +645,13 @@ func (auuo *ApplicationUserUpdateOne) sqlSave(ctx context.Context) (_node *Appli
 			Type:   field.TypeBool,
 			Value:  value,
 			Column: applicationuser.FieldGaLogin,
+		})
+	}
+	if value, ok := auuo.mutation.SmsLogin(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldSmsLogin,
 		})
 	}
 	if value, ok := auuo.mutation.LoginNumber(); ok {

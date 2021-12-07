@@ -86,6 +86,24 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		}
 	}
 
+	response6 := npool.GetResourceResponse{}
+	resp6, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.GetResourceRequest{
+			ResourceID: resourceInfo.ID,
+			AppID:      resourceInfo.AppID,
+		}).Post("http://localhost:50080/v1/get/resource/by/name")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp6.StatusCode())
+
+		err := json.Unmarshal(resp6.Body(), &response6)
+		if assert.Nil(t, err) {
+			assert.Equal(t, response6.Info.ID, resourceInfo.ID)
+			assert.Equal(t, response6.Info.ResourceName, resourceInfo.ResourceName)
+			assert.Equal(t, response6.Info.AppID, resourceInfo.AppID)
+		}
+	}
+
 	response3 := npool.GetResourcesResponse{}
 	resp3, err := cli.R().
 		SetHeader("Content-Type", "application/json").
@@ -128,13 +146,13 @@ func TestApplicationResourceAPI(t *testing.T) { // nolint
 		assert.Equal(t, 200, resp5.StatusCode())
 	}
 
-	resp6, err := cli.R().
+	resp7, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.DeleteResourceRequest{
 			AppID:      resourceInfo.AppID,
 			ResourceID: resourceInfo.ID,
 		}).Post("http://localhost:50080/v1/delete/resource")
 	if assert.Nil(t, err) {
-		assert.Equal(t, 200, resp6.StatusCode())
+		assert.Equal(t, 200, resp7.StatusCode())
 	}
 }

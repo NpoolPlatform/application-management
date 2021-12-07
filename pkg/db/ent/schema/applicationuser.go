@@ -26,6 +26,7 @@ func (ApplicationUser) Fields() []ent.Field {
 		field.Bool("kyc_verify").Default(false),
 		field.Bool("ga_verify").Default(false),
 		field.Bool("ga_login").Default(false),
+		field.Bool("sms_login").Default(false),
 		field.Uint32("Login_number").Default(0),
 		field.Uint32("create_at").
 			DefaultFunc(func() uint32 {

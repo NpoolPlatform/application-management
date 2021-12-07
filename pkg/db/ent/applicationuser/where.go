@@ -133,6 +133,13 @@ func GaLogin(v bool) predicate.ApplicationUser {
 	})
 }
 
+// SmsLogin applies equality check predicate on the "sms_login" field. It's identical to SmsLoginEQ.
+func SmsLogin(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSmsLogin), v))
+	})
+}
+
 // LoginNumber applies equality check predicate on the "Login_number" field. It's identical to LoginNumberEQ.
 func LoginNumber(v uint32) predicate.ApplicationUser {
 	return predicate.ApplicationUser(func(s *sql.Selector) {
@@ -359,6 +366,20 @@ func GaLoginEQ(v bool) predicate.ApplicationUser {
 func GaLoginNEQ(v bool) predicate.ApplicationUser {
 	return predicate.ApplicationUser(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldGaLogin), v))
+	})
+}
+
+// SmsLoginEQ applies the EQ predicate on the "sms_login" field.
+func SmsLoginEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldSmsLogin), v))
+	})
+}
+
+// SmsLoginNEQ applies the NEQ predicate on the "sms_login" field.
+func SmsLoginNEQ(v bool) predicate.ApplicationUser {
+	return predicate.ApplicationUser(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldSmsLogin), v))
 	})
 }
 

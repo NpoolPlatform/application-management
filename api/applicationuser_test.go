@@ -105,6 +105,17 @@ func TestApplicationUserAPI(t *testing.T) {
 		assert.Equal(t, 200, resp4.StatusCode())
 	}
 
+	resp9, err := cli.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(npool.SetGALoginRequest{
+			AppID:  appUser.AppID,
+			UserID: appUser.UserID,
+			Set:    true,
+		}).Post("http://localhost:50080/v1/set/sms/login")
+	if assert.Nil(t, err) {
+		assert.Equal(t, 200, resp9.StatusCode())
+	}
+
 	resp5, err := cli.R().
 		SetHeader("Content-Type", "application/json").
 		SetBody(npool.AddUserLoginTimeRequest{

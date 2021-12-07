@@ -28,6 +28,8 @@ type ApplicationUser struct {
 	GaVerify bool `json:"ga_verify,omitempty"`
 	// GaLogin holds the value of the "ga_login" field.
 	GaLogin bool `json:"ga_login,omitempty"`
+	// SmsLogin holds the value of the "sms_login" field.
+	SmsLogin bool `json:"sms_login,omitempty"`
 	// LoginNumber holds the value of the "Login_number" field.
 	LoginNumber uint32 `json:"Login_number,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
@@ -41,7 +43,7 @@ func (*ApplicationUser) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case applicationuser.FieldOriginal, applicationuser.FieldKycVerify, applicationuser.FieldGaVerify, applicationuser.FieldGaLogin:
+		case applicationuser.FieldOriginal, applicationuser.FieldKycVerify, applicationuser.FieldGaVerify, applicationuser.FieldGaLogin, applicationuser.FieldSmsLogin:
 			values[i] = new(sql.NullBool)
 		case applicationuser.FieldLoginNumber, applicationuser.FieldCreateAt, applicationuser.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
@@ -104,6 +106,12 @@ func (au *ApplicationUser) assignValues(columns []string, values []interface{}) 
 			} else if value.Valid {
 				au.GaLogin = value.Bool
 			}
+		case applicationuser.FieldSmsLogin:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field sms_login", values[i])
+			} else if value.Valid {
+				au.SmsLogin = value.Bool
+			}
 		case applicationuser.FieldLoginNumber:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field Login_number", values[i])
@@ -162,6 +170,8 @@ func (au *ApplicationUser) String() string {
 	builder.WriteString(fmt.Sprintf("%v", au.GaVerify))
 	builder.WriteString(", ga_login=")
 	builder.WriteString(fmt.Sprintf("%v", au.GaLogin))
+	builder.WriteString(", sms_login=")
+	builder.WriteString(fmt.Sprintf("%v", au.SmsLogin))
 	builder.WriteString(", Login_number=")
 	builder.WriteString(fmt.Sprintf("%v", au.LoginNumber))
 	builder.WriteString(", create_at=")

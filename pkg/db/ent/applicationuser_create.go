@@ -88,6 +88,20 @@ func (auc *ApplicationUserCreate) SetNillableGaLogin(b *bool) *ApplicationUserCr
 	return auc
 }
 
+// SetSmsLogin sets the "sms_login" field.
+func (auc *ApplicationUserCreate) SetSmsLogin(b bool) *ApplicationUserCreate {
+	auc.mutation.SetSmsLogin(b)
+	return auc
+}
+
+// SetNillableSmsLogin sets the "sms_login" field if the given value is not nil.
+func (auc *ApplicationUserCreate) SetNillableSmsLogin(b *bool) *ApplicationUserCreate {
+	if b != nil {
+		auc.SetSmsLogin(*b)
+	}
+	return auc
+}
+
 // SetLoginNumber sets the "Login_number" field.
 func (auc *ApplicationUserCreate) SetLoginNumber(u uint32) *ApplicationUserCreate {
 	auc.mutation.SetLoginNumber(u)
@@ -223,6 +237,10 @@ func (auc *ApplicationUserCreate) defaults() {
 		v := applicationuser.DefaultGaLogin
 		auc.mutation.SetGaLogin(v)
 	}
+	if _, ok := auc.mutation.SmsLogin(); !ok {
+		v := applicationuser.DefaultSmsLogin
+		auc.mutation.SetSmsLogin(v)
+	}
 	if _, ok := auc.mutation.LoginNumber(); !ok {
 		v := applicationuser.DefaultLoginNumber
 		auc.mutation.SetLoginNumber(v)
@@ -260,6 +278,9 @@ func (auc *ApplicationUserCreate) check() error {
 	}
 	if _, ok := auc.mutation.GaLogin(); !ok {
 		return &ValidationError{Name: "ga_login", err: errors.New(`ent: missing required field "ga_login"`)}
+	}
+	if _, ok := auc.mutation.SmsLogin(); !ok {
+		return &ValidationError{Name: "sms_login", err: errors.New(`ent: missing required field "sms_login"`)}
 	}
 	if _, ok := auc.mutation.LoginNumber(); !ok {
 		return &ValidationError{Name: "Login_number", err: errors.New(`ent: missing required field "Login_number"`)}
@@ -349,6 +370,14 @@ func (auc *ApplicationUserCreate) createSpec() (*ApplicationUser, *sqlgraph.Crea
 			Column: applicationuser.FieldGaLogin,
 		})
 		_node.GaLogin = value
+	}
+	if value, ok := auc.mutation.SmsLogin(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: applicationuser.FieldSmsLogin,
+		})
+		_node.SmsLogin = value
 	}
 	if value, ok := auc.mutation.LoginNumber(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
