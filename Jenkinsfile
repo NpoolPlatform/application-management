@@ -247,7 +247,7 @@ pipeline {
       }
       steps {
         sh 'TAG=latest make release-docker-images'
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           images=`docker images | grep entropypool | grep application-management | grep none | awk '{ print $3 }'`
           for image in $images; do
             docker rmi $image -f
@@ -261,7 +261,7 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           revlist=`git rev-list --tags --max-count=1`
           tag=`git describe --tags $revlist`
 
@@ -281,7 +281,7 @@ pipeline {
         expression { RELEASE_TARGET == 'true' }
       }
       steps {
-        sh(returnStdout: true, script: '''
+        sh(returnStdout: false, script: '''
           revlist=`git rev-list --tags --max-count=1`
           tag=`git describe --tags $revlist`
 
