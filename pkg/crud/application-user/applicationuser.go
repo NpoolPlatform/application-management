@@ -193,7 +193,7 @@ func Delete(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*
 	}, nil
 }
 
-func SetSMSLogin(ctx context.Context, in *npool.SetSMSLoginRequest) (*npool.SetSMSLoginResponse, error) {
+func SetSMSLogin(ctx context.Context, in *npool.SetSMSLoginRequest) (*npool.SetSMSLoginResponse, error) { // nolint
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -228,7 +228,7 @@ func SetSMSLogin(ctx context.Context, in *npool.SetSMSLoginRequest) (*npool.SetS
 	}, nil
 }
 
-func SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGALoginResponse, error) {
+func SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGALoginResponse, error) { // nolint
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
