@@ -63,6 +63,8 @@
     - [GetRoleUsersResponse](#application.management.v1.GetRoleUsersResponse)
     - [GetRolesRequest](#application.management.v1.GetRolesRequest)
     - [GetRolesResponse](#application.management.v1.GetRolesResponse)
+    - [GetUserAppIDRequest](#application.management.v1.GetUserAppIDRequest)
+    - [GetUserAppIDResponse](#application.management.v1.GetUserAppIDResponse)
     - [GetUserFromApplicationRequest](#application.management.v1.GetUserFromApplicationRequest)
     - [GetUserFromApplicationResponse](#application.management.v1.GetUserFromApplicationResponse)
     - [GetUserGroupRequest](#application.management.v1.GetUserGroupRequest)
@@ -1047,6 +1049,36 @@
 
 
 
+<a name="application.management.v1.GetUserAppIDRequest"></a>
+
+### GetUserAppIDRequest
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| UserID | [string](#string) |  |  |
+
+
+
+
+
+
+<a name="application.management.v1.GetUserAppIDResponse"></a>
+
+### GetUserAppIDResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Infos | [string](#string) | repeated |  |
+
+
+
+
+
+
 <a name="application.management.v1.GetUserFromApplicationRequest"></a>
 
 ### GetUserFromApplicationRequest
@@ -1763,6 +1795,7 @@ request body and response
 | AddUsersToApplication | [AddUsersToApplicationRequest](#application.management.v1.AddUsersToApplicationRequest) | [AddUsersToApplicationResponse](#application.management.v1.AddUsersToApplicationResponse) | Add users to app. |
 | GetUserFromApplication | [GetUserFromApplicationRequest](#application.management.v1.GetUserFromApplicationRequest) | [GetUserFromApplicationResponse](#application.management.v1.GetUserFromApplicationResponse) | Get user from app. |
 | GetUsersFromApplication | [GetUsersFromApplicationRequest](#application.management.v1.GetUsersFromApplicationRequest) | [GetUsersFromApplicationResponse](#application.management.v1.GetUsersFromApplicationResponse) | Get users from app. |
+| GetUserAppID | [GetUserAppIDRequest](#application.management.v1.GetUserAppIDRequest) | [GetUserAppIDResponse](#application.management.v1.GetUserAppIDResponse) | Get user&#39;s appid. |
 | RemoveUsersFromApplication | [RemoveUsersFromApplicationRequest](#application.management.v1.RemoveUsersFromApplicationRequest) | [RemoveUsersFromApplicationResponse](#application.management.v1.RemoveUsersFromApplicationResponse) | Remove users from app. |
 | CreateGroup | [CreateGroupRequest](#application.management.v1.CreateGroupRequest) | [CreateGroupResponse](#application.management.v1.CreateGroupResponse) | Create group in an application. |
 | GetGroup | [GetGroupRequest](#application.management.v1.GetGroupRequest) | [GetGroupResponse](#application.management.v1.GetGroupResponse) | Get group info. |

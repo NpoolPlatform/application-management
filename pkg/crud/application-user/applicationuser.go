@@ -377,3 +377,31 @@ func UpdateUserKYCStatus(ctx context.Context, in *npool.UpdateUserKYCStatusReque
 		Info: "successfully update user kyc status: %v",
 	}, nil
 }
+
+func GetUserAppID(ctx context.Context, in *npool.GetUserAppIDRequest) (*npool.GetUserAppIDResponse, error) {
+	userID, err := uuid.Parse(in.UserID)
+	if err != nil {
+		return nil, xerrors.Errorf("invalid user id: %v", err)
+	}
+
+	infos, err := db.Client().
+		ApplicationUser.
+		Query().
+		Where(
+			applicationuser.And(
+				applicationuser.UserID(userID),
+				applicationuser.DeleteAt(0),
+			),
+		).All(ctx)
+	if err != nil {
+		return nil, xerrors.Errorf("fail to get user app ids: %v", err)
+	}
+
+	response := []string{}
+	for _, info := range infos {
+		response = append(response, info.AppID.String())
+	}
+	return &npool.GetUserAppIDResponse{
+		Infos: response,
+	}, nil
+}
