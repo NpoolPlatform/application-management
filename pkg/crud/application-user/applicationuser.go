@@ -243,6 +243,18 @@ func SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGAL
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
+	resp, err := Get(ctx, &npool.GetUserFromApplicationRequest{
+		AppID:  in.AppID,
+		UserID: in.UserID,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	if !resp.Info.GAVerify {
+		return nil, xerrors.Errorf("please bind your account to google authenticator")
+	}
+
 	_, err = db.Client().
 		ApplicationUser.
 		Update().

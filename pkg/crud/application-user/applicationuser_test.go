@@ -48,6 +48,7 @@ func TestApplicationUserCRUD(t *testing.T) {
 		AppID:    applicationInfo.ID,
 		UserID:   uuid.New().String(),
 		Original: true,
+		GAVerify: true,
 	}
 
 	resp, err := Create(context.Background(), &npool.AddUsersToApplicationRequest{
@@ -86,14 +87,12 @@ func TestApplicationUserCRUD(t *testing.T) {
 	})
 	assert.Nil(t, err)
 
-	resp2, err := SetGALogin(context.Background(), &npool.SetGALoginRequest{
+	_, err = SetGALogin(context.Background(), &npool.SetGALoginRequest{
 		AppID:  applicationUser.AppID,
 		UserID: applicationUser.UserID,
 		Set:    true,
 	})
-	if assert.Nil(t, err) {
-		assert.NotNil(t, resp2)
-	}
+	assert.NotNil(t, err)
 
 	resp6, err := SetSMSLogin(context.Background(), &npool.SetSMSLoginRequest{
 		AppID:  applicationUser.AppID,

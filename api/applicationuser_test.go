@@ -114,7 +114,7 @@ func TestApplicationUserAPI(t *testing.T) { // nolint
 			Set:    true,
 		}).Post("http://localhost:50080/v1/set/ga/login")
 	if assert.Nil(t, err) {
-		assert.Equal(t, 200, resp4.StatusCode())
+		assert.NotEqual(t, 200, resp4.StatusCode())
 	}
 
 	resp9, err := cli.R().
