@@ -418,6 +418,7 @@ message ApplicationInfo {
     string ClientSecret = 9;
     bool GoogleRecaptcha = 10;
     bool SmsLogin = 11;
+    bool InvitationCodeMust = 12;
 }
 
 message CreateApplicationRequest {

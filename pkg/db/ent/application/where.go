@@ -147,6 +147,13 @@ func GoogleRecaptcha(v bool) predicate.Application {
 	})
 }
 
+// InvitationCodeMust applies equality check predicate on the "invitation_code_must" field. It's identical to InvitationCodeMustEQ.
+func InvitationCodeMust(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldInvitationCodeMust), v))
+	})
+}
+
 // CreateAt applies equality check predicate on the "create_at" field. It's identical to CreateAtEQ.
 func CreateAt(v uint32) predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
@@ -866,6 +873,20 @@ func GoogleRecaptchaEQ(v bool) predicate.Application {
 func GoogleRecaptchaNEQ(v bool) predicate.Application {
 	return predicate.Application(func(s *sql.Selector) {
 		s.Where(sql.NEQ(s.C(FieldGoogleRecaptcha), v))
+	})
+}
+
+// InvitationCodeMustEQ applies the EQ predicate on the "invitation_code_must" field.
+func InvitationCodeMustEQ(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldInvitationCodeMust), v))
+	})
+}
+
+// InvitationCodeMustNEQ applies the NEQ predicate on the "invitation_code_must" field.
+func InvitationCodeMustNEQ(v bool) predicate.Application {
+	return predicate.Application(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldInvitationCodeMust), v))
 	})
 }
 

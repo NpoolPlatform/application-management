@@ -235,6 +235,7 @@
 | ClientSecret | [string](#string) |  |  |
 | GoogleRecaptcha | [bool](#bool) |  |  |
 | SmsLogin | [bool](#bool) |  |  |
+| InvitationCodeMust | [bool](#bool) |  |  |
 
 
 

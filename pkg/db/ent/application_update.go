@@ -141,6 +141,20 @@ func (au *ApplicationUpdate) SetNillableGoogleRecaptcha(b *bool) *ApplicationUpd
 	return au
 }
 
+// SetInvitationCodeMust sets the "invitation_code_must" field.
+func (au *ApplicationUpdate) SetInvitationCodeMust(b bool) *ApplicationUpdate {
+	au.mutation.SetInvitationCodeMust(b)
+	return au
+}
+
+// SetNillableInvitationCodeMust sets the "invitation_code_must" field if the given value is not nil.
+func (au *ApplicationUpdate) SetNillableInvitationCodeMust(b *bool) *ApplicationUpdate {
+	if b != nil {
+		au.SetInvitationCodeMust(*b)
+	}
+	return au
+}
+
 // SetCreateAt sets the "create_at" field.
 func (au *ApplicationUpdate) SetCreateAt(u uint32) *ApplicationUpdate {
 	au.mutation.ResetCreateAt()
@@ -356,6 +370,13 @@ func (au *ApplicationUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: application.FieldGoogleRecaptcha,
 		})
 	}
+	if value, ok := au.mutation.InvitationCodeMust(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldInvitationCodeMust,
+		})
+	}
 	if value, ok := au.mutation.CreateAt(); ok {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeUint32,
@@ -527,6 +548,20 @@ func (auo *ApplicationUpdateOne) SetGoogleRecaptcha(b bool) *ApplicationUpdateOn
 func (auo *ApplicationUpdateOne) SetNillableGoogleRecaptcha(b *bool) *ApplicationUpdateOne {
 	if b != nil {
 		auo.SetGoogleRecaptcha(*b)
+	}
+	return auo
+}
+
+// SetInvitationCodeMust sets the "invitation_code_must" field.
+func (auo *ApplicationUpdateOne) SetInvitationCodeMust(b bool) *ApplicationUpdateOne {
+	auo.mutation.SetInvitationCodeMust(b)
+	return auo
+}
+
+// SetNillableInvitationCodeMust sets the "invitation_code_must" field if the given value is not nil.
+func (auo *ApplicationUpdateOne) SetNillableInvitationCodeMust(b *bool) *ApplicationUpdateOne {
+	if b != nil {
+		auo.SetInvitationCodeMust(*b)
 	}
 	return auo
 }
@@ -768,6 +803,13 @@ func (auo *ApplicationUpdateOne) sqlSave(ctx context.Context) (_node *Applicatio
 			Type:   field.TypeBool,
 			Value:  value,
 			Column: application.FieldGoogleRecaptcha,
+		})
+	}
+	if value, ok := auo.mutation.InvitationCodeMust(); ok {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldInvitationCodeMust,
 		})
 	}
 	if value, ok := auo.mutation.CreateAt(); ok {

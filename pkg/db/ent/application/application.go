@@ -27,6 +27,8 @@ const (
 	FieldSmsLogin = "sms_login"
 	// FieldGoogleRecaptcha holds the string denoting the google_recaptcha field in the database.
 	FieldGoogleRecaptcha = "google_recaptcha"
+	// FieldInvitationCodeMust holds the string denoting the invitation_code_must field in the database.
+	FieldInvitationCodeMust = "invitation_code_must"
 	// FieldCreateAt holds the string denoting the create_at field in the database.
 	FieldCreateAt = "create_at"
 	// FieldUpdateAt holds the string denoting the update_at field in the database.
@@ -48,6 +50,7 @@ var Columns = []string{
 	FieldApplicationLogo,
 	FieldSmsLogin,
 	FieldGoogleRecaptcha,
+	FieldInvitationCodeMust,
 	FieldCreateAt,
 	FieldUpdateAt,
 	FieldDeleteAt,
@@ -70,6 +73,8 @@ var (
 	DefaultSmsLogin bool
 	// DefaultGoogleRecaptcha holds the default value on creation for the "google_recaptcha" field.
 	DefaultGoogleRecaptcha bool
+	// DefaultInvitationCodeMust holds the default value on creation for the "invitation_code_must" field.
+	DefaultInvitationCodeMust bool
 	// DefaultCreateAt holds the default value on creation for the "create_at" field.
 	DefaultCreateAt func() uint32
 	// DefaultUpdateAt holds the default value on creation for the "update_at" field.

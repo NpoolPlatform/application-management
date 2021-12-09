@@ -116,6 +116,20 @@ func (ac *ApplicationCreate) SetNillableGoogleRecaptcha(b *bool) *ApplicationCre
 	return ac
 }
 
+// SetInvitationCodeMust sets the "invitation_code_must" field.
+func (ac *ApplicationCreate) SetInvitationCodeMust(b bool) *ApplicationCreate {
+	ac.mutation.SetInvitationCodeMust(b)
+	return ac
+}
+
+// SetNillableInvitationCodeMust sets the "invitation_code_must" field if the given value is not nil.
+func (ac *ApplicationCreate) SetNillableInvitationCodeMust(b *bool) *ApplicationCreate {
+	if b != nil {
+		ac.SetInvitationCodeMust(*b)
+	}
+	return ac
+}
+
 // SetCreateAt sets the "create_at" field.
 func (ac *ApplicationCreate) SetCreateAt(u uint32) *ApplicationCreate {
 	ac.mutation.SetCreateAt(u)
@@ -247,6 +261,10 @@ func (ac *ApplicationCreate) defaults() {
 		v := application.DefaultGoogleRecaptcha
 		ac.mutation.SetGoogleRecaptcha(v)
 	}
+	if _, ok := ac.mutation.InvitationCodeMust(); !ok {
+		v := application.DefaultInvitationCodeMust
+		ac.mutation.SetInvitationCodeMust(v)
+	}
 	if _, ok := ac.mutation.CreateAt(); !ok {
 		v := application.DefaultCreateAt()
 		ac.mutation.SetCreateAt(v)
@@ -281,6 +299,9 @@ func (ac *ApplicationCreate) check() error {
 	}
 	if _, ok := ac.mutation.GoogleRecaptcha(); !ok {
 		return &ValidationError{Name: "google_recaptcha", err: errors.New(`ent: missing required field "google_recaptcha"`)}
+	}
+	if _, ok := ac.mutation.InvitationCodeMust(); !ok {
+		return &ValidationError{Name: "invitation_code_must", err: errors.New(`ent: missing required field "invitation_code_must"`)}
 	}
 	if _, ok := ac.mutation.CreateAt(); !ok {
 		return &ValidationError{Name: "create_at", err: errors.New(`ent: missing required field "create_at"`)}
@@ -386,6 +407,14 @@ func (ac *ApplicationCreate) createSpec() (*Application, *sqlgraph.CreateSpec) {
 			Column: application.FieldGoogleRecaptcha,
 		})
 		_node.GoogleRecaptcha = value
+	}
+	if value, ok := ac.mutation.InvitationCodeMust(); ok {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeBool,
+			Value:  value,
+			Column: application.FieldInvitationCodeMust,
+		})
+		_node.InvitationCodeMust = value
 	}
 	if value, ok := ac.mutation.CreateAt(); ok {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{

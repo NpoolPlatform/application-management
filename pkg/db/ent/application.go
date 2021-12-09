@@ -32,6 +32,8 @@ type Application struct {
 	SmsLogin bool `json:"sms_login,omitempty"`
 	// GoogleRecaptcha holds the value of the "google_recaptcha" field.
 	GoogleRecaptcha bool `json:"google_recaptcha,omitempty"`
+	// InvitationCodeMust holds the value of the "invitation_code_must" field.
+	InvitationCodeMust bool `json:"invitation_code_must,omitempty"`
 	// CreateAt holds the value of the "create_at" field.
 	CreateAt uint32 `json:"create_at,omitempty"`
 	// UpdateAt holds the value of the "update_at" field.
@@ -45,7 +47,7 @@ func (*Application) scanValues(columns []string) ([]interface{}, error) {
 	values := make([]interface{}, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case application.FieldSmsLogin, application.FieldGoogleRecaptcha:
+		case application.FieldSmsLogin, application.FieldGoogleRecaptcha, application.FieldInvitationCodeMust:
 			values[i] = new(sql.NullBool)
 		case application.FieldCreateAt, application.FieldUpdateAt, application.FieldDeleteAt:
 			values[i] = new(sql.NullInt64)
@@ -122,6 +124,12 @@ func (a *Application) assignValues(columns []string, values []interface{}) error
 			} else if value.Valid {
 				a.GoogleRecaptcha = value.Bool
 			}
+		case application.FieldInvitationCodeMust:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field invitation_code_must", values[i])
+			} else if value.Valid {
+				a.InvitationCodeMust = value.Bool
+			}
 		case application.FieldCreateAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field create_at", values[i])
@@ -183,6 +191,8 @@ func (a *Application) String() string {
 	builder.WriteString(fmt.Sprintf("%v", a.SmsLogin))
 	builder.WriteString(", google_recaptcha=")
 	builder.WriteString(fmt.Sprintf("%v", a.GoogleRecaptcha))
+	builder.WriteString(", invitation_code_must=")
+	builder.WriteString(fmt.Sprintf("%v", a.InvitationCodeMust))
 	builder.WriteString(", create_at=")
 	builder.WriteString(fmt.Sprintf("%v", a.CreateAt))
 	builder.WriteString(", update_at=")

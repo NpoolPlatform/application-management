@@ -41,27 +41,28 @@ const (
 // ApplicationMutation represents an operation that mutates the Application nodes in the graph.
 type ApplicationMutation struct {
 	config
-	op                Op
-	typ               string
-	id                *uuid.UUID
-	application_name  *string
-	application_owner *uuid.UUID
-	homepage_url      *string
-	redirect_url      *string
-	client_secret     *string
-	application_logo  *string
-	sms_login         *bool
-	google_recaptcha  *bool
-	create_at         *uint32
-	addcreate_at      *uint32
-	update_at         *uint32
-	addupdate_at      *uint32
-	delete_at         *uint32
-	adddelete_at      *uint32
-	clearedFields     map[string]struct{}
-	done              bool
-	oldValue          func(context.Context) (*Application, error)
-	predicates        []predicate.Application
+	op                   Op
+	typ                  string
+	id                   *uuid.UUID
+	application_name     *string
+	application_owner    *uuid.UUID
+	homepage_url         *string
+	redirect_url         *string
+	client_secret        *string
+	application_logo     *string
+	sms_login            *bool
+	google_recaptcha     *bool
+	invitation_code_must *bool
+	create_at            *uint32
+	addcreate_at         *uint32
+	update_at            *uint32
+	addupdate_at         *uint32
+	delete_at            *uint32
+	adddelete_at         *uint32
+	clearedFields        map[string]struct{}
+	done                 bool
+	oldValue             func(context.Context) (*Application, error)
+	predicates           []predicate.Application
 }
 
 var _ ent.Mutation = (*ApplicationMutation)(nil)
@@ -476,6 +477,42 @@ func (m *ApplicationMutation) ResetGoogleRecaptcha() {
 	m.google_recaptcha = nil
 }
 
+// SetInvitationCodeMust sets the "invitation_code_must" field.
+func (m *ApplicationMutation) SetInvitationCodeMust(b bool) {
+	m.invitation_code_must = &b
+}
+
+// InvitationCodeMust returns the value of the "invitation_code_must" field in the mutation.
+func (m *ApplicationMutation) InvitationCodeMust() (r bool, exists bool) {
+	v := m.invitation_code_must
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInvitationCodeMust returns the old "invitation_code_must" field's value of the Application entity.
+// If the Application object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ApplicationMutation) OldInvitationCodeMust(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, fmt.Errorf("OldInvitationCodeMust is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, fmt.Errorf("OldInvitationCodeMust requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInvitationCodeMust: %w", err)
+	}
+	return oldValue.InvitationCodeMust, nil
+}
+
+// ResetInvitationCodeMust resets all changes to the "invitation_code_must" field.
+func (m *ApplicationMutation) ResetInvitationCodeMust() {
+	m.invitation_code_must = nil
+}
+
 // SetCreateAt sets the "create_at" field.
 func (m *ApplicationMutation) SetCreateAt(u uint32) {
 	m.create_at = &u
@@ -663,7 +700,7 @@ func (m *ApplicationMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ApplicationMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.application_name != nil {
 		fields = append(fields, application.FieldApplicationName)
 	}
@@ -687,6 +724,9 @@ func (m *ApplicationMutation) Fields() []string {
 	}
 	if m.google_recaptcha != nil {
 		fields = append(fields, application.FieldGoogleRecaptcha)
+	}
+	if m.invitation_code_must != nil {
+		fields = append(fields, application.FieldInvitationCodeMust)
 	}
 	if m.create_at != nil {
 		fields = append(fields, application.FieldCreateAt)
@@ -721,6 +761,8 @@ func (m *ApplicationMutation) Field(name string) (ent.Value, bool) {
 		return m.SmsLogin()
 	case application.FieldGoogleRecaptcha:
 		return m.GoogleRecaptcha()
+	case application.FieldInvitationCodeMust:
+		return m.InvitationCodeMust()
 	case application.FieldCreateAt:
 		return m.CreateAt()
 	case application.FieldUpdateAt:
@@ -752,6 +794,8 @@ func (m *ApplicationMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldSmsLogin(ctx)
 	case application.FieldGoogleRecaptcha:
 		return m.OldGoogleRecaptcha(ctx)
+	case application.FieldInvitationCodeMust:
+		return m.OldInvitationCodeMust(ctx)
 	case application.FieldCreateAt:
 		return m.OldCreateAt(ctx)
 	case application.FieldUpdateAt:
@@ -822,6 +866,13 @@ func (m *ApplicationMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetGoogleRecaptcha(v)
+		return nil
+	case application.FieldInvitationCodeMust:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInvitationCodeMust(v)
 		return nil
 	case application.FieldCreateAt:
 		v, ok := value.(uint32)
@@ -976,6 +1027,9 @@ func (m *ApplicationMutation) ResetField(name string) error {
 		return nil
 	case application.FieldGoogleRecaptcha:
 		m.ResetGoogleRecaptcha()
+		return nil
+	case application.FieldInvitationCodeMust:
+		m.ResetInvitationCodeMust()
 		return nil
 	case application.FieldCreateAt:
 		m.ResetCreateAt()

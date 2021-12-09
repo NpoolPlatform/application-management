@@ -31,6 +31,7 @@ func (Application) Fields() []ent.Field {
 		field.String("application_logo").Optional(),
 		field.Bool("sms_login").Default(false),
 		field.Bool("google_recaptcha").Default(false),
+		field.Bool("invitation_code_must").Default(false),
 		field.Uint32("create_at").
 			DefaultFunc(func() uint32 {
 				return uint32(time.Now().Unix())

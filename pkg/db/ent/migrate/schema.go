@@ -19,6 +19,7 @@ var (
 		{Name: "application_logo", Type: field.TypeString, Nullable: true},
 		{Name: "sms_login", Type: field.TypeBool, Default: false},
 		{Name: "google_recaptcha", Type: field.TypeBool, Default: false},
+		{Name: "invitation_code_must", Type: field.TypeBool, Default: false},
 		{Name: "create_at", Type: field.TypeUint32},
 		{Name: "update_at", Type: field.TypeUint32},
 		{Name: "delete_at", Type: field.TypeUint32},

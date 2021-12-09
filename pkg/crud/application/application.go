@@ -14,17 +14,18 @@ import (
 
 func dbRowToApplication(row *ent.Application) *npool.ApplicationInfo {
 	return &npool.ApplicationInfo{
-		ID:               row.ID.String(),
-		ApplicationName:  row.ApplicationName,
-		ApplicationOwner: row.ApplicationOwner.String(),
-		ApplicationLogo:  row.ApplicationLogo,
-		HomepageUrl:      row.HomepageURL,
-		RedirectUrl:      row.RedirectURL,
-		CreateAT:         row.CreateAt,
-		UpdateAT:         row.UpdateAt,
-		ClientSecret:     row.ClientSecret,
-		SmsLogin:         row.SmsLogin,
-		GoogleRecaptcha:  row.GoogleRecaptcha,
+		ID:                 row.ID.String(),
+		ApplicationName:    row.ApplicationName,
+		ApplicationOwner:   row.ApplicationOwner.String(),
+		ApplicationLogo:    row.ApplicationLogo,
+		HomepageUrl:        row.HomepageURL,
+		RedirectUrl:        row.RedirectURL,
+		CreateAT:           row.CreateAt,
+		UpdateAT:           row.UpdateAt,
+		ClientSecret:       row.ClientSecret,
+		SmsLogin:           row.SmsLogin,
+		GoogleRecaptcha:    row.GoogleRecaptcha,
+		InvitationCodeMust: row.InvitationCodeMust,
 	}
 }
 
@@ -43,6 +44,7 @@ func Create(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.Cre
 		SetRedirectURL(in.Info.RedirectUrl).
 		SetGoogleRecaptcha(in.Info.GoogleRecaptcha).
 		SetSmsLogin(in.Info.SmsLogin).
+		SetInvitationCodeMust(in.Info.InvitationCodeMust).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to create application: %v", err)
@@ -94,10 +96,6 @@ func GetAll(ctx context.Context, in *npool.GetApplicationsRequest) (*npool.GetAp
 		return nil, xerrors.Errorf("fail to get all applications: %v", err)
 	}
 
-	if len(infos) == 0 {
-		return nil, xerrors.Errorf("empty database")
-	}
-
 	resp := []*npool.ApplicationInfo{}
 	for _, info := range infos {
 		resp = append(resp, dbRowToApplication(info))
@@ -122,6 +120,7 @@ func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.Upd
 		SetRedirectURL(in.Info.RedirectUrl).
 		SetGoogleRecaptcha(in.Info.GoogleRecaptcha).
 		SetSmsLogin(in.Info.SmsLogin).
+		SetInvitationCodeMust(in.Info.InvitationCodeMust).
 		Save(ctx)
 	if err != nil {
 		return nil, xerrors.Errorf("fail to update application: %v", err)
