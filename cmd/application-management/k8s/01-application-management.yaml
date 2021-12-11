@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: application-management
-        image: entropypool/application-management:latest
+        image: uhub.service.ucloud.cn/entropypool/application-management:latest
         imagePullPolicy: Always
         env:
         - name: ENV_ENVIRONMENT_TARGET
