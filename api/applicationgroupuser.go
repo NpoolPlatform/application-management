@@ -15,7 +15,7 @@ import (
 func (s *Server) AddGroupUsers(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGroupUsersResponse, error) {
 	resp, err := applicationgroupuser.Create(ctx, in)
 	if err != nil {
-		logger.Sugar().Errorf("create group error: %v", err)
+		logger.Sugar().Errorf("Add user to group error: %v", err)
 		return &npool.AddGroupUsersResponse{}, status.Errorf(codes.Internal, "internal server error: %v", err.Error())
 	}
 	return resp, nil

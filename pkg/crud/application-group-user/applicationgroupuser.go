@@ -13,6 +13,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 
+	crudappgroup "github.com/NpoolPlatform/application-management/pkg/crud/application-group"
 	crudappuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
 )
 
@@ -36,7 +37,7 @@ func preConditionJudge(ctx context.Context, groupIDString, appID string) (uuid.U
 		return uuid.UUID{}, xerrors.Errorf("invalid group id: %v", err)
 	}
 
-	if _, err := Get(ctx, &npool.GetGroupUsersRequest{
+	if _, err := crudappgroup.Get(ctx, &npool.GetGroupRequest{
 		GroupID: groupIDString,
 		AppID:   appID,
 	}); err != nil {
@@ -78,7 +79,6 @@ func genCreate(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *n
 					applicationgroupuser.DeleteAt(0),
 				),
 			).All(ctx)
-
 		if err != nil {
 			return nil, xerrors.Errorf("user has already existed in this app group")
 		}
