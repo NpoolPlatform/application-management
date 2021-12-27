@@ -34,7 +34,12 @@ func Create(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.Cre
 	if err != nil {
 		return nil, xerrors.Errorf("invalid owner id: %v", err)
 	}
-	info, err := db.Client().
+
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+	info, err := cli.
 		Application.
 		Create().
 		SetApplicationName(in.Info.ApplicationName).
@@ -60,7 +65,11 @@ func Get(ctx context.Context, in *npool.GetApplicationRequest) (*npool.GetApplic
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
-	info, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+	info, err := cli.
 		Application.
 		Query().
 		Where(
@@ -83,7 +92,11 @@ func Get(ctx context.Context, in *npool.GetApplicationRequest) (*npool.GetApplic
 }
 
 func GetAll(ctx context.Context, in *npool.GetApplicationsRequest) (*npool.GetApplicationsResponse, error) {
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+	infos, err := cli.
 		Application.
 		Query().
 		Where(
@@ -111,7 +124,11 @@ func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.Upd
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
-	info, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+	info, err := cli.
 		Application.
 		UpdateOneID(id).
 		SetApplicationName(in.Info.ApplicationName).
@@ -136,7 +153,11 @@ func Delete(ctx context.Context, in *npool.DeleteApplicationRequest) (*npool.Del
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
-	_, err = db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+	_, err = cli.
 		Application.
 		UpdateOneID(id).
 		SetDeleteAt(uint32(time.Now().Unix())).
@@ -155,8 +176,11 @@ func GetApplicationByOwner(ctx context.Context, in *npool.GetApplicationByOwnerR
 	if err != nil {
 		return nil, xerrors.Errorf("invalid owner id: %v", err)
 	}
-
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+	infos, err := cli.
 		Application.
 		Query().
 		Where(

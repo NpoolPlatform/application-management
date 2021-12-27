@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/NpoolPlatform/application-management/message/npool"
+	approle "github.com/NpoolPlatform/application-management/pkg/crud/application-role"
 	"github.com/NpoolPlatform/application-management/pkg/db"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationroleuser"
@@ -12,6 +13,8 @@ import (
 	"github.com/NpoolPlatform/application-management/pkg/rollback"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
+
+	crudappuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
 )
 
 func dbRowToApplication(row *ent.ApplicationRoleUser) *npool.RoleUserInfo {
@@ -29,13 +32,16 @@ func preConditionJudge(ctx context.Context, roleIDString, appID string) (uuid.UU
 		return uuid.UUID{}, xerrors.Errorf("application does not exist: %v", err)
 	}
 
+	if _, err := approle.Get(ctx, &npool.GetRoleRequest{
+		AppID:  appID,
+		RoleID: roleIDString,
+	}); err != nil {
+		return uuid.UUID{}, xerrors.Errorf("role doesn't exist")
+	}
+
 	roleID, err := uuid.Parse(roleIDString)
 	if err != nil {
 		return uuid.UUID{}, xerrors.Errorf("invalid role id: %v", err)
-	}
-
-	if existRole, err := exist.ApplicationRole(ctx, roleID, appID); err != nil || !existRole {
-		return uuid.UUID{}, xerrors.Errorf("role doesn't exist")
 	}
 
 	return roleID, nil
@@ -49,25 +55,38 @@ func genCreate(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *np
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		if existUser, err := exist.ApplicationUser(ctx, in.AppID, userID); err != nil || !existUser {
+		appID, err := uuid.Parse(in.AppID)
+		if err != nil {
+			return nil, xerrors.Errorf("invalid app id: %v", err)
+		}
+
+		if _, err := crudappuser.Get(ctx, &npool.GetUserFromApplicationRequest{
+			AppID:  in.AppID,
+			UserID: userIDString,
+		}); err != nil {
 			return nil, xerrors.Errorf("user does not exist: %v", err)
 		}
 
-		has, err := exist.UserRole(ctx, userID, roleID, in.AppID)
-		if err != nil || has {
-			return nil, xerrors.Errorf("user already has the role: %v", err)
-		}
-
-		id, err := uuid.Parse(in.AppID)
+		_, err = client.
+			ApplicationRoleUser.
+			Query().
+			Where(
+				applicationroleuser.And(
+					applicationroleuser.UserID(userID),
+					applicationroleuser.RoleID(roleID),
+					applicationroleuser.AppID(appID),
+					applicationroleuser.DeleteAt(0),
+				),
+			).All(ctx)
 		if err != nil {
-			return nil, xerrors.Errorf("invalid app id: %v", err)
+			return nil, xerrors.Errorf("fail to get user role: %v", err)
 		}
 
 		info, err := client.
 			ApplicationRoleUser.
 			Create().
 			SetRoleID(roleID).
-			SetAppID(id).
+			SetAppID(appID).
 			SetUserID(userID).
 			Save(ctx)
 		if err != nil {
@@ -84,7 +103,12 @@ func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRo
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
-	response, err := rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	response, err := rollback.WithTX(ctx, cli, func(tx *ent.Tx) (interface{}, error) {
 		return genCreate(ctx, tx.Client(), roleID, in)
 	})
 	if err != nil {
@@ -107,7 +131,12 @@ func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.Ge
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	infos, err := cli.
 		ApplicationRoleUser.
 		Query().
 		Where(
@@ -139,7 +168,10 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
-	if existUser, err := exist.ApplicationUser(ctx, in.AppID, userID); err != nil || !existUser {
+	if _, err := crudappuser.Get(ctx, &npool.GetUserFromApplicationRequest{
+		AppID:  in.AppID,
+		UserID: in.UserID,
+	}); err != nil {
 		return nil, xerrors.Errorf("user does not exist: %v", err)
 	}
 
@@ -148,7 +180,12 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	infos, err := cli.
 		ApplicationRoleUser.
 		Query().
 		Where(
@@ -216,7 +253,12 @@ func Delete(ctx context.Context, in *npool.UnSetUserRoleRequest) (*npool.UnSetUs
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
 	}
 
-	if _, err = rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	if _, err = rollback.WithTX(ctx, cli, func(tx *ent.Tx) (interface{}, error) {
 		return genDelete(ctx, tx.Client(), roleID, in)
 	}); err != nil {
 		return nil, err

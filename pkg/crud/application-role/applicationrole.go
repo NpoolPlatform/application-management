@@ -34,17 +34,17 @@ func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRole
 		return nil, xerrors.Errorf("invalid creator id: %v", err)
 	}
 
-	existRoleName, err := exist.RoleName(ctx, in.Info.RoleName, in.Info.AppID)
-	if err != nil || existRoleName != 0 {
-		return nil, xerrors.Errorf("role name has already exist in this app")
-	}
-
 	id, err := uuid.Parse(in.Info.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	info, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	info, err := cli.
 		ApplicationRole.
 		Create().
 		SetAppID(id).
@@ -76,7 +76,12 @@ func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse,
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	info, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	info, err := cli.
 		ApplicationRole.
 		Query().
 		Where(
@@ -105,7 +110,12 @@ func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResp
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	infos, err := cli.
 		ApplicationRole.
 		Query().
 		Where(
@@ -137,16 +147,17 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 		return nil, xerrors.Errorf("invalid role id: %v", err)
 	}
 
-	if existRoleName, err := exist.RoleName(ctx, in.Info.RoleName, in.Info.AppID); err != nil || existRoleName == -1 {
-		return nil, xerrors.Errorf("role name has already exist in this app")
-	}
-
 	id, err := uuid.Parse(in.Info.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	query, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	query, err := cli.
 		ApplicationRole.
 		Query().
 		Where(
@@ -163,7 +174,7 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 		return nil, xerrors.Errorf("role has been already deleted.")
 	}
 
-	info, err := db.Client().
+	info, err := cli.
 		ApplicationRole.
 		UpdateOneID(roleID).
 		SetRoleName(in.Info.RoleName).
@@ -188,7 +199,12 @@ func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRole
 		return nil, xerrors.Errorf("invalid role id: %v", err)
 	}
 
-	_, err = db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	_, err = cli.
 		ApplicationRole.
 		UpdateOneID(roleID).
 		SetDeleteAt(uint32(time.Now().Unix())).
@@ -217,7 +233,12 @@ func GetRoleByCreator(ctx context.Context, in *npool.GetRoleByCreatorRequest) (*
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	infos, err := cli.
 		ApplicationRole.
 		Query().
 		Where(

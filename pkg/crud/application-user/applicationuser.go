@@ -41,7 +41,10 @@ func genCreate(ctx context.Context, client *ent.Client, in *npool.AddUsersToAppl
 			return nil, xerrors.Errorf("invalid user id: %v", err)
 		}
 
-		if existAppUser, err := exist.ApplicationUser(ctx, in.AppID, userID); err != nil || existAppUser {
+		if _, err := Get(ctx, &npool.GetUserFromApplicationRequest{
+			AppID:  in.AppID,
+			UserID: userIDString,
+		}); err == nil {
 			return nil, xerrors.Errorf("user has already exist in this app: %v", err)
 		}
 
@@ -65,7 +68,12 @@ func Create(ctx context.Context, in *npool.AddUsersToApplicationRequest) (*npool
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	response, err := rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	response, err := rollback.WithTX(ctx, cli, func(tx *ent.Tx) (interface{}, error) {
 		return genCreate(ctx, tx.Client(), in)
 	})
 	if err != nil {
@@ -92,7 +100,12 @@ func Get(ctx context.Context, in *npool.GetUserFromApplicationRequest) (*npool.G
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	info, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	info, err := cli.
 		ApplicationUser.
 		Query().
 		Where(
@@ -125,7 +138,12 @@ func GetAll(ctx context.Context, in *npool.GetUsersFromApplicationRequest) (*npo
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	infos, err := cli.
 		ApplicationUser.
 		Query().
 		Where(
@@ -182,7 +200,12 @@ func Delete(ctx context.Context, in *npool.RemoveUsersFromApplicationRequest) (*
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
 
-	if _, err := rollback.WithTX(ctx, db.Client(), func(tx *ent.Tx) (interface{}, error) {
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	if _, err := rollback.WithTX(ctx, cli, func(tx *ent.Tx) (interface{}, error) {
 		return genDelete(ctx, tx.Client(), in)
 	}); err != nil {
 		return nil, err
@@ -208,7 +231,12 @@ func SetSMSLogin(ctx context.Context, in *npool.SetSMSLoginRequest) (*npool.SetS
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
-	_, err = db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	_, err = cli.
 		ApplicationUser.
 		Update().
 		Where(
@@ -255,7 +283,12 @@ func SetGALogin(ctx context.Context, in *npool.SetGALoginRequest) (*npool.SetGAL
 		return nil, xerrors.Errorf("please bind your account to google authenticator")
 	}
 
-	_, err = db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	_, err = cli.
 		ApplicationUser.
 		Update().
 		Where(
@@ -290,7 +323,12 @@ func AddUserLoginTime(ctx context.Context, in *npool.AddUserLoginTimeRequest) (*
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
-	info, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	info, err := cli.
 		ApplicationUser.
 		Query().
 		Where(
@@ -304,7 +342,7 @@ func AddUserLoginTime(ctx context.Context, in *npool.AddUserLoginTimeRequest) (*
 		return nil, xerrors.Errorf("fail to query app user: %v", err)
 	}
 
-	_, err = db.Client().
+	_, err = cli.
 		ApplicationUser.
 		UpdateOneID(info.ID).
 		SetLoginNumber(info.LoginNumber + 1).
@@ -333,7 +371,12 @@ func UpdateUserGAStatus(ctx context.Context, in *npool.UpdateUserGAStatusRequest
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	_, err = db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	_, err = cli.
 		ApplicationUser.
 		Update().
 		Where(
@@ -369,7 +412,12 @@ func UpdateUserKYCStatus(ctx context.Context, in *npool.UpdateUserKYCStatusReque
 		return nil, xerrors.Errorf("invalid app id: %v", err)
 	}
 
-	_, err = db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	_, err = cli.
 		ApplicationUser.
 		Update().
 		Where(
@@ -396,7 +444,12 @@ func GetUserAppID(ctx context.Context, in *npool.GetUserAppIDRequest) (*npool.Ge
 		return nil, xerrors.Errorf("invalid user id: %v", err)
 	}
 
-	infos, err := db.Client().
+	cli, err := db.Client()
+	if err != nil {
+		return nil, xerrors.Errorf("fail get db client: %v", err)
+	}
+
+	infos, err := cli.
 		ApplicationUser.
 		Query().
 		Where(
