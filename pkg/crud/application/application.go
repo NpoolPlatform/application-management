@@ -30,6 +30,9 @@ func dbRowToApplication(row *ent.Application) *npool.ApplicationInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.CreateApplicationResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	owner, err := uuid.Parse(in.Info.ApplicationOwner)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid owner id: %v", err)
@@ -61,6 +64,9 @@ func Create(ctx context.Context, in *npool.CreateApplicationRequest) (*npool.Cre
 }
 
 func Get(ctx context.Context, in *npool.GetApplicationRequest) (*npool.GetApplicationResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	id, err := uuid.Parse(in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
@@ -92,6 +98,9 @@ func Get(ctx context.Context, in *npool.GetApplicationRequest) (*npool.GetApplic
 }
 
 func GetAll(ctx context.Context, in *npool.GetApplicationsRequest) (*npool.GetApplicationsResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	cli, err := db.Client()
 	if err != nil {
 		return nil, xerrors.Errorf("fail get db client: %v", err)
@@ -120,6 +129,9 @@ func GetAll(ctx context.Context, in *npool.GetApplicationsRequest) (*npool.GetAp
 }
 
 func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.UpdateApplicationResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	id, err := uuid.Parse(in.Info.ID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
@@ -149,6 +161,9 @@ func Update(ctx context.Context, in *npool.UpdateApplicationRequest) (*npool.Upd
 }
 
 func Delete(ctx context.Context, in *npool.DeleteApplicationRequest) (*npool.DeleteApplicationResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	id, err := uuid.Parse(in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
@@ -172,6 +187,9 @@ func Delete(ctx context.Context, in *npool.DeleteApplicationRequest) (*npool.Del
 }
 
 func GetApplicationByOwner(ctx context.Context, in *npool.GetApplicationByOwnerRequest) (*npool.GetApplicationByOwnerResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	ownerID, err := uuid.Parse(in.Owner)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid owner id: %v", err)

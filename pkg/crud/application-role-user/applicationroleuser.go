@@ -28,6 +28,9 @@ func dbRowToApplication(row *ent.ApplicationRoleUser) *npool.RoleUserInfo {
 }
 
 func preConditionJudge(ctx context.Context, roleIDString, appID string) (uuid.UUID, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, appID); err != nil || !existApp {
 		return uuid.UUID{}, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -48,6 +51,9 @@ func preConditionJudge(ctx context.Context, roleIDString, appID string) (uuid.UU
 }
 
 func genCreate(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *npool.SetUserRoleRequest) ([]*npool.RoleUserInfo, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	response := []*npool.RoleUserInfo{}
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
@@ -98,6 +104,9 @@ func genCreate(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *np
 }
 
 func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRoleResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
@@ -121,6 +130,9 @@ func Create(ctx context.Context, in *npool.SetUserRoleRequest) (*npool.SetUserRo
 }
 
 func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.GetRoleUsersResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
@@ -159,6 +171,9 @@ func GetRoleUsers(ctx context.Context, in *npool.GetRoleUsersRequest) (*npool.Ge
 }
 
 func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetUserRoleResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -216,6 +231,9 @@ func GetUserRole(ctx context.Context, in *npool.GetUserRoleRequest) (*npool.GetU
 }
 
 func genDelete(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *npool.UnSetUserRoleRequest) (interface{}, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
@@ -248,6 +266,9 @@ func genDelete(ctx context.Context, client *ent.Client, roleID uuid.UUID, in *np
 }
 
 func Delete(ctx context.Context, in *npool.UnSetUserRoleRequest) (*npool.UnSetUserRoleResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	roleID, err := preConditionJudge(ctx, in.RoleID, in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)

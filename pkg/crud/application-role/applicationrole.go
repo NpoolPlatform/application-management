@@ -26,6 +26,9 @@ func dbRowToApplicationRole(row *ent.ApplicationRole) *npool.RoleInfo {
 }
 
 func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRoleResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, in.Info.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -62,6 +65,9 @@ func Create(ctx context.Context, in *npool.CreateRoleRequest) (*npool.CreateRole
 }
 
 func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -101,6 +107,9 @@ func Get(ctx context.Context, in *npool.GetRoleRequest) (*npool.GetRoleResponse,
 }
 
 func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -138,6 +147,9 @@ func GetAll(ctx context.Context, in *npool.GetRolesRequest) (*npool.GetRolesResp
 }
 
 func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRoleResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, in.Info.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -190,6 +202,9 @@ func Update(ctx context.Context, in *npool.UpdateRoleRequest) (*npool.UpdateRole
 }
 
 func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRoleResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -219,6 +234,9 @@ func Delete(ctx context.Context, in *npool.DeleteRoleRequest) (*npool.DeleteRole
 }
 
 func GetRoleByCreator(ctx context.Context, in *npool.GetRoleByCreatorRequest) (*npool.GetRoleByCreatorResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, in.AppID); err != nil || !existApp {
 		return nil, xerrors.Errorf("application does not exist: %v", err)
 	}

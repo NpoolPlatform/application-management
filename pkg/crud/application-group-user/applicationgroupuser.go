@@ -28,6 +28,9 @@ func dbRawToApplicationGroupUser(row *ent.ApplicationGroupUser) *npool.GroupUser
 }
 
 func preConditionJudge(ctx context.Context, groupIDString, appID string) (uuid.UUID, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	if existApp, err := exist.Application(ctx, appID); err != nil || !existApp {
 		return uuid.UUID{}, xerrors.Errorf("application does not exist: %v", err)
 	}
@@ -48,6 +51,9 @@ func preConditionJudge(ctx context.Context, groupIDString, appID string) (uuid.U
 }
 
 func genCreate(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *npool.AddGroupUsersRequest) ([]*npool.GroupUserInfo, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	response := []*npool.GroupUserInfo{}
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
@@ -99,6 +105,9 @@ func genCreate(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *n
 }
 
 func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGroupUsersResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
@@ -122,6 +131,9 @@ func Create(ctx context.Context, in *npool.AddGroupUsersRequest) (*npool.AddGrou
 }
 
 func Get(ctx context.Context, in *npool.GetGroupUsersRequest) (*npool.GetGroupUsersResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
@@ -162,6 +174,9 @@ func Get(ctx context.Context, in *npool.GetGroupUsersRequest) (*npool.GetGroupUs
 }
 
 func genDelete(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *npool.RemoveGroupUsersRequest) (interface{}, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	for _, userIDString := range in.UserIDs {
 		userID, err := uuid.Parse(userIDString)
 		if err != nil {
@@ -194,6 +209,9 @@ func genDelete(ctx context.Context, client *ent.Client, groupID uuid.UUID, in *n
 }
 
 func Delete(ctx context.Context, in *npool.RemoveGroupUsersRequest) (*npool.RemoveGroupUsersResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	groupID, err := preConditionJudge(ctx, in.GroupID, in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("pre condition not pass: %v", err)
@@ -216,6 +234,9 @@ func Delete(ctx context.Context, in *npool.RemoveGroupUsersRequest) (*npool.Remo
 }
 
 func GetUserGroup(ctx context.Context, in *npool.GetUserGroupRequest) (*npool.GetUserGroupResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+
 	appID, err := uuid.Parse(in.AppID)
 	if err != nil {
 		return nil, xerrors.Errorf("invalid app id: %v", err)
