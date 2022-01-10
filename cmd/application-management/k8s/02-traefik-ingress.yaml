@@ -25,6 +25,10 @@ spec:
             backend:
               serviceName: application-management
               servicePort: 50080
+          - path: /api/application-management/v1/get/apps
+            backend:
+              serviceName: application-management
+              servicePort: 50080
     - host: api.xpool.top
       http: *http_appid_userid_rules
     - host: www.npool.top
@@ -34,6 +38,8 @@ spec:
     - host: www.procyon.vip
       http: *http_appid_userid_rules
     - host: procyon.vip
+      http: *http_appid_userid_rules
+    - host: dashboard.xpool.top
       http: *http_appid_userid_rules
 
 ---
