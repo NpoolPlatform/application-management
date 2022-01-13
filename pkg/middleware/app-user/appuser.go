@@ -3,10 +3,10 @@ package appuser
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	applicationgroupuser "github.com/NpoolPlatform/application-management/pkg/crud/application-group-user"
 	applicationroleuser "github.com/NpoolPlatform/application-management/pkg/crud/application-role-user"
 	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"golang.org/x/xerrors"
 )
 

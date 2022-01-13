@@ -3,9 +3,9 @@ package roleuser
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	applicationrole "github.com/NpoolPlatform/application-management/pkg/crud/application-role"
 	applicationroleuser "github.com/NpoolPlatform/application-management/pkg/crud/application-role-user"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"golang.org/x/xerrors"
 )
 

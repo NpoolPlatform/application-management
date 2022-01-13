@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	"github.com/NpoolPlatform/application-management/pkg/crud/application"
 	applicationgroup "github.com/NpoolPlatform/application-management/pkg/crud/application-group"
 	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
 	testinit "github.com/NpoolPlatform/application-management/pkg/test-init"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 )

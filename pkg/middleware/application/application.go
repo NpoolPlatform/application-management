@@ -3,9 +3,9 @@ package application
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	"github.com/NpoolPlatform/application-management/pkg/crud/application"
 	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"golang.org/x/xerrors"
 )
 
