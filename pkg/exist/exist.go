@@ -3,8 +3,8 @@ package exist
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	crudapp "github.com/NpoolPlatform/application-management/pkg/crud/application"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"golang.org/x/xerrors"
 )
 

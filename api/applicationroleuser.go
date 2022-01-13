@@ -5,7 +5,7 @@ package api
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
+	npool "github.com/NpoolPlatform/message/npool/application"
 
 	applicationroleuser "github.com/NpoolPlatform/application-management/pkg/crud/application-role-user"
 	roleuser "github.com/NpoolPlatform/application-management/pkg/middleware/role-user"

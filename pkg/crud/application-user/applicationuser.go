@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	"github.com/NpoolPlatform/application-management/pkg/db"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent"
 	"github.com/NpoolPlatform/application-management/pkg/db/ent/applicationuser"
 	"github.com/NpoolPlatform/application-management/pkg/exist"
 	"github.com/NpoolPlatform/application-management/pkg/rollback"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 )

@@ -5,10 +5,10 @@ package api
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	applicationuser "github.com/NpoolPlatform/application-management/pkg/crud/application-user"
 	appuser "github.com/NpoolPlatform/application-management/pkg/middleware/app-user"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

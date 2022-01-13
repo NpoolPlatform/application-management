@@ -3,7 +3,8 @@ package api
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
+	npool "github.com/NpoolPlatform/message/npool/application"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
 )

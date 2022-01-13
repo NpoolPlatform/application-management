@@ -5,9 +5,9 @@ package api
 import (
 	"context"
 
-	"github.com/NpoolPlatform/application-management/message/npool"
 	"github.com/NpoolPlatform/application-management/pkg/version"
 	"github.com/NpoolPlatform/go-service-framework/pkg/logger"
+	npool "github.com/NpoolPlatform/message/npool/application"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
